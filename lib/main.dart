@@ -4,12 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shop_com/routes/router.dart';
 import 'package:shop_com/utils/color_value_key.dart';
 
 late GoRouter system_router;
 
 Future<void> main() async {
-  system_router = genRouter();
+  system_router = genRoute();
   runApp(MyDisplay());
 }
 
