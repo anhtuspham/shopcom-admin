@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shop_com/utils/widgets/input_form_widget.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreen();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreen extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
