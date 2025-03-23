@@ -4,7 +4,7 @@ import '../data/model/auth_user.dart';
 import 'base_api.dart';
 
 mixin AuthUserApi on BaseApi {
-  static const String PATH_LOGIN = "/User/login";
+  static const String PATH_LOGIN = "/User/auth";
   static const String PATH_RENEWTOKEN = "/User/renewToken";
 
   Future<AuthUser?> login(String username, String password) async {

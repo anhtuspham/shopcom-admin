@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/config/app_config.dart';
 import '../screens/home/home.dart';
-import '../screens/login/screen/login_screen.dart';
+import '../screens/auth/screen/login_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -11,8 +11,8 @@ GoRouter genRoute() {
   // List<MenuItem>? items = app_config.setupMenu;
 
   GoRoute screenLogin = GoRoute(
-      path: '/login',
-      name: 'login',
+      path: '/auth',
+      name: 'auth',
       builder: (BuildContext context, GoRouterState state) {
         return const LoginScreen();
       });
@@ -76,7 +76,7 @@ GoRouter genRoute() {
   // }
   GoRouter router = GoRouter(
       navigatorKey: _rootNavigatorKey,
-      initialLocation: '/login',
+      initialLocation: '/auth',
       routes: [
         screenLogin,
         // ShellRoute(

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shop_com/utils/widgets/input_form_widget.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+import '../../../widgets/input_form_widget.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreen();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignupScreen extends State<SignupScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +82,7 @@ class _SignupScreen extends State<SignupScreen> {
             ),
             const SizedBox(height: 30),
             // Or login with
-            const Center(child: Text("Or login with social account")),
+            const Center(child: Text("Or auth with social account")),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
