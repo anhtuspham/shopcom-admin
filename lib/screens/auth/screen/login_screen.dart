@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shop_com/data/config/app_config.dart';
+import 'package:shop_com/providers/auth_provider.dart';
 
 import '../../../widgets/input_form_widget.dart';
 
@@ -12,6 +15,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String _email = '';
+  String _password = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,48 +43,76 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 30),
             // Email field
-            InputForm(
-                labelText: 'Email',
-                prefixIcon: const Icon(Icons.email_outlined),
-                suffixIcon: const Icon(Icons.check, color: Colors.green),
-                hintText: 'anhtu@gmail.com'),
-            const SizedBox(height: 20),
-            // Password field
-            InputForm(
-                obscureText: true,
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock_outline)),
-            const SizedBox(height: 10),
-            // Forgot Password
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {},
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Forgot your password?",
-                        style: TextStyle(color: Colors.black87)),
-                    Icon(Icons.arrow_right_alt, color: Colors.red),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Login Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  InputForm(
+                      labelText: 'Email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      suffixIcon: const Icon(Icons.check, color: Colors.green),
+                      hintText: 'anhtu@gmail.com',
+                      onSaved: (newValue) {
+                        _email = newValue.toString();
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter email";
+                        } else {
+                          return null;
+                        }
+                      }),
+                  const SizedBox(height: 20),
+                  // Password field
+                  InputForm(
+                    obscureText: true,
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    onSaved: (newValue) {
+                      _password = newValue.toString();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter password";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text("LOGIN",
-                    style: TextStyle(color: Colors.white, fontSize: 18)),
+                  const SizedBox(height: 10),
+                  // Forgot Password
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Forgot your password?",
+                              style: TextStyle(color: Colors.black87)),
+                          Icon(Icons.arrow_right_alt, color: Colors.red),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _onLogin,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: const Text("LOGIN",
+                          style: TextStyle(color: Colors.white, fontSize: 18)),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 30),
@@ -96,6 +131,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _onLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+    final user = await userController.login(_email, _password);
+    if (mounted && user != null) {
+      Future.microtask(() => context.go("/tab1"));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Login failed"),
+        backgroundColor: Colors.red,
+      ));
+    }
   }
 
   Widget _socialButton(IconData icon, Color color) {
