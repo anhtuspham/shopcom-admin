@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:shop_com/screens/home/widgets/bottom_nav_bar.dart';
 
-final homeKey = GlobalKey<FormState>();
+class HomeScreen extends StatelessWidget {
+  final Widget child;
+  const HomeScreen({Key? key, required this.child}) : super(key: key);
 
-class HomeScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(key: homeKey, child: Text('Home screen'));
+    return Scaffold(
+      body: child, // Hiển thị màn hình con dựa theo router
+      bottomNavigationBar: BottomNavBar(),
+    );
   }
 }

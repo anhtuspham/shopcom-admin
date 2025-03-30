@@ -7,8 +7,8 @@ import '../data/config/app_config.dart';
 class AuthProvider {
   AuthProvider() : super();
 
-  Future<AuthUser?> login(String userName, String password) async {
-    AuthUser? appUser = await api.login(userName, password);
+  Future<AuthUser?> login(String email, String password) async {
+    AuthUser? appUser = await api.login(email, password);
     if (appUser != null) {
       app_config.user = appUser;
       // await app_config.saveUser();

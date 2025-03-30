@@ -38,6 +38,29 @@ class _MyDisplay extends State<MyDisplay> {
       debugShowCheckedModeBanner: false,
       routerConfig: system_router,
       theme: ThemeData(
+        scrollbarTheme: ScrollbarThemeData(
+          thumbColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return ColorValueKey.textColor.withOpacity(0.5);
+            }
+            return ColorValueKey.textColor.withOpacity(0.5);
+          }),
+          thumbVisibility:const WidgetStatePropertyAll(true),
+          trackVisibility: const WidgetStatePropertyAll(true),
+          interactive: true,
+          trackColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.dragged) || states.contains(WidgetState.hovered)) {
+              return ColorValueKey.textColor.withOpacity(0.1);
+            }
+            return Colors.transparent;
+          }),
+          trackBorderColor: WidgetStateProperty.all(Colors.transparent),
+          radius: const Radius.circular(2),
+          thickness: WidgetStateProperty.resolveWith<double?>((states) {
+            return 10;
+          }),
+          minThumbLength: 48,
+        ),
         textTheme: const TextTheme().copyWith(
           bodyLarge: TextStyle(color: ColorValueKey.textColor,),
           bodyMedium: TextStyle(color: ColorValueKey.textColor),

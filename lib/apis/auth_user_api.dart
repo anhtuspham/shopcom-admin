@@ -4,15 +4,16 @@ import '../data/model/auth_user.dart';
 import 'base_api.dart';
 
 mixin AuthUserApi on BaseApi {
-  static const String PATH_LOGIN = "/User/auth";
+  static const String PATH_LOGIN = "/api/users/login";
   static const String PATH_RENEWTOKEN = "/User/renewToken";
 
-  Future<AuthUser?> login(String username, String password) async {
+  Future<AuthUser?> login(String email, String password) async {
     try {
+      print('email $email password $password');
       Map<String, dynamic> headers = <String, dynamic>{};
       headers['Content-Type'] = 'application/json';
       headers['accept'] = '*/*';
-      Object body = {'username':username, 'password':password};
+      Object body = {'email':email, 'password':password};
 
       Response response = await dio.post(PATH_LOGIN, options: Options(headers: headers), data: body);
       if (response.statusCode == 200) {

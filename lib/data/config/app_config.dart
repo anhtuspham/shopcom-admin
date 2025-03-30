@@ -1,5 +1,6 @@
 import 'package:logger/logger.dart';
 import 'package:shop_com/data/model/auth_user.dart';
+import 'package:shop_com/providers/auth_provider.dart';
 import 'package:shop_com/utils/app_color.dart';
 
 import '../../apis/base_api.dart';
@@ -63,5 +64,5 @@ class AppConfig {
 }
 
 final AppConfig app_config = AppConfig();
-late final String baseUrl;
-Api api = Api(base_url: baseUrl);
+final AuthProvider userController = AuthProvider();
+Api api = Api();

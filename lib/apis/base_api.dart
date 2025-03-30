@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shop_com/apis/base_url.dart';
 import 'package:shop_com/apis/user_api.dart';
 import 'package:shop_com/data/config/app_config.dart';
 import 'package:async/async.dart';
@@ -8,9 +9,9 @@ import 'auth_user_api.dart';
 import 'custom_interceptor_api.dart';
 
 class BaseApi{
-  String base_url = "";
+  String base_url = baseUrl;
   late Dio dio;
-  BaseApi({required this.base_url}){
+  BaseApi(){
     dio = Dio(BaseOptions(
       baseUrl: base_url,
       headers: {
@@ -104,5 +105,5 @@ class BaseApi{
 }
 
 class Api extends BaseApi with AuthUserApi, UserApi{
-  Api({required super.base_url});
+  Api();
 }
