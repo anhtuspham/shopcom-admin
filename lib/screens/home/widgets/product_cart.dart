@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
@@ -28,7 +27,6 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 170,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -44,32 +42,33 @@ class ProductCard extends StatelessWidget {
                   topLeft: Radius.circular(8),
                   topRight: Radius.circular(8),
                 ),
-                child: Image.asset(
-                  imageUrl,
-                  height: 220,
-                  width: 170,
-                  fit: BoxFit.cover,
+                child: AspectRatio(
+                  aspectRatio: 1, // Tỷ lệ 1:1 cho hình ảnh
+                  child: Image.asset(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-              Positioned(
-                left: 10,
-                top: 10,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    discount ?? '',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+              if (discount != null)
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      discount ?? '',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ),
-              ),
               Positioned(
                 right: 10,
                 top: 10,
@@ -103,14 +102,14 @@ class ProductCard extends StatelessWidget {
                 for (int i = 0; i < 5; i++)
                   Icon(
                     i < rating ? Icons.star : Icons.star_border,
-                    size: 16,
+                    size: 14,
                     color: Colors.amber,
                   ),
                 const SizedBox(width: 4),
                 Text(
                   '($reviewCount)',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                     color: Colors.grey,
                   ),
                 ),
@@ -124,42 +123,46 @@ class ProductCard extends StatelessWidget {
             child: Text(
               brand,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: Colors.grey,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
 
           // Product title
           Padding(
-            padding: const EdgeInsets.only(left: 10, top: 2),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 2),
             child: Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
 
           // Price information
           Padding(
-            padding: const EdgeInsets.only(left: 10, top: 2),
+            padding: const EdgeInsets.only(left: 10, top: 2, bottom: 8),
             child: Row(
               children: [
                 Text(
                   '$originalPrice\$',
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Colors.grey,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '$discountedPrice\$',
+                  '${discountedPrice ?? originalPrice}\$',
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
