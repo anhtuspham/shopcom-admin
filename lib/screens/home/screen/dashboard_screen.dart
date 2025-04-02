@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/product_cart.dart';
+import '../widgets/product_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -19,7 +19,8 @@ class DashboardScreen extends StatelessWidget {
                     height: 200,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300], // Placeholder color if image fails to load
+                      color: Colors.grey[300],
+                      // Placeholder color if image fails to load
                       image: const DecorationImage(
                         image: AssetImage('assets/images/banner.jpg'),
                         fit: BoxFit.cover,
@@ -91,48 +92,82 @@ class DashboardScreen extends StatelessWidget {
 
               // Sale products horizontal list
               SizedBox(
-                height: 320,
-                child: ListView(
+                height: 360,
+                child: ListView.separated(
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return const ProductCard(
+                      imageUrl:
+                          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                      isNew: true,
+                      rating: 4.0,
+                      reviewCount: 5,
+                      discount: '-11%',
+                      brand: 'Apple',
+                      title: 'Iphone 15 Pro',
+                      originalPrice: 28,
+                      discountedPrice: 20,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(width: 10);
+                  },
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  children: const [
-                    ProductCard(
-                      isNew: true,
-                      imageUrl: 'assets/images/1.jpg',
-                      discount: '-20%',
-                      rating: 5.0,
-                      reviewCount: 10,
-                      brand: 'Apple',
-                      title: 'Iphone 14',
-                      originalPrice: 450,
-                      discountedPrice: 440,
-                    ),
-                    SizedBox(width: 16),
-                    ProductCard(
-                      isNew: true,
-                      imageUrl: 'assets/images/2.jpg',
-                      discount: '-15%',
-                      rating: 5.0,
-                      reviewCount: 10,
-                      brand: 'Apple',
-                      title: 'Iphone 13',
-                      originalPrice: 380,
-                      discountedPrice: 350,
-                    ),
-                    SizedBox(width: 16,),
-                    ProductCard(
-                      isNew: true,
-                      imageUrl: 'assets/images/1.jpg',
-                      discount: '-20%',
-                      rating: 5.0,
-                      reviewCount: 10,
-                      brand: 'Apple',
-                      title: 'Iphone 14',
-                      originalPrice: 450,
-                      discountedPrice: 440,
-                    ),
-                  ],
+                  shrinkWrap: true,
                 ),
+                // child: ListView(
+                //   scrollDirection: Axis.horizontal,
+                //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                //   children: const [
+                //     ProductCard(
+                //       imageUrl: 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                //       isNew: true,
+                //       rating: 4.0,
+                //       reviewCount: 5,
+                //       discount: '-11%',
+                //       brand: 'Apple',
+                //       title: 'Iphone 15 Pro',
+                //       originalPrice: 28,
+                //       discountedPrice: 20,
+                //     ),
+                //     // ProductCard(
+                //     //   isNew: true,
+                //     //   imageUrl: 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                //     //   discount: '-20%',
+                //     //   rating: 5.0,
+                //     //   reviewCount: 10,
+                //     //   brand: 'Apple',
+                //     //   title: 'Iphone 14',
+                //     //   originalPrice: 450,
+                //     //   discountedPrice: 440,
+                //     // ),
+                //     // SizedBox(width: 16),
+                //     // ProductCard(
+                //     //   isNew: true,
+                //     //   imageUrl: 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                //     //   discount: '-15%',
+                //     //   rating: 5.0,
+                //     //   reviewCount: 10,
+                //     //   brand: 'Apple',
+                //     //   title: 'Iphone 13',
+                //     //   originalPrice: 380,
+                //     //   discountedPrice: 350,
+                //     // ),
+                //     SizedBox(width: 16,),
+                //     // ProductCard(
+                //     //   isNew: true,
+                //     //   imageUrl: 'assets/images/1.jpg',
+                //     //   discount: '-20%',
+                //     //   rating: 5.0,
+                //     //   reviewCount: 10,
+                //     //   brand: 'Apple',
+                //     //   title: 'Iphone 14',
+                //     //   originalPrice: 450,
+                //     //   discountedPrice: 440,
+                //     // ),
+                //   ],
+                // ),
               ),
 
               // New section
@@ -185,7 +220,8 @@ class DashboardScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: const [
                   ProductCard(
-                    imageUrl: 'assets/images/3.jpg',
+                    imageUrl:
+                        'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
                     isNew: true,
                     rating: 4.5,
                     discount: '-10%',
@@ -196,7 +232,8 @@ class DashboardScreen extends StatelessWidget {
                     discountedPrice: 350,
                   ),
                   ProductCard(
-                    imageUrl: 'assets/images/4.jpg',
+                    imageUrl:
+                        'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
                     isNew: true,
                     rating: 4.0,
                     reviewCount: 5,
@@ -207,7 +244,8 @@ class DashboardScreen extends StatelessWidget {
                     discountedPrice: 20,
                   ),
                   ProductCard(
-                    imageUrl: 'assets/images/4.jpg',
+                    imageUrl:
+                        'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
                     isNew: true,
                     rating: 4.0,
                     reviewCount: 5,

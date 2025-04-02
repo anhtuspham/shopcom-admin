@@ -27,6 +27,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 250,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -43,10 +44,24 @@ class ProductCard extends StatelessWidget {
                   topRight: Radius.circular(8),
                 ),
                 child: AspectRatio(
-                  aspectRatio: 1, // Tỷ lệ 1:1 cho hình ảnh
-                  child: Image.asset(
+                  aspectRatio: 1,
+                  child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Icon(Icons.image_not_supported, size: 40),
+                        ),
+                      );
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if(loadingProgress == null){
+                        return child;
+                      }
+                      return const Center(child: CircularProgressIndicator());
+                    },
                   ),
                 ),
               ),
@@ -152,21 +167,23 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   '$originalPrice\$',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
+                    decoration: discountedPrice != null ? TextDecoration.lineThrough : TextDecoration.none,
                   ),
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  '${discountedPrice ?? originalPrice}\$',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
+                if (discountedPrice != null) ...[
+                  const SizedBox(width: 4),
+                  Text(
+                    '$discountedPrice\$',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
