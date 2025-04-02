@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_com/screens/home/widgets/product_card.dart';
+import 'package:shop_com/widgets/product_card.dart';
 
 class ShopScreen extends StatelessWidget {
   const ShopScreen({super.key});

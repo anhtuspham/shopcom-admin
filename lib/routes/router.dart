@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/screens/home/screen/home_screen.dart';
-import 'package:shop_com/screens/home/screen/favorite_screen.dart';
-import 'package:shop_com/screens/home/screen/profile_screen.dart';
+import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
+import 'package:shop_com/screens/profile/screen/profile_screen.dart';
 
 import '../data/config/app_config.dart';
 import '../screens/home/home.dart';
 import '../screens/auth/screen/login_screen.dart';
 import '../screens/home/screen/dashboard_screen.dart';
-import '../screens/home/screen/shop_screen.dart';
-import '../screens/home/screen/bag_screen.dart';
+import '../screens/shop/screen/shop_screen.dart';
+import '../screens/my_bag/screen/bag_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
