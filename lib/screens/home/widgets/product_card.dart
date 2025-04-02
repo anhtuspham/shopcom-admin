@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final String imageUrl;
   final String? discount;
   final double rating;
@@ -25,9 +25,17 @@ class ProductCard extends StatelessWidget {
   });
 
   @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
+
     return Container(
-      width: 250,
+      width: width * 0.45,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -43,10 +51,10 @@ class ProductCard extends StatelessWidget {
                   topLeft: Radius.circular(8),
                   topRight: Radius.circular(8),
                 ),
-                child: AspectRatio(
-                  aspectRatio: 1,
+                child: SizedBox(
+                  height: height * 0.2,
                   child: Image.network(
-                    imageUrl,
+                    widget.imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
@@ -57,7 +65,7 @@ class ProductCard extends StatelessWidget {
                       );
                     },
                     loadingBuilder: (context, child, loadingProgress) {
-                      if(loadingProgress == null){
+                      if (loadingProgress == null) {
                         return child;
                       }
                       return const Center(child: CircularProgressIndicator());
@@ -65,18 +73,19 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (discount != null)
+              if (widget.discount != null)
                 Positioned(
                   left: 10,
                   top: 10,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      discount ?? '',
+                      widget.discount ?? '',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -116,13 +125,13 @@ class ProductCard extends StatelessWidget {
               children: [
                 for (int i = 0; i < 5; i++)
                   Icon(
-                    i < rating ? Icons.star : Icons.star_border,
+                    i < widget.rating ? Icons.star : Icons.star_border,
                     size: 14,
                     color: Colors.amber,
                   ),
                 const SizedBox(width: 4),
                 Text(
-                  '($reviewCount)',
+                  '(${widget.reviewCount})',
                   style: const TextStyle(
                     fontSize: 10,
                     color: Colors.grey,
@@ -136,7 +145,7 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10, top: 4),
             child: Text(
-              brand,
+              widget.brand,
               style: const TextStyle(
                 fontSize: 11,
                 color: Colors.grey,
@@ -150,7 +159,7 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 2),
             child: Text(
-              title,
+              widget.title,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
@@ -166,17 +175,18 @@ class ProductCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '$originalPrice\$',
+                  '${widget.originalPrice}\$',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
-                    decoration: discountedPrice != null ? TextDecoration.lineThrough : TextDecoration.none,
+                    decoration: widget.discountedPrice != null ? TextDecoration
+                        .lineThrough : TextDecoration.none,
                   ),
                 ),
-                if (discountedPrice != null) ...[
+                if (widget.discountedPrice != null) ...[
                   const SizedBox(width: 4),
                   Text(
-                    '$discountedPrice\$',
+                    '${widget.discountedPrice}\$',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.red,
@@ -186,7 +196,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ],
             ),
-          ),
+          )
         ],
       ),
     );
