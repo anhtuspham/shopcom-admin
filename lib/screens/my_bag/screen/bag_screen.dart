@@ -35,28 +35,37 @@ class _MyBagScreenState extends State<MyBagScreen> {
                   separatorBuilder: (context, index) =>
                       const Divider(height: 32),
                   itemBuilder: (context, index) => ProductBagItem(
-                    imageUrl: ['https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg', 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg', 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg'][index],
-                    name: ['Pullover', 'T-Shirt', 'Sport Dress'][index],
+                    imageUrl: [
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg'
+                    ][index],
+                    name: ['Iphone 15', 'IPhone 14', 'Samsung S23'][index],
                     color: ['Black', 'Gray', 'Black'][index],
-                    size: ['L', 'L', 'M'][index],
+                    ram: ['8', '8', '16'][index],
                   ),
                 ),
               ),
 
+              const SizedBox(height: 10,),
+
+
               // Promo code
-              TextField(
+              const TextField(
                 decoration: InputDecoration(
                   hintText: 'Enter your promo code',
                   border: UnderlineInputBorder(),
                   suffixIcon: Icon(Icons.arrow_forward, color: Colors.grey),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               // Total amount
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     'Total amount:',
                     style: TextStyle(
@@ -73,7 +82,7 @@ class _MyBagScreenState extends State<MyBagScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               // Checkout button
               SizedBox(
@@ -103,6 +112,4 @@ class _MyBagScreenState extends State<MyBagScreen> {
       ),
     );
   }
-
-
 }

@@ -16,6 +16,7 @@ mixin AuthUserApi on BaseApi {
       Object body = {'email':email, 'password':password};
 
       Response response = await dio.post(PATH_LOGIN, options: Options(headers: headers), data: body);
+      print('response ${response}');
       if (response.statusCode == 200) {
         app_config.printLog("i", " API_USER_LOGIN : ${response.data} ");
         AuthUser user = AuthUser.fromJson(response.data);

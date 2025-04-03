@@ -18,7 +18,8 @@ class BaseApi{
         "Access-Control-Allow-Origin": "*",
         if (app_config.user != null) 'Authorization': app_config.user?.token,
       },
-      receiveTimeout: Duration(minutes: 5),
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(minutes: 5),
     ));
     dio.interceptors.add(CustomInterceptorsApi());
   }

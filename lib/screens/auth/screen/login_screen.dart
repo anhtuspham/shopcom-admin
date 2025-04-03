@@ -140,7 +140,15 @@ class _LoginScreenState extends State<LoginScreen> {
     _formKey.currentState!.save();
     final user = await userController.login(_email, _password);
     if (mounted && user != null) {
-      Future.microtask(() => context.go("/tab1"));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Login success"),
+        backgroundColor: Colors.green,
+      ));
+      reloadApiUrl();
+      if (mounted) {
+        context.goNamed("tab1", extra: true);
+      }
+      // Future.microtask(() => context.go("/tab1"));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Login failed"),
