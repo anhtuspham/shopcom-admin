@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com/main.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -27,7 +26,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Expanded(
                 child: _buildOrderSection(),
               ),
-              ElevatedButton(onPressed: () => context.go('/'), style: const ButtonStyle(), child: const Text('Log out'),)
+              ElevatedButton(
+                onPressed: () => context.go('/auth'),
+                style: const ButtonStyle(),
+                child: const Text('Log out'),
+              )
             ],
           ),
         ),
@@ -89,8 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fontSize: 14,
           ),
         ),
-        onTap: () {
-        },
+        onTap: () {},
       ),
     );
   }

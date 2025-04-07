@@ -1,10 +1,17 @@
+import 'dart:convert';
+
+import 'package:encrypt/encrypt.dart' as EncryptSys;
 import 'package:logger/logger.dart';
 import 'package:shop_com/data/model/auth_user.dart';
 import 'package:shop_com/providers/auth_provider.dart';
 import 'package:shop_com/utils/app_color.dart';
 
 import '../../apis/base_api.dart';
-import '../../utils/app_value_key.dart';
+import '../../utils/data_store.dart';
+
+const bool app_encryption = false;
+final EncryptSys.IV app_iv = EncryptSys.IV.fromUtf8('uUuGe4Zw1F4rGbOs');
+final EncryptSys.Key app_key = EncryptSys.Key.fromUtf8('G3jxGfmjXOztJAyxA8zNFsJ33hZVFzap');
 
 final logger = Logger(
   filter: null, // Use the default LogFilter (-> only log in debug mode)
@@ -23,6 +30,7 @@ final logger = Logger(
 );
 
 class AppConfig {
+  final DataStore app_dataStore = DataStore(key: app_key, iv: app_iv, isEncryption: app_encryption);
   final List<ItemAppColor> store_color = [];
   String _selected_color = "";
 
@@ -45,6 +53,11 @@ class AppConfig {
     }
   }
 
+  Future<void> init() async{
+    await app_dataStore.initStore();
+    loadUser();
+  }
+
   void printLog(String type, String txt) {
     switch (type) {
       case "i":
@@ -59,6 +72,58 @@ class AppConfig {
       default:
         logger.i(txt);
         break;
+    }
+  }
+
+  Future<bool> saveUser() async {
+    if (user != null) {
+      try {
+        String data = jsonEncode(user!);
+        return app_dataStore.saveToLocal("AuthUser", data).then((value) {
+          return value;
+        });
+      } catch (e) {
+        printLog("e", e.toString());
+        return false;
+      }
+    } else {
+      return app_dataStore.saveToLocal("AuthUser", "").then((value) {
+        return false;
+      });
+      // return false;
+    }
+  }
+
+  void loadUser() {
+    try {
+      final String? data = app_dataStore.loadFromLocal("AuthUser");
+      if (data == null || data.isEmpty) {
+        _user = null;
+      } else {
+        Map<String, dynamic> map = jsonDecode(data);
+        _user = AuthUser.fromJson(map);
+      }
+    } catch (e) {
+      printLog("e", e.toString());
+      _user = null;
+    }
+  }
+
+  void clearUser() {
+    try {
+      app_dataStore.deleteLocal("AuthUser");
+      _user = null;
+      reloadApiUrl();
+      // final String? data = app_dataStore.loadFromLocal("AuthUser");
+      // if(data == null || data.isEmpty) {
+      //   _user = null;
+      // } else {
+      //   Map<String, dynamic> map = jsonDecode(data);
+      //   _user = AuthUser.fromJson(map);
+      // }
+    } catch (e) {
+      printLog("e", e.toString());
+      _user = null;
     }
   }
 }

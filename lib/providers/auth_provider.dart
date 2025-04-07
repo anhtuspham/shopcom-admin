@@ -11,7 +11,7 @@ class AuthProvider {
     AuthUser? appUser = await api.login(email, password);
     if (appUser != null) {
       app_config.user = appUser;
-      // await app_config.saveUser();
+      await app_config.saveUser();
       return appUser;
     }
     return appUser;

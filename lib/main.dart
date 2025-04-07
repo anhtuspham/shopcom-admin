@@ -1,17 +1,35 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/routes/router.dart';
 import 'package:shop_com/utils/color_value_key.dart';
 
+import 'data/config/app_config.dart';
+
 late GoRouter system_router;
 
 Future<void> main() async {
   system_router = genRoute();
-  runApp(MyDisplay());
+  app_config.init().then((value) {
+    try {
+      system_router = genRoute();
+      try {
+        runApp(const MyDisplay());
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  });
 }
 
 class MyDisplay extends StatefulWidget {

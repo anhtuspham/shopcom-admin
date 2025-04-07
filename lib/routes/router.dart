@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com/screens/home/screen/home_screen.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com/screens/profile/screen/profile_screen.dart';
 
 import '../data/config/app_config.dart';
+import '../data/model/auth_user.dart';
 import '../screens/home/home.dart';
 import '../screens/auth/screen/login_screen.dart';
 import '../screens/home/screen/dashboard_screen.dart';
@@ -14,6 +16,16 @@ import '../screens/my_bag/screen/bag_screen.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>();
+
+FutureOr<String?> systemRedirect(BuildContext context, GoRouterState state) {
+  AuthUser? user = app_config.user;
+  if(user == null){
+    if(state.fullPath!.compareTo("/auth") != 0) {
+      return '/auth';
+    }
+  }
+  return null;
+}
 
 GoRouter genRoute() {
   // List<MenuItem>? items = app_config.setupMenu;
@@ -64,6 +76,7 @@ GoRouter genRoute() {
         ],
       ),
     ],
+    redirect: systemRedirect
   );
   return router;
 }

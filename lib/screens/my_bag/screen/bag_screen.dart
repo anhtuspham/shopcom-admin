@@ -35,6 +35,7 @@ class _MyBagScreenState extends State<MyBagScreen> {
                   separatorBuilder: (context, index) =>
                       const Divider(height: 32),
                   itemBuilder: (context, index) => ProductBagItem(
+                    index: index,
                     imageUrl: [
                       'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
                       'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',

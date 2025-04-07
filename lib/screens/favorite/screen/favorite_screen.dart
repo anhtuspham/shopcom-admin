@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_com/widgets/product_bag_item.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -87,7 +88,21 @@ class FavoritesScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: favoriteProducts.length,
       separatorBuilder: (context, index) => const SizedBox(height: 16),
-      itemBuilder: (context, index) => _buildFavoriteItem(context, favoriteProducts[index]),
+      // itemBuilder: (context, index) => _buildFavoriteItem(context, favoriteProducts[index]),
+      itemBuilder: (context, index) => ProductBagItem(
+        index: index,
+        isFavorite: true,
+        imageUrl: [
+          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg'
+        ][index],
+        name: ['Iphone 15', 'IPhone 14', 'Samsung S23'][index],
+        color: ['Black', 'Gray', 'Black'][index],
+        ram: ['8', '8', '16'][index],
+      ),
     );
   }
 
