@@ -15,16 +15,16 @@ class BottomNavBar extends StatelessWidget {
             context.go('/tab1');
             break;
           case 1:
-            context.go('/tab2');
+            context.go('/shop');
             break;
           case 2:
-            context.go('/tab3');
+            context.go('/bag');
             break;
           case 3:
-            context.go('/tab4');
+            context.go('/favorite');
             break;
           case 4:
-            context.go('/tab5');
+            context.go('/profile');
             break;
         }
       },
@@ -41,10 +41,10 @@ class BottomNavBar extends StatelessWidget {
   int _getSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
     if (location.contains('/tab1')) return 0;
-    if (location.contains('/tab2')) return 1;
-    if (location.contains('/tab3')) return 2;
-    if (location.contains('/tab4')) return 3;
-    if (location.contains('/tab5')) return 4;
+    if (location.contains('/shop')) return 1;
+    if (location.contains('/bag')) return 2;
+    if (location.contains('/favorite')) return 3;
+    if (location.contains('/profile')) return 4;
     return 0;
   }
 }

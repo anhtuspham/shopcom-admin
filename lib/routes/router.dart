@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com/screens/profile/screen/profile_screen.dart';
+import 'package:shop_com/screens/profile/screen/setting_screen.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
@@ -54,24 +55,29 @@ GoRouter genRoute() {
             builder: (context, state) => const DashboardScreen(),
           ),
           GoRoute(
-            path: '/tab2',
-            name: 'tab2',
+            path: '/shop',
+            name: 'shop',
             builder: (context, state) => const ShopScreen(),
           ),
           GoRoute(
-            path: '/tab3',
-            name: 'tab3',
+            path: '/bag',
+            name: 'bag',
             builder: (context, state) => const MyBagScreen(),
           ),
           GoRoute(
-            path: '/tab4',
-            name: 'tab4',
+            path: '/favorite',
+            name: 'favorite',
             builder: (context, state) => const FavoritesScreen(),
           ),
           GoRoute(
-            path: '/tab5',
-            name: 'tab5',
+            path: '/profile',
+            name: 'profile',
             builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/setting',
+            name: 'setting',
+            builder: (context, state) => const SettingScreen(),
           ),
         ],
       ),

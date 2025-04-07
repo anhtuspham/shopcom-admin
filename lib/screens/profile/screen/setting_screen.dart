@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/product_bag_item.dart';
 
-class MyBagScreen extends StatefulWidget {
-  const MyBagScreen({super.key});
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  State<MyBagScreen> createState() => _MyBagScreenState();
+  State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _MyBagScreenState extends State<MyBagScreen> {
+class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +33,7 @@ class _MyBagScreenState extends State<MyBagScreen> {
                 child: ListView.separated(
                   itemCount: 3,
                   separatorBuilder: (context, index) =>
-                      const Divider(height: 28),
+                  const Divider(height: 28),
                   itemBuilder: (context, index) => ProductBagItem(
                     index: index,
                     imageUrl: [

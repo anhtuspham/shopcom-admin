@@ -104,7 +104,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         trailing:
             IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
-        onTap: () {},
+        onTap: () {
+          switch (index) {
+            case 1:
+              context.go('/setting');
+              break;
+            case 2:
+              context.go('/setting');
+              break;
+          }
+        },
       ),
     );
   }
