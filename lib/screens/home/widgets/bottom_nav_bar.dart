@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -39,12 +41,14 @@ class BottomNavBar extends StatelessWidget {
   }
 
   int _getSelectedIndex(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-    if (location.contains('/tab1')) return 0;
-    if (location.contains('/shop')) return 1;
-    if (location.contains('/bag')) return 2;
-    if (location.contains('/favorite')) return 3;
-    if (location.contains('/profile')) return 4;
+    final location = GoRouterState.of(context).matchedLocation;
+
+    if (location == '/tab1') return 0;
+    if (location == '/shop') return 1;
+    if (location == '/bag') return 2;
+    if (location == '/favorite') return 3;
+    if (location.startsWith('/profile')) return 4;
+
     return 0;
   }
 }

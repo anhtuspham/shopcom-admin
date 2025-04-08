@@ -106,11 +106,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
         onTap: () {
           switch (index) {
+            case 0:
+              context.push('/order');
             case 1:
-              context.go('/setting');
+              context.push('/setting');
               break;
             case 2:
-              context.go('/setting');
+              context.push('/setting');
               break;
           }
         },

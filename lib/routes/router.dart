@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
+import 'package:shop_com/screens/profile/screen/order_detail.dart';
+import 'package:shop_com/screens/profile/screen/order_screen.dart';
 import 'package:shop_com/screens/profile/screen/profile_screen.dart';
 import 'package:shop_com/screens/profile/screen/setting_screen.dart';
 
@@ -20,8 +22,8 @@ final GlobalKey<NavigatorState> _shellNavigatorKey =
 
 FutureOr<String?> systemRedirect(BuildContext context, GoRouterState state) {
   AuthUser? user = app_config.user;
-  if(user == null){
-    if(state.fullPath!.compareTo("/auth") != 0) {
+  if (user == null) {
+    if (state.fullPath!.compareTo("/auth") != 0) {
       return '/auth';
     }
   }
@@ -41,48 +43,57 @@ GoRouter genRoute() {
   List<GoRoute> groupHome = [];
 
   GoRouter router = GoRouter(
-    navigatorKey: _rootNavigatorKey,
-    initialLocation: '/auth',
-    routes: [
-      screenLogin,
-      ShellRoute(
-        navigatorKey: _shellNavigatorKey,
-        builder: (context, state, child) => HomeScreen(child: child),
-        routes: [
-          GoRoute(
-            path: '/tab1',
-            name: 'tab1',
-            builder: (context, state) => const DashboardScreen(),
-          ),
-          GoRoute(
-            path: '/shop',
-            name: 'shop',
-            builder: (context, state) => const ShopScreen(),
-          ),
-          GoRoute(
-            path: '/bag',
-            name: 'bag',
-            builder: (context, state) => const MyBagScreen(),
-          ),
-          GoRoute(
-            path: '/favorite',
-            name: 'favorite',
-            builder: (context, state) => const FavoritesScreen(),
-          ),
-          GoRoute(
-            path: '/profile',
-            name: 'profile',
-            builder: (context, state) => const ProfileScreen(),
-          ),
-          GoRoute(
-            path: '/setting',
-            name: 'setting',
-            builder: (context, state) => const SettingScreen(),
-          ),
-        ],
-      ),
-    ],
-    redirect: systemRedirect
-  );
+      navigatorKey: _rootNavigatorKey,
+      initialLocation: '/auth',
+      routes: [
+        screenLogin,
+        ShellRoute(
+          navigatorKey: _shellNavigatorKey,
+          builder: (context, state, child) => HomeScreen(child: child),
+          routes: [
+            GoRoute(
+              path: '/tab1',
+              name: 'tab1',
+              builder: (context, state) => const DashboardScreen(),
+            ),
+            GoRoute(
+              path: '/shop',
+              name: 'shop',
+              builder: (context, state) => const ShopScreen(),
+            ),
+            GoRoute(
+              path: '/bag',
+              name: 'bag',
+              builder: (context, state) => const MyBagScreen(),
+            ),
+            GoRoute(
+              path: '/favorite',
+              name: 'favorite',
+              builder: (context, state) => const FavoritesScreen(),
+            ),
+            GoRoute(
+              path: '/profile',
+              name: 'profile',
+              builder: (context, state) => const ProfileScreen(),
+            ),
+            GoRoute(
+              path: '/setting',
+              name: 'setting',
+              builder: (context, state) => const SettingScreen(),
+            ),
+            GoRoute(
+              path: '/order',
+              name: 'order',
+              builder: (context, state) => const OrderScreen(),
+            ),
+            GoRoute(
+              path: '/orderDetail',
+              name: 'orderDetail',
+              builder: (context, state) => const OrderDetailScreen(),
+            ),
+          ],
+        ),
+      ],
+      redirect: systemRedirect);
   return router;
 }
