@@ -90,11 +90,11 @@ class ShopScreen extends StatelessWidget {
   Widget _buildProductCard(_ProductItem product) {
     return ProductCard(
         imageUrl:
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
         rating: product.rating,
         reviewCount: product.reviews,
         brand: product.brand,
-        title: 'shop',
+        title: 'Iphone 15',
         originalPrice: 234,
         isNew: true);
   }

@@ -90,19 +90,17 @@ class FavoritesScreen extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       // itemBuilder: (context, index) => _buildFavoriteItem(context, favoriteProducts[index]),
       itemBuilder: (context, index) => ProductBagItem(
-        index: index,
-        isFavorite: true,
-        imageUrl: [
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg'
-        ][index],
-        name: ['Iphone 15', 'IPhone 14', 'Samsung S23'][index],
-        color: ['Black', 'Gray', 'Black'][index],
-        ram: ['8', '8', '16'][index],
-      ),
+          index: index,
+          isFavorite: true,
+          imageUrl: [
+            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744134810/igor-omilaev-lDWTfYhZ85w-unsplash_yjswfd.jpg',
+            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744134811/amanz-FkEfFVrbM3o-unsplash_xe2nwr.jpg',
+            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133883/anh-nhat-PdALQmfEqvE-unsplash_qfvuhv.jpg',
+          ][index],
+          name: ['Iphone 15', 'IPhone 16', 'Samsung S23'][index],
+          color: ['Black', 'Blue', 'Grey'][index],
+          ram: ['8', '8', '16'][index],
+          price: ['899', '1099', '999'][index]),
     );
   }
 
@@ -122,7 +120,8 @@ class FavoritesScreen extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text("Confirm"),
-              content: const Text("Are you sure you want to remove this item from favorites?"),
+              content: const Text(
+                  "Are you sure you want to remove this item from favorites?"),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../widgets/button_widget.dart';
 import '../../../widgets/product_bag_item.dart';
 
 class MyBagScreen extends StatefulWidget {
@@ -19,7 +20,6 @@ class _MyBagScreenState extends State<MyBagScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Tiêu đề
               const Text(
                 'My Bag',
                 style: TextStyle(
@@ -37,28 +37,29 @@ class _MyBagScreenState extends State<MyBagScreen> {
                   itemBuilder: (context, index) => ProductBagItem(
                     index: index,
                     imageUrl: [
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg'
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133884/felix-fischer-1m0BBZpeSUs-unsplash_pjtywt.jpg',
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133884/dimitri-karastelev-DjkYRklN0QI-unsplash_qrycsa.jpg',
+                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133883/anh-nhat-uCqMa_s-JDg-unsplash_dvy4ii.jpg',
                     ][index],
-                    name: ['Iphone 15', 'IPhone 14', 'Samsung S23'][index],
-                    color: ['Black', 'Gray', 'Black'][index],
+                    name: ['Iphone 15', 'IPhone 14', 'Samsung S21 Ultra'][index],
+                    color: ['Blue', 'Gray', 'Black'][index],
                     ram: ['8', '8', '16'][index],
+                    price: ['755', '699', '999'][index]
                   ),
                 ),
               ),
 
-              const SizedBox(height: 10,),
-
+              const SizedBox(
+                height: 10,
+              ),
 
               // Promo code
               const TextField(
                 decoration: InputDecoration(
                   hintText: 'Enter your promo code',
                   border: UnderlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   suffixIcon: Icon(Icons.arrow_forward, color: Colors.grey),
                 ),
               ),
@@ -85,29 +86,15 @@ class _MyBagScreenState extends State<MyBagScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-
-              // Checkout button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'CHECK OUT',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+              const SizedBox(
+                  width: double.infinity,
+                  child: CommonButtonWidget(
+                    callBack: null,
+                    label: 'CHECK OUT',
+                    style: TextStyle(color: Colors.white),
+                    buttonStyle: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.black)),
+                  ))
             ],
           ),
         ),

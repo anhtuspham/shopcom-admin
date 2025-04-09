@@ -25,7 +25,6 @@ class DashboardScreen extends StatelessWidget {
               _newSection(),
 
               _buildProductGrid(),
-
             ],
           ),
         ),
@@ -33,7 +32,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _bannerSection(){
+  Widget _bannerSection() {
     return Stack(
       children: [
         Container(
@@ -52,10 +51,10 @@ class DashboardScreen extends StatelessWidget {
           bottom: 20,
           left: 20,
           child: Text(
-            'Hello, Apple Intelligence',
+            'Welcome to SHOPCOM',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 25,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
               shadows: [
                 Shadow(
@@ -71,7 +70,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _salesSection(){
+  Widget _salesSection() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -86,7 +85,7 @@ class DashboardScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Super summer sale',
+            'Tech day',
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey,
@@ -97,12 +96,12 @@ class DashboardScreen extends StatelessWidget {
             spacing: 8,
             children: [
               Chip(
-                label: const Text('-20%'),
+                label: const Text('-5%'),
                 backgroundColor: Colors.red[400],
                 labelStyle: const TextStyle(color: Colors.white),
               ),
               Chip(
-                label: const Text('-15%'),
+                label: const Text('-10%'),
                 backgroundColor: Colors.red[400],
                 labelStyle: const TextStyle(color: Colors.white),
               ),
@@ -113,7 +112,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _productSlideSection(){
+  Widget _productSlideSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
@@ -121,17 +120,20 @@ class DashboardScreen extends StatelessWidget {
         child: ListView.separated(
           itemCount: 3,
           itemBuilder: (context, index) {
-            return const ProductCard(
-              imageUrl:
-              'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739155636/cld-sample-4.jpg',
+            return ProductCard(
+              imageUrl: [
+                'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
+                'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/amanz-VP_FOpy5G68-unsplash_d4chmi.jpg',
+                'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-RPiEdud0dcw-unsplash_mpsvmd.jpg',
+              ][index],
               isNew: true,
               rating: 4.0,
               reviewCount: 5,
-              discount: '-11%',
+              discount: ['-5%', '-5%', '-10%'][index],
               brand: 'Apple',
-              title: 'Iphone 15 Pro',
-              originalPrice: 28,
-              discountedPrice: 20,
+              title: ['Iphone 15 Pro', 'Iphone 14 Pro', 'Iphone 15 Pro Max'][index],
+              originalPrice: [400, 500, 600][index],
+              discountedPrice: [380, 450, 540][index],
             );
           },
           separatorBuilder: (context, index) {
@@ -145,7 +147,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _newSection(){
+  Widget _newSection() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -171,11 +173,11 @@ class DashboardScreen extends StatelessWidget {
             spacing: 8,
             children: [
               Chip(
-                label: const Text('NEW'),
+                label: const Text('Apple'),
                 backgroundColor: Colors.grey[200],
               ),
               Chip(
-                label: const Text('NEW'),
+                label: const Text('Samsung'),
                 backgroundColor: Colors.grey[200],
               ),
             ],
@@ -185,17 +187,16 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildProductGrid() {
     final products = List.generate(
-        10,
-            (index) => _ProductItem(
-            name: 'Product ${index + 1}',
-            price: '\$${(50 + index * 10)}',
-            discountedPrice: index.isEven ? '\$${(40 + index * 10)}' : null,
+        6,
+        (index) => _ProductItem(
+            name: ['Samsung S23', 'Samsung S22', 'Samsung S21', 'Iphone 14', 'Iphone 13', 'Iphone 15'][index],
+            price: ['450', '440', '430', '430', '550', '510'][index],
+            discountedPrice: null,
             rating: (index % 5) + 1,
             reviews: (index + 1) * 10,
-            brand: 'Samsung'));
+            brand: ['Samsung', 'Samsung', 'Samsung', 'Apple', 'Apple', 'Apple'][index]));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -217,15 +218,14 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildProductCard(_ProductItem product) {
     return ProductCard(
         imageUrl:
-        'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
+            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
         rating: product.rating,
         reviewCount: product.reviews,
         brand: product.brand,
-        title: 'shop',
-        originalPrice: 234,
+        title: 'Iphone 15 Pro',
+        originalPrice: 400,
         isNew: true);
   }
-
 }
 
 class _ProductItem {

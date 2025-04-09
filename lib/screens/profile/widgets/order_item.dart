@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:shop_com/widgets/button_widget.dart';
 
 class OrderItem extends StatefulWidget {
-
   const OrderItem({super.key});
 
   @override
@@ -24,15 +24,15 @@ class _OrderItemState extends State<OrderItem> {
         child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
-            child:  Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 3,
               children: [
                 const Row(
                   children: [
-                    Text('Order: No1999'),
+                    Text('Order: 19234'),
                     Spacer(),
-                    Text('12/12/2023'),
+                    Text('01/04/2025'),
                   ],
                 ),
                 const Text('Tracking number: IW3452344'),
@@ -44,25 +44,20 @@ class _OrderItemState extends State<OrderItem> {
                         text: const TextSpan(
                             style: TextStyle(color: Colors.black, fontSize: 16),
                             children: [
-                          TextSpan(text: 'Total Amount: '),
+                          TextSpan(text: 'Total Amount: ', style: TextStyle(fontSize: 14)),
                           TextSpan(
-                              text: '112\$',
-                              style: TextStyle(fontWeight: FontWeight.w700))
+                              text: '2453\$',
+                              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15))
                         ])),
                   ],
                 ),
                 Row(
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        context.push('/orderDetail');
-                      },
-                      style: ButtonStyle(
-                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              side: BorderSide(color: Colors.black)))),
-                      child: Text('Details'),
-                    ),
+                    CommonButtonWidget(
+                        callBack: () {
+                          context.push('/orderDetail');
+                        },
+                        label: 'Details'),
                     const Spacer(),
                     const Text('Delivered',
                         style: TextStyle(

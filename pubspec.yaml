@@ -50,6 +50,7 @@ dependencies:
   hive_flutter: ^1.1.0
   shared_preferences: ^2.5.2
   elegant_notification: ^2.4.3
+  awesome_dialog: ^3.2.1
 
 dev_dependencies:
   flutter_test:

@@ -6,6 +6,7 @@ class ProductBagItem extends StatefulWidget {
   final String? brand;
   final String? name;
   final String? color;
+  final String? price;
   final String? ram;
   final bool? isFavorite;
   final int index;
@@ -17,6 +18,7 @@ class ProductBagItem extends StatefulWidget {
       this.name,
       this.color,
       this.ram,
+      this.price,
       required this.index,
       this.isFavorite = false});
 
@@ -145,7 +147,7 @@ class _ProductBagItemState extends State<ProductBagItem> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('124\$',
+                      Text('${widget.price}\$',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -173,7 +175,8 @@ class _ProductBagItemState extends State<ProductBagItem> {
       ),
       style: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.white),
-      shape: WidgetStatePropertyAll(CircleBorder(side: BorderSide(color: Colors.black12)))),
+          shape: WidgetStatePropertyAll(
+              CircleBorder(side: BorderSide(color: Colors.black12)))),
     );
   }
 

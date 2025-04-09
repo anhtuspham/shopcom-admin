@@ -9,6 +9,7 @@ class OrderProductItem extends StatefulWidget {
   final String? color;
   final String? unit;
   final String? ram;
+  final String? price;
   final bool? isFavorite;
   final int index;
 
@@ -18,6 +19,7 @@ class OrderProductItem extends StatefulWidget {
       this.brand,
       this.name,
       this.color,
+      this.price,
       this.unit,
       this.ram,
       required this.index,
@@ -110,7 +112,7 @@ class _OrderProductItemState extends State<OrderProductItem> {
                           fontSize: 14,
                           infoFontWeight: FontWeight.w700,
                         )),
-                    const Text('124\$',
+                    Text('${widget.price}\$',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

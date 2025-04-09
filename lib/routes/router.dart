@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
+import 'package:shop_com/screens/product/screen/product_detail_screen.dart';
 import 'package:shop_com/screens/profile/screen/order_detail.dart';
 import 'package:shop_com/screens/profile/screen/order_screen.dart';
 import 'package:shop_com/screens/profile/screen/profile_screen.dart';
@@ -91,6 +92,11 @@ GoRouter genRoute() {
               name: 'orderDetail',
               builder: (context, state) => const OrderDetailScreen(),
             ),
+            GoRoute(
+              path: '/productDetail',
+              name: 'productDetail',
+              builder: (context, state) => const ProductDetailScreen(),
+            )
           ],
         ),
       ],

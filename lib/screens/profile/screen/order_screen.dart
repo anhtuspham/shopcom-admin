@@ -20,9 +20,7 @@ class _OrderScreenState extends State<OrderScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back_ios)),
+              _buildAppBar(context),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -30,14 +28,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'My Orders',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
                       TabBar(
                         labelPadding: EdgeInsets.zero,
                         labelColor: Colors.white,
@@ -92,39 +82,38 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  Widget _buildAppBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
+          const SizedBox(width: 4),
+          const Text(
+            'My Orders',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _buildOrderItemSection() {
     return ListView.separated(
       itemBuilder: (context, index) => OrderItem(),
-      itemCount: 3,
+      itemCount: 1,
       separatorBuilder: (context, index) => const SizedBox(height: 16),
     );
   }
+
   Widget _buildEmptyOrderItemSection() {
     return ListView.separated(
       itemBuilder: (context, index) => const Offstage(),
       itemCount: 0,
       separatorBuilder: (context, index) => const SizedBox(height: 16),
-    );
-  }
-
-
-  Widget _buildOrderSection() {
-    return ListView.separated(
-      itemCount: 3,
-      separatorBuilder: (context, index) => const Divider(height: 28),
-      itemBuilder: (context, index) => ProductBagItem(
-        index: index,
-        imageUrl: [
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-          'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg'
-        ][index],
-        name: ['Iphone 15', 'IPhone 14', 'Samsung S23'][index],
-        color: ['Black', 'Gray', 'Black'][index],
-        ram: ['8', '8', '16'][index],
-      ),
     );
   }
 }

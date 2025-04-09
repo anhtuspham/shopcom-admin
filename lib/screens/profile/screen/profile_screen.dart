@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shop_com/widgets/button_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -26,11 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Expanded(
                 child: _buildOrderSection(),
               ),
-              ElevatedButton(
-                onPressed: () => context.go('/auth'),
-                style: const ButtonStyle(),
-                child: const Text('Log out'),
-              )
+              CommonButtonWidget(callBack: () => context.go('/auth'), label: 'Log out')
             ],
           ),
         ),
@@ -53,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Text(
               'Pham Anh Tu',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -61,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Text(
               'panhtu0902@mail.com',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 color: Colors.grey,
               ),
             ),
