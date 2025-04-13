@@ -2,34 +2,31 @@ import 'dart:convert';
 
 import 'package:shop_com/data/model/rating.dart';
 import 'package:shop_com/data/model/variant.dart';
+import 'package:shop_com/utils/util.dart';
 
 class Product {
-  Ratings? ratings;
   String? id;
   String? name;
   String? description;
   String? category;
   String? brand;
+  Variant? defaultVariant;
   List<Variant>? variants;
-  int? defaultVariant;
+  Ratings? ratings;
   bool? isActive;
-  int? v;
   DateTime? createdAt;
-  DateTime? updatedAt;
 
   Product({
-    this.ratings,
     this.id,
     this.name,
     this.description,
     this.category,
     this.brand,
-    this.variants,
     this.defaultVariant,
+    this.variants,
+    this.ratings,
     this.isActive,
-    this.v,
     this.createdAt,
-    this.updatedAt,
   });
 
   factory Product.fromRawJson(String str) => Product.fromJson(json.decode(str));
@@ -37,32 +34,28 @@ class Product {
   String toRawJson() => json.encode(toJson());
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    ratings: Ratings.fromJson(json["ratings"]),
     id: json["_id"],
     name: json["name"],
     description: json["description"],
     category: json["category"],
     brand: json["brand"],
+    defaultVariant: Variant.fromJson(json["defaultVariant"]),
     variants: List<Variant>.from(json["variants"].map((x) => Variant.fromJson(x))),
-    defaultVariant: json["defaultVariant"],
+    ratings: Ratings.fromJson(json["ratings"]),
     isActive: json["isActive"],
-    v: json["__v"],
     createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "ratings": ratings?.toJson(),
     "_id": id,
     "name": name,
     "description": description,
     "category": category,
     "brand": brand,
+    "defaultVariant": defaultVariant?.toJson(),
     "variants": List<dynamic>.from(variants!.map((x) => x.toJson())),
-    "defaultVariant": defaultVariant,
+    "ratings": ratings?.toJson(),
     "isActive": isActive,
-    "__v": v,
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
+    "createdAt": getStringFromDateTime(createdAt ?? DateTime(0), 'dd/MM/yyyy'),
   };
 }
