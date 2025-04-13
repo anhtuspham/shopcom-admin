@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:intl/intl.dart';
+
 Color convertColorFromString(String data) {
   int value = int.parse(data, radix: 16);
   return Color(value);
@@ -8,4 +10,20 @@ Color convertColorFromString(String data) {
 String convertColorToString(Color color) {
   int tmp = (color.alpha << 24) | (color.red << 16) | (color.green << 8) | color.blue;
   return tmp.toRadixString(16).padLeft(8, '0');
+}
+
+DateTime? getDateTimeFromString(String datetime, String format) {
+  try {
+    return DateFormat(format).tryParse(datetime);
+  } catch (e) {
+    return null;
+  }
+}
+
+String getStringFromDateTime(DateTime datetime, String format) {
+  try {
+    return DateFormat(format).format(datetime.toLocal());
+  } catch (e) {
+    return '';
+  }
 }
