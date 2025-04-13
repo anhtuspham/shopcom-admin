@@ -51,6 +51,7 @@ dependencies:
   shared_preferences: ^2.5.2
   elegant_notification: ^2.4.3
   awesome_dialog: ^3.2.1
+  async: ^2.12.0
 
 dev_dependencies:
   flutter_test:

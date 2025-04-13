@@ -132,8 +132,8 @@ class DashboardScreen extends StatelessWidget {
               discount: ['-5%', '-5%', '-10%'][index],
               brand: 'Apple',
               title: ['Iphone 15 Pro', 'Iphone 14 Pro', 'Iphone 15 Pro Max'][index],
-              originalPrice: [400, 500, 600][index],
-              discountedPrice: [380, 450, 540][index],
+              originalPrice: [400, 500, 600][index].toDouble(),
+              discountedPrice: [380, 450, 540][index].toDouble(),
             );
           },
           separatorBuilder: (context, index) {

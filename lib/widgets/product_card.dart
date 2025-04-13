@@ -8,8 +8,8 @@ class ProductCard extends StatefulWidget {
   final int reviewCount;
   final String brand;
   final String title;
-  final int originalPrice;
-  final int? discountedPrice;
+  final double originalPrice;
+  final double? discountedPrice;
   final bool isNew;
 
   const ProductCard({
@@ -182,8 +182,9 @@ class _ProductCardState extends State<ProductCard> {
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
-                      decoration: widget.discountedPrice != null ? TextDecoration
-                          .lineThrough : TextDecoration.none,
+                      decoration: widget.discountedPrice != null
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
                     ),
                   ),
                   if (widget.discountedPrice != null) ...[

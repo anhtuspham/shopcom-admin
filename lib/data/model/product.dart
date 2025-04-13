@@ -6,7 +6,7 @@ import 'package:shop_com/utils/util.dart';
 
 class Product {
   String? id;
-  String? name;
+  String name;
   String? description;
   String? category;
   String? brand;
@@ -18,7 +18,7 @@ class Product {
 
   Product({
     this.id,
-    this.name,
+    required this.name,
     this.description,
     this.category,
     this.brand,
@@ -33,18 +33,32 @@ class Product {
 
   String toRawJson() => json.encode(toJson());
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id: json["_id"],
-    name: json["name"],
-    description: json["description"],
-    category: json["category"],
-    brand: json["brand"],
-    defaultVariant: Variant.fromJson(json["defaultVariant"]),
-    variants: List<Variant>.from(json["variants"].map((x) => Variant.fromJson(x))),
-    ratings: Ratings.fromJson(json["ratings"]),
-    isActive: json["isActive"],
-    createdAt: DateTime.parse(json["createdAt"]),
-  );
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json["_id"],
+      name: json["name"] ?? "Unknown",
+      description: json["description"],
+      category: json["category"],
+      brand: json["brand"],
+      defaultVariant: json["defaultVariant"] != null
+          ? Variant.fromJson(json["defaultVariant"])
+          : null,
+      variants: json["variants"] != null
+          ? List<Variant>.from(
+        (json["variants"] as List).map(
+              (x) => Variant.fromJson(x),
+        ),
+      )
+          : [],
+      ratings: json["ratings"] != null
+          ? Ratings.fromJson(json["ratings"])
+          : null,
+      isActive: json["isActive"] ?? false,
+      createdAt: json["createdAt"] != null
+          ? DateTime.tryParse(json["createdAt"])
+          : null,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "_id": id,

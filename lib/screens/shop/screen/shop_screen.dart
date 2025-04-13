@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:shop_com/providers/product_provider.dart';
+import 'package:shop_com/widgets/error_widget.dart';
 import 'package:shop_com/widgets/product_card.dart';
 
-class ShopScreen extends StatelessWidget {
+import '../../../widgets/loading_widget.dart';
+
+class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
+
+  @override
+  State<ShopScreen> createState() => _ShopScreenState();
+}
+
+class _ShopScreenState extends State<ShopScreen> {
+  final ProductProvider _productProvider = ProductProvider();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _productProvider.fetchProduct();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _productProvider.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,55 +91,73 @@ class ShopScreen extends StatelessWidget {
   }
 
   Widget _buildProductGrid() {
-    final products = List.generate(
-        10,
-        (index) => _ProductItem(
-            name: 'Product ${index + 1}',
-            price: '\$${(50 + index * 10)}',
-            discountedPrice: index.isEven ? '\$${(40 + index * 10)}' : null,
-            rating: (index % 5) + 1,
-            reviews: (index + 1) * 10,
-            brand: 'Samsung'));
-
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.6,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 6,
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) => _buildProductCard(products[index]),
-    );
+    return ListenableBuilder(
+        listenable: _productProvider,
+        builder: (context, child) {
+          if (_productProvider.isError) {
+            return const ErrorsWidget();
+          }
+          if (_productProvider.isLoading) {
+            return const LoadingWidget();
+          }
+          return Container(
+            margin: const EdgeInsets.only(left: 8.0, right: 8, bottom: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1,
+              ),
+            ),
+            child: RawScrollbar(
+              trackVisibility: false,
+              thumbVisibility: true,
+              thumbColor: Colors.grey,
+              controller: _scrollController,
+              padding: const EdgeInsets.only(top: 7, right: 2),
+              crossAxisMargin: 0,
+              radius: const Radius.circular(10),
+              thickness: 10,
+              child: RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: GridView.builder(
+                      controller: _scrollController,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.6,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 6,
+                      ),
+                      itemCount: _productProvider.filteredGroups.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(
+                            imageUrl:
+                                _productProvider.filteredGroups[index].defaultVariant?.images?[0] ?? '',
+                            rating: _productProvider
+                                    .filteredGroups[index].ratings?.average ??
+                                0,
+                            reviewCount: _productProvider
+                                    .filteredGroups[index].ratings?.count ??
+                                0,
+                            brand:
+                                _productProvider.filteredGroups[index].brand ??
+                                    '',
+                            title: _productProvider.filteredGroups[index].name,
+                            originalPrice: _productProvider
+                                    .filteredGroups[index]
+                                    .defaultVariant
+                                    ?.price ??
+                                0,
+                            isNew: true);
+                      })),
+            ),
+          );
+        });
   }
 
-  Widget _buildProductCard(_ProductItem product) {
-    return ProductCard(
-        imageUrl:
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
-        rating: product.rating,
-        reviewCount: product.reviews,
-        brand: product.brand,
-        title: 'Iphone 15',
-        originalPrice: 234,
-        isNew: true);
+  Future<void> _refresh() {
+    _productProvider.fetchProduct();
+    return Future.delayed(const Duration(seconds: 1));
   }
-}
-
-class _ProductItem {
-  final String name;
-  final String price;
-  final String? discountedPrice;
-  final double rating;
-  final int reviews;
-  final String brand;
-
-  _ProductItem({
-    required this.name,
-    required this.price,
-    this.discountedPrice,
-    required this.rating,
-    required this.reviews,
-    required this.brand,
-  });
 }

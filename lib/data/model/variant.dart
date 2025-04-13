@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 class Variant {
   List<String>? images;
   String? color;
   String? ram;
   String? rom;
-  String? price;
+  double? price;
   int? quantity;
   String? id;
 
@@ -28,7 +29,7 @@ class Variant {
     color: json["color"],
     ram: json["ram"],
     rom: json["rom"],
-    price: json["price"],
+    price: (json["price"] as num?)?.toDouble() ?? 0.0,
     quantity: json["quantity"],
     id: json["_id"],
   );
