@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shop_com/apis/base_url.dart';
+import 'package:shop_com/apis/product_api.dart';
 import 'package:shop_com/apis/user_api.dart';
 import 'package:shop_com/data/config/app_config.dart';
 import 'package:async/async.dart';
@@ -16,7 +17,7 @@ class BaseApi{
       baseUrl: base_url,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        if (app_config.user != null) 'Authorization': app_config.user?.token,
+        if (app_config.user != null) 'Authorization': 'Bearer ${app_config.user?.token}',
       },
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(minutes: 5),
@@ -105,6 +106,6 @@ class BaseApi{
   }
 }
 
-class Api extends BaseApi with AuthUserApi, UserApi{
+class Api extends BaseApi with AuthUserApi, UserApi, ProductApi{
   Api();
 }
