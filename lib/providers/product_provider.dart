@@ -15,11 +15,12 @@ class ProductProvider with ChangeNotifier {
 
   final searchTF = TextEditingController();
 
-  List<Product> get filteredGroups => _filteredProducts.isEmpty
-      ? searchTF.text.isEmpty
-          ? _products
-          : []
-      : _filteredProducts;
+  List<Product> get filteredProducts {
+    if (_filteredProducts.isEmpty) {
+      return _products;
+    }
+    return _filteredProducts;
+  }
 
   bool get isLoading => _isLoading;
 
@@ -45,7 +46,10 @@ class ProductProvider with ChangeNotifier {
     if (searchTF.text.isEmpty) {
       _filteredProducts = _products;
     } else {
-      _filteredProducts = _products.where((e) => e.name.toLowerCase().trim().contains(searchTF.text.toLowerCase().trim())).toList();
+      _filteredProducts = _products
+          .where((e) =>
+              e.name.toLowerCase().contains(searchTF.text.toLowerCase().trim()))
+          .toList();
     }
     notifyListeners();
   }

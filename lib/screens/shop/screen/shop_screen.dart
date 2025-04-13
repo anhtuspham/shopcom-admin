@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_com/providers/product_provider.dart';
+import 'package:shop_com/screens/shop/widgets/search_product.dart';
 import 'package:shop_com/widgets/error_widget.dart';
 import 'package:shop_com/widgets/product_card.dart';
 
@@ -18,14 +19,12 @@ class _ShopScreenState extends State<ShopScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _productProvider.fetchProduct();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _productProvider.dispose();
   }
@@ -39,7 +38,13 @@ class _ShopScreenState extends State<ShopScreen> {
           child: Column(
             children: [
               _buildHeaderSection(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              SearchProduct(
+                productProvider: _productProvider,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Expanded(
                 child: _buildProductGrid(),
               ),
@@ -101,7 +106,8 @@ class _ShopScreenState extends State<ShopScreen> {
             return const LoadingWidget();
           }
           return Container(
-            margin: const EdgeInsets.only(left: 8.0, right: 8, bottom: 8),
+            margin: const EdgeInsets.only(left: 4.0, right: 8, bottom: 8),
+            padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -117,11 +123,12 @@ class _ShopScreenState extends State<ShopScreen> {
               padding: const EdgeInsets.only(top: 7, right: 2),
               crossAxisMargin: 0,
               radius: const Radius.circular(10),
-              thickness: 10,
+              thickness: 6,
               child: RefreshIndicator(
                   onRefresh: _refresh,
                   child: GridView.builder(
                       controller: _scrollController,
+                      physics: const BouncingScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -129,23 +136,25 @@ class _ShopScreenState extends State<ShopScreen> {
                         mainAxisSpacing: 16,
                         crossAxisSpacing: 6,
                       ),
-                      itemCount: _productProvider.filteredGroups.length,
+                      itemCount: _productProvider.filteredProducts.length,
                       itemBuilder: (context, index) {
                         return ProductCard(
-                            imageUrl:
-                                _productProvider.filteredGroups[index].defaultVariant?.images?[0] ?? '',
+                            imageUrl: _productProvider.filteredProducts[index]
+                                    .defaultVariant?.images?[0] ??
+                                '',
                             rating: _productProvider
-                                    .filteredGroups[index].ratings?.average ??
+                                    .filteredProducts[index].ratings?.average ??
                                 0,
                             reviewCount: _productProvider
-                                    .filteredGroups[index].ratings?.count ??
+                                    .filteredProducts[index].ratings?.count ??
                                 0,
-                            brand:
-                                _productProvider.filteredGroups[index].brand ??
-                                    '',
-                            title: _productProvider.filteredGroups[index].name,
+                            brand: _productProvider
+                                    .filteredProducts[index].brand ??
+                                '',
+                            title:
+                                _productProvider.filteredProducts[index].name,
                             originalPrice: _productProvider
-                                    .filteredGroups[index]
+                                    .filteredProducts[index]
                                     .defaultVariant
                                     ?.price ??
                                 0,
