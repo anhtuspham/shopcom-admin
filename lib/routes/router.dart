@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_com/providers/product_detail_provider.dart';
+import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com/screens/product/screen/product_detail_screen.dart';
 import 'package:shop_com/screens/profile/screen/order_detail.dart';
@@ -60,7 +63,9 @@ GoRouter genRoute() {
             GoRoute(
               path: '/shop',
               name: 'shop',
-              builder: (context, state) => const ShopScreen(),
+              builder: (context, state) => ChangeNotifierProvider(
+                  create: (context) => ProductProvider()..fetchProduct(),
+                  child: const ShopScreen()),
             ),
             GoRoute(
               path: '/bag',
@@ -95,7 +100,10 @@ GoRouter genRoute() {
             GoRoute(
               path: '/productDetail',
               name: 'productDetail',
-              builder: (context, state) => const ProductDetailScreen(),
+              builder: (context, state) => ChangeNotifierProvider(
+                  create: (context) =>
+                      ProductDetailProvider()..fetchProductDetail(),
+                  child: const ProductDetailScreen()),
             )
           ],
         ),

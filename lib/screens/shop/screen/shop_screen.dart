@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/shop/widgets/search_product.dart';
 import 'package:shop_com/widgets/error_widget.dart';
@@ -14,23 +15,11 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
-  final ProductProvider _productProvider = ProductProvider();
   final ScrollController _scrollController = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
-    _productProvider.fetchProduct();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _productProvider.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final productProvider = context.watch<ProductProvider>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -39,14 +28,12 @@ class _ShopScreenState extends State<ShopScreen> {
             children: [
               _buildHeaderSection(),
               const SizedBox(height: 10),
-              SearchProduct(
-                productProvider: _productProvider,
-              ),
+              const SearchProduct(),
               const SizedBox(
                 height: 10,
               ),
               Expanded(
-                child: _buildProductGrid(),
+                child: _buildProductGrid(productProvider),
               ),
             ],
           ),
@@ -95,14 +82,14 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildProductGrid() {
+  Widget _buildProductGrid(ProductProvider productProvider) {
     return ListenableBuilder(
-        listenable: _productProvider,
+        listenable: productProvider,
         builder: (context, child) {
-          if (_productProvider.isError) {
+          if (productProvider.isError) {
             return const ErrorsWidget();
           }
-          if (_productProvider.isLoading) {
+          if (productProvider.isLoading) {
             return const LoadingWidget();
           }
           return Container(
@@ -136,24 +123,24 @@ class _ShopScreenState extends State<ShopScreen> {
                         mainAxisSpacing: 16,
                         crossAxisSpacing: 6,
                       ),
-                      itemCount: _productProvider.filteredProducts.length,
+                      itemCount: productProvider.filteredProducts.length,
                       itemBuilder: (context, index) {
                         return ProductCard(
-                            imageUrl: _productProvider.filteredProducts[index]
+                            imageUrl: productProvider.filteredProducts[index]
                                     .defaultVariant?.images?[0] ??
                                 '',
-                            rating: _productProvider
+                            rating: productProvider
                                     .filteredProducts[index].ratings?.average ??
                                 0,
-                            reviewCount: _productProvider
+                            reviewCount: productProvider
                                     .filteredProducts[index].ratings?.count ??
                                 0,
-                            brand: _productProvider
+                            brand: productProvider
                                     .filteredProducts[index].brand ??
                                 '',
                             title:
-                                _productProvider.filteredProducts[index].name,
-                            originalPrice: _productProvider
+                                productProvider.filteredProducts[index].name,
+                            originalPrice: productProvider
                                     .filteredProducts[index]
                                     .defaultVariant
                                     ?.price ??
@@ -165,8 +152,8 @@ class _ShopScreenState extends State<ShopScreen> {
         });
   }
 
-  Future<void> _refresh() {
-    _productProvider.fetchProduct();
+  Future<void> _refresh() async {
+    await context.read<ProductProvider>().fetchProduct();
     return Future.delayed(const Duration(seconds: 1));
   }
 }

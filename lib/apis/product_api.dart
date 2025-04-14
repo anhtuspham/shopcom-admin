@@ -18,13 +18,27 @@ mixin ProductApi on BaseApi {
   }
 
   List<Product> safeParseProducts(List rawList) {
-    return rawList.map<Product?>((e) {
-      try {
-        return Product.fromJson(e);
-      } catch (err) {
-        print('❌ Lỗi khi parse product: $err\nRaw item: $e');
-        return null;
-      }
-    }).whereType<Product>().toList();
+    return rawList
+        .map<Product?>((e) {
+          try {
+            return Product.fromJson(e);
+          } catch (err) {
+            print('❌ Lỗi khi parse product: $err\nRaw item: $e');
+            return null;
+          }
+        })
+        .whereType<Product>()
+        .toList();
+  }
+
+  Future<Product> fetchProductDetail({required String id}) async {
+    Result result = await handleRequest(request: () async {
+      return get('/api/product/$id');
+    });
+    try {
+      return Product.fromJson(result.asValue!.value);
+    } catch (_) {
+      return Product.empty();
+    }
   }
 }

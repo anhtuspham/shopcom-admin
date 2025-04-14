@@ -33,6 +33,8 @@ class Product {
 
   String toRawJson() => json.encode(toJson());
 
+  factory Product.empty() => Product(name: '');
+
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json["_id"],

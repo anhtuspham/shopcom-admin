@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../providers/product_provider.dart';
 import '../../../utils/color_value_key.dart';
 
 class SearchProduct extends StatelessWidget {
-  final ProductProvider productProvider;
+  // final ProductProvider productProvider;
 
-  const SearchProduct({super.key, required this.productProvider});
+  const SearchProduct({super.key});
 
   @override
   Widget build(BuildContext context) {
     // final productProvider = ProductProvider();
+    final productProvider = context.watch<ProductProvider>();
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 8, top: 8),
       child: TextField(
