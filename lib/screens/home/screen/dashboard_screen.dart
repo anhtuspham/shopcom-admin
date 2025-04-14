@@ -121,6 +121,7 @@ class DashboardScreen extends StatelessWidget {
           itemCount: 3,
           itemBuilder: (context, index) {
             return ProductCard(
+              id: '123',
               imageUrl: [
                 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
                 'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/amanz-VP_FOpy5G68-unsplash_d4chmi.jpg',
@@ -131,7 +132,11 @@ class DashboardScreen extends StatelessWidget {
               reviewCount: 5,
               discount: ['-5%', '-5%', '-10%'][index],
               brand: 'Apple',
-              title: ['Iphone 15 Pro', 'Iphone 14 Pro', 'Iphone 15 Pro Max'][index],
+              title: [
+                'Iphone 15 Pro',
+                'Iphone 14 Pro',
+                'Iphone 15 Pro Max'
+              ][index],
               originalPrice: [400, 500, 600][index].toDouble(),
               discountedPrice: [380, 450, 540][index].toDouble(),
             );
@@ -191,12 +196,26 @@ class DashboardScreen extends StatelessWidget {
     final products = List.generate(
         6,
         (index) => _ProductItem(
-            name: ['Samsung S23', 'Samsung S22', 'Samsung S21', 'Iphone 14', 'Iphone 13', 'Iphone 15'][index],
+            name: [
+              'Samsung S23',
+              'Samsung S22',
+              'Samsung S21',
+              'Iphone 14',
+              'Iphone 13',
+              'Iphone 15'
+            ][index],
             price: ['450', '440', '430', '430', '550', '510'][index],
             discountedPrice: null,
             rating: (index % 5) + 1,
             reviews: (index + 1) * 10,
-            brand: ['Samsung', 'Samsung', 'Samsung', 'Apple', 'Apple', 'Apple'][index]));
+            brand: [
+              'Samsung',
+              'Samsung',
+              'Samsung',
+              'Apple',
+              'Apple',
+              'Apple'
+            ][index]));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -217,6 +236,7 @@ class DashboardScreen extends StatelessWidget {
 
   Widget _buildProductCard(_ProductItem product) {
     return ProductCard(
+        id: '123',
         imageUrl:
             'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
         rating: product.rating,

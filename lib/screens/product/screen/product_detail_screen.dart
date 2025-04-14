@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_com/providers/product_detail_provider.dart';
+import 'package:shop_com/widgets/error_widget.dart';
+import 'package:shop_com/widgets/loading_widget.dart';
 
 import '../../../widgets/button_widget.dart';
 
@@ -27,49 +31,61 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final productDetailProvider = context.watch<ProductDetailProvider>();
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildAppBar(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildImageSlider(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 16),
-                          _buildDropdowns(),
-                          const SizedBox(height: 16),
-                          _buildTitlePriceSection(),
-                          const SizedBox(height: 8),
-                          _buildDescription(),
-                          const SizedBox(height: 20),
-                          _buildAddToCartButton(),
-                          const SizedBox(height: 20),
-                          _buildAccordion(),
-                          const SizedBox(height: 20),
-                          // _buildSuggestions(),
-                        ],
-                      ),
+        child: ListenableBuilder(
+          listenable: productDetailProvider,
+          builder: (context, child) {
+            if (productDetailProvider.isLoading) {
+              return const LoadingWidget();
+            }
+            if (productDetailProvider.isError) {
+              return const ErrorsWidget();
+            }
+            return Column(
+              children: [
+                _buildAppBar(productDetailProvider),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildImageSlider(productDetailProvider),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16),
+                              _buildDropdowns(),
+                              const SizedBox(height: 16),
+                              _buildTitlePriceSection(),
+                              const SizedBox(height: 8),
+                              _buildDescription(),
+                              const SizedBox(height: 20),
+                              _buildAddToCartButton(),
+                              const SizedBox(height: 20),
+                              _buildAccordion(),
+                              const SizedBox(height: 20),
+                              // _buildSuggestions(),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(ProductDetailProvider productDetailProvider) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -77,11 +93,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back_ios)),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Iphone 15 Pro',
+              productDetailProvider.product.name,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
             ),
           ),
           const Icon(Icons.share),
@@ -100,7 +116,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildImageSlider() {
+  Widget _buildImageSlider(ProductDetailProvider productDetailProvider) {
     return Column(
       children: [
         AspectRatio(

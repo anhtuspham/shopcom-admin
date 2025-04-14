@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ProductCard extends StatefulWidget {
+  final String id;
   final String imageUrl;
   final String? discount;
   final double rating;
@@ -14,6 +15,7 @@ class ProductCard extends StatefulWidget {
 
   const ProductCard({
     super.key,
+    required this.id,
     required this.imageUrl,
     this.discount,
     required this.rating,
@@ -36,7 +38,7 @@ class _ProductCardState extends State<ProductCard> {
     final width = MediaQuery.sizeOf(context).width;
 
     return InkWell(
-      onTap: () => context.push('/productDetail'),
+      onTap: () => context.push('/productDetail', extra: widget.id),
       child: Container(
         width: width * 0.45,
         decoration: BoxDecoration(

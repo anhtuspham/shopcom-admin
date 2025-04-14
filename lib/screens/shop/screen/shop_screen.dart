@@ -126,6 +126,8 @@ class _ShopScreenState extends State<ShopScreen> {
                       itemCount: productProvider.filteredProducts.length,
                       itemBuilder: (context, index) {
                         return ProductCard(
+                            id: productProvider.filteredProducts[index].id ??
+                                '',
                             imageUrl: productProvider.filteredProducts[index]
                                     .defaultVariant?.images?[0] ??
                                 '',
@@ -135,11 +137,10 @@ class _ShopScreenState extends State<ShopScreen> {
                             reviewCount: productProvider
                                     .filteredProducts[index].ratings?.count ??
                                 0,
-                            brand: productProvider
-                                    .filteredProducts[index].brand ??
-                                '',
-                            title:
-                                productProvider.filteredProducts[index].name,
+                            brand:
+                                productProvider.filteredProducts[index].brand ??
+                                    '',
+                            title: productProvider.filteredProducts[index].name,
                             originalPrice: productProvider
                                     .filteredProducts[index]
                                     .defaultVariant
