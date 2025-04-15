@@ -59,7 +59,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 16),
-                              _buildDropdowns(),
+                              _buildDropdowns(productDetailProvider),
                               const SizedBox(height: 16),
                               _buildTitlePriceSection(),
                               const SizedBox(height: 8),
@@ -117,13 +117,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildImageSlider(ProductDetailProvider productDetailProvider) {
+    final images = productDetailProvider.product.variants!
+        .expand((v) => v.images?.cast<String>() ?? [])
+        .toList();
     return Column(
       children: [
         AspectRatio(
           aspectRatio: 1,
           child: PageView.builder(
             controller: _pageController,
-            itemCount: productImages.length,
+            itemCount: images.length,
             onPageChanged: (index) {
               setState(() {
                 currentPage = index;
@@ -131,8 +134,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             },
             itemBuilder: (context, index) {
               return Image.network(
-                productImages[index],
+                images[index],
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if(loadingProgress == null) return child;
+                  return const LoadingWidget();
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const ErrorsWidget();
+                },
               );
             },
           ),
@@ -141,7 +151,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
-            productImages.length,
+            images.length,
             (index) => AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -159,7 +169,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildDropdowns() {
+  Widget _buildDropdowns(ProductDetailProvider productDetailProvider) {
     return Row(
       children: [
         Expanded(
