@@ -80,9 +80,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               const SizedBox(height: 16),
                               _buildDropdowns(productDetailProvider),
                               const SizedBox(height: 16),
-                              _buildTitlePriceSection(),
+                              _buildTitlePriceSection(productDetailProvider),
                               const SizedBox(height: 8),
-                              _buildDescription(),
+                              _buildDescription(productDetailProvider),
                               const SizedBox(height: 20),
                               _buildAddToCartButton(),
                               const SizedBox(height: 20),
@@ -272,29 +272,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     });
   }
 
-  Widget _buildTitlePriceSection() {
-    return const Row(
+  Widget _buildTitlePriceSection(ProductDetailProvider provider) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Apple',
+            Text(provider.product.name,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            Text('Iphone 15 Pro',
+            Text(provider.product.brand ?? '',
                 style: TextStyle(color: Colors.grey, fontSize: 14)),
           ],
         ),
-        Text('\$380',
+        Text('\$${provider.product.defaultVariant?.price}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
       ],
     );
   }
 
-  Widget _buildDescription() {
-    return const Text(
-      '48MP Main: 26 mm, ƒ/1.6 aperture, sensor‑shift optical image stabilization, 100% Focus Pixels, support for super-high-resolution photos (24MP and 48MP)',
-      style: TextStyle(fontSize: 14),
+  Widget _buildDescription(ProductDetailProvider productDetailProvider) {
+    return Text(
+      productDetailProvider.product.description ?? '',
+      style: const TextStyle(fontSize: 14),
     );
   }
 
@@ -303,11 +303,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       width: double.infinity,
       child: CommonButtonWidget(
         callBack: null,
-        label: 'CHECK OUT',
+        label: 'Add to cart',
         style: TextStyle(color: Colors.white),
         buttonStyle: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.black),
         ),
+        isUppercase: true,
       ),
     );
   }
