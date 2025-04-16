@@ -63,9 +63,7 @@ GoRouter genRoute() {
             GoRoute(
               path: '/shop',
               name: 'shop',
-              builder: (context, state) => ChangeNotifierProvider(
-                  create: (context) => ProductProvider()..fetchProduct(),
-                  child: const ShopScreen()),
+              builder: (context, state) => const ShopScreen(),
             ),
             GoRoute(
               path: '/bag',
@@ -102,16 +100,12 @@ GoRouter genRoute() {
               name: 'productDetail',
               builder: (context, state) {
                 final id = state.extra as String;
-                return ChangeNotifierProvider(
-                    create: (context) {
-                      final provider = ProductDetailProvider();
-                      provider.id = id;
-                      provider.fetchProductDetail();
-                      return provider;
-                    },
-                    child: const ProductDetailScreen());
+                final provider = ProductDetailProvider.instance;
+                provider.setProductId(id);
+                return ChangeNotifierProvider<ProductDetailProvider>.value(
+                    value: provider, child: const ProductDetailScreen());
               },
-            )
+            ),
           ],
         ),
       ],

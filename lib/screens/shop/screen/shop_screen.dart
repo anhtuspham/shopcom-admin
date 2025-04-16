@@ -18,6 +18,17 @@ class _ShopScreenState extends State<ShopScreen> {
   final ScrollController _scrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final provider = ProductProvider.instance;
+      if(provider.products.isEmpty){
+        provider.fetchProduct();
+      }
+    },);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final productProvider = context.watch<ProductProvider>();
     return Scaffold(

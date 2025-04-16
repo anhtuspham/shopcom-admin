@@ -1,61 +1,59 @@
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-
 import '../data/config/app_config.dart';
 import '../data/model/product.dart';
 
 class ProductProvider with ChangeNotifier {
+  static ProductProvider? _instance;
+  static ProductProvider get instance {
+    _instance ??= ProductProvider._internal();
+    return _instance!;
+  }
+
+  ProductProvider._internal();
+
   List<Product> _products = [];
   List<Product> _filteredProducts = [];
 
+  final searchTF = TextEditingController();
   bool _isLoading = false;
   bool _isError = false;
 
   List<Product> get products => _products;
-
-  final searchTF = TextEditingController();
-
-  List<Product> get filteredProducts {
-    if (_filteredProducts.isEmpty) {
-      return _products;
-    }
-    return _filteredProducts;
-  }
-
+  List<Product> get filteredProducts =>
+      _filteredProducts.isEmpty ? _products : _filteredProducts;
   bool get isLoading => _isLoading;
-
   bool get isError => _isError;
 
   Future<void> fetchProduct() async {
+    if (_isLoading || _products.isNotEmpty) return;
     _isLoading = true;
+    _isError = false;
     notifyListeners();
+
     try {
       _products = await api.fetchProduct();
+      _filteredProducts = _products;
     } catch (_) {
       _products = [];
       _isError = true;
     }
 
     _isLoading = false;
-    if (hasListeners) {
-      notifyListeners();
-    }
+    notifyListeners();
   }
 
+
   void searchProduct() {
-    if (searchTF.text.isEmpty) {
-      _filteredProducts = _products;
-    } else {
-      _filteredProducts = _products
-          .where((e) =>
-              e.name.toLowerCase().contains(searchTF.text.toLowerCase().trim()))
-          .toList();
-    }
+    final query = searchTF.text.toLowerCase().trim();
+    _filteredProducts = query.isEmpty
+        ? _products
+        : _products
+        .where((e) => e.name.toLowerCase().contains(query))
+        .toList();
     notifyListeners();
   }
 
   Future<void> notifier() async {
-    _products = await api.fetchProduct();
-    notifyListeners();
+    await fetchProduct();
   }
 }

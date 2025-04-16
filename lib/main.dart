@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/routes/router.dart';
 import 'package:shop_com/utils/color_value_key.dart';
 
@@ -18,7 +20,11 @@ Future<void> main() async {
     try {
       system_router = genRoute();
       try {
-        runApp(const MyDisplay());
+        runApp(MultiProvider(providers: [
+          ChangeNotifierProvider(
+            create: (context) => ProductProvider.instance,
+          )
+        ], child: const MyDisplay()));
       } catch (e) {
         if (kDebugMode) {
           print(e);
@@ -63,11 +69,12 @@ class _MyDisplay extends State<MyDisplay> {
             }
             return ColorValueKey.textColor.withOpacity(0.5);
           }),
-          thumbVisibility:const WidgetStatePropertyAll(true),
+          thumbVisibility: const WidgetStatePropertyAll(true),
           trackVisibility: const WidgetStatePropertyAll(true),
           interactive: true,
           trackColor: WidgetStateProperty.resolveWith<Color?>((states) {
-            if (states.contains(WidgetState.dragged) || states.contains(WidgetState.hovered)) {
+            if (states.contains(WidgetState.dragged) ||
+                states.contains(WidgetState.hovered)) {
               return ColorValueKey.textColor.withOpacity(0.1);
             }
             return Colors.transparent;
@@ -80,7 +87,9 @@ class _MyDisplay extends State<MyDisplay> {
           minThumbLength: 48,
         ),
         textTheme: const TextTheme().copyWith(
-          bodyLarge: TextStyle(color: ColorValueKey.textColor,),
+          bodyLarge: TextStyle(
+            color: ColorValueKey.textColor,
+          ),
           bodyMedium: TextStyle(color: ColorValueKey.textColor),
           bodySmall: TextStyle(color: ColorValueKey.textColor),
           titleLarge: TextStyle(color: ColorValueKey.textColor),
@@ -105,7 +114,7 @@ class _MyDisplay extends State<MyDisplay> {
         ),
       ),
       locale: const Locale('vi', 'VN'),
-      supportedLocales: const[
+      supportedLocales: const [
         Locale('vi', "VN"),
         Locale('en', "US"),
       ],
