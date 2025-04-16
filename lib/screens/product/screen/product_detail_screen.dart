@@ -14,31 +14,50 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  String selectedSize = 'Size';
-  String selectedColor = 'Black';
+  String? selectedRAM;
+  String? selectedROM;
+  String? selectedColors;
+  List<String> ramOptions = [];
+  List<String> romOptions = [];
+  List<String> colorOptions = [];
+  List<String> images = [];
 
-  final List<String> sizes = ['8', '16', '32'];
-  final List<String> colors = ['Black', 'White', 'Grey'];
-  final List<String> productImages = [
-    'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744135352/samuel-angor-HoThEebqSdY-unsplash_omuea5.jpg',
-    'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744132448/thai-nguyen-fw_KhcwHmlY-unsplash_frhp4g.jpg',
-    'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744132489/thai-nguyen-7uEVvoPzwG4-unsplash_m6l6r0.jpg',
-  ];
+  final Map<String, List<String>> categoryOptions = {
+    'laptop': ['RAM', 'ROM'],
+    'headphone': ['Color'],
+    'smartphone': ['RAM', 'ROM', 'Color'],
+    'tablet': ['RAM', 'ROM', 'Color']
+  };
 
   int currentPage = 0;
   final PageController _pageController = PageController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<ProductDetailProvider>();
+      if (provider.ram.isNotEmpty) selectedRAM = provider.ram.first;
+      if (provider.rom.isNotEmpty) selectedROM = provider.rom.first;
+      if (provider.color.isNotEmpty) selectedColors = provider.color.first;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     final productDetailProvider = context.watch<ProductDetailProvider>();
+    images = productDetailProvider.images;
+    ramOptions = productDetailProvider.ram;
+    romOptions = productDetailProvider.rom;
+    colorOptions = productDetailProvider.color;
 
     return Scaffold(
       body: SafeArea(
         child: ListenableBuilder(
           listenable: productDetailProvider,
           builder: (context, child) {
-            if (productDetailProvider.isLoading) {
+            if (productDetailProvider.isLoading ||
+                productDetailProvider.product.variants == null) {
               return const LoadingWidget();
             }
             if (productDetailProvider.isError) {
@@ -52,7 +71,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildImageSlider(productDetailProvider),
+                        _buildImageSlider(),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
@@ -69,7 +88,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               const SizedBox(height: 20),
                               _buildAccordion(),
                               const SizedBox(height: 20),
-                              // _buildSuggestions(),
                             ],
                           ),
                         ),
@@ -85,7 +103,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildAppBar(ProductDetailProvider productDetailProvider) {
+  Widget _buildAppBar(ProductDetailProvider provider) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -95,7 +113,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               icon: const Icon(Icons.arrow_back_ios)),
           Expanded(
             child: Text(
-              productDetailProvider.product.name,
+              provider.product.name,
               textAlign: TextAlign.center,
               style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
             ),
@@ -106,20 +124,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildProductImage() {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Image.network(
-        'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  Widget _buildImageSlider(ProductDetailProvider productDetailProvider) {
-    final images = productDetailProvider.product.variants!
-        .expand((v) => v.images?.cast<String>() ?? [])
-        .toList();
+  Widget _buildImageSlider() {
     return Column(
       children: [
         AspectRatio(
@@ -127,24 +132,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           child: PageView.builder(
             controller: _pageController,
             itemCount: images.length,
-            onPageChanged: (index) {
-              setState(() {
-                currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              return Image.network(
-                images[index],
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if(loadingProgress == null) return child;
-                  return const LoadingWidget();
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return const ErrorsWidget();
-                },
-              );
-            },
+            onPageChanged: (index) => setState(() => currentPage = index),
+            itemBuilder: (context, index) => Image.network(
+              images[index],
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress == null ? child : const LoadingWidget(),
+              errorBuilder: (context, error, stackTrace) =>
+                  const ErrorsWidget(),
+            ),
           ),
         ),
         const SizedBox(height: 8),
@@ -169,50 +165,111 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildDropdowns(ProductDetailProvider productDetailProvider) {
+  Widget _buildDropdowns(ProductDetailProvider provider) {
+    final category = provider.product.category?.toLowerCase() ?? '';
+    return _buildDynamicDropdowns(category);
+  }
+
+  Widget _buildDynamicDropdowns(String category) {
+    final options = categoryOptions[category] ?? [];
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: options.map((option) {
+        final list = _getOptions(option);
+        final selected = _getSelected(option);
+        return SizedBox(
+          width: 150,
+          child: _buildDropdown(
+            hint: option,
+            items: list,
+            selected: selected,
+            onChanged: (value) => _setSelected(option, value),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildDropdown(
+      {required String hint,
+      required List<String> items,
+      String? selected,
+      required ValueChanged<String> onChanged}) {
     return Row(
+      spacing: 4,
       children: [
+        Text('$hint: '),
         Expanded(
-            child: _buildDropdown('Size', sizes, selectedSize,
-                (value) => setState(() => selectedSize = value))),
-        const SizedBox(width: 16),
-        Expanded(
-            child: _buildDropdown('Color', colors, selectedColor,
-                (value) => setState(() => selectedColor = value))),
-        const SizedBox(width: 16),
-        const Icon(Icons.favorite_border),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: selected != '' ? selected : null,
+                hint: const Text('Select'),
+                isExpanded: true,
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                onChanged: (value) {
+                  if (value != null) onChanged(value);
+                },
+                items: items.map((value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildDropdown(String hint, List<String> items, String selected,
-      ValueChanged<String> onChanged) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8)),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selected,
-          isExpanded: true,
-          onChanged: (value) {
-            if (value != null) onChanged(value);
-          },
-          items: [hint, ...items].map((value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              enabled: value != hint,
-              child: Text(
-                value,
-                style: TextStyle(
-                    color: value == hint ? Colors.grey : Colors.black),
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-    );
+  List<String> _getOptions(String type) {
+    switch (type) {
+      case 'RAM':
+        return ramOptions;
+      case 'ROM':
+        return romOptions;
+      case 'Color':
+        return colorOptions;
+      default:
+        return [];
+    }
+  }
+
+  String? _getSelected(String type) {
+    switch (type) {
+      case 'RAM':
+        return selectedRAM;
+      case 'ROM':
+        return selectedROM;
+      case 'Color':
+        return selectedColors;
+      default:
+        return null;
+    }
+  }
+
+  void _setSelected(String type, String value) {
+    setState(() {
+      switch (type) {
+        case 'RAM':
+          selectedRAM = value;
+          break;
+        case 'ROM':
+          selectedROM = value;
+          break;
+        case 'Color':
+          selectedColors = value;
+          break;
+      }
+    });
   }
 
   Widget _buildTitlePriceSection() {
@@ -243,14 +300,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildAddToCartButton() {
     return const SizedBox(
-        width: double.infinity,
-        child: CommonButtonWidget(
-          callBack: null,
-          label: 'CHECK OUT',
-          style: TextStyle(color: Colors.white),
-          buttonStyle: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(Colors.black)),
-        ));
+      width: double.infinity,
+      child: CommonButtonWidget(
+        callBack: null,
+        label: 'CHECK OUT',
+        style: TextStyle(color: Colors.white),
+        buttonStyle: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(Colors.black),
+        ),
+      ),
+    );
   }
 
   Widget _buildAccordion() {
@@ -265,131 +324,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           title: const Text('Support'),
           trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () {},
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSuggestions() {
-    final suggestions = [
-      {
-        'image':
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744132489/thai-nguyen-7uEVvoPzwG4-unsplash_m6l6r0.jpg',
-        'title': 'Evening Dress',
-        'brand': 'Dorothy Perkins',
-        'price': '\$12',
-        'oldPrice': '\$15',
-        'discount': '-20%',
-      },
-      {
-        'image':
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744132489/thai-nguyen-7uEVvoPzwG4-unsplash_m6l6r0.jpg',
-        'title': 'T-Shirt Sailing',
-        'brand': 'Mango Boy',
-        'price': '\$10',
-        'discount': 'NEW',
-      },
-      {
-        'image':
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744132489/thai-nguyen-7uEVvoPzwG4-unsplash_m6l6r0.jpg',
-        'title': 'T-Shirt Sailing',
-        'brand': 'Mango Boy',
-        'price': '\$10',
-        'discount': 'NEW',
-      },
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'You can also like this',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 230,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: suggestions.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final item = suggestions[index];
-              return Container(
-                width: 140,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade200),
-                    borderRadius: BorderRadius.circular(12)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            item['image']!,
-                            width: 130,
-                            height: 130,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Positioned(
-                          top: 6,
-                          left: 6,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: item['discount'] == 'NEW'
-                                  ? Colors.black
-                                  : Colors.red,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              item['discount']!,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 10),
-                            ),
-                          ),
-                        ),
-                        const Positioned(
-                          top: 6,
-                          right: 6,
-                          child: Icon(Icons.favorite_border,
-                              size: 18, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(item['brand']!,
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey)),
-                    Text(item['title']!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14)),
-                    Row(
-                      children: [
-                        Text(item['price']!,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14)),
-                        if (item['oldPrice'] != null)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(item['oldPrice']!,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    decoration: TextDecoration.lineThrough,
-                                    color: Colors.grey)),
-                          )
-                      ],
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
         ),
       ],
     );

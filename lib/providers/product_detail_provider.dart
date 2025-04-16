@@ -11,6 +11,29 @@ class ProductDetailProvider with ChangeNotifier {
   bool _isError = false;
 
   Product get product => _product;
+  List<String> get images {
+    final variants = product.variants;
+    if (variants == null) return [];
+    return variants.expand((v) => v.images ?? []).cast<String>().toList();
+  }
+
+  List<String> get ram {
+    final variants = product.variants;
+    if(variants == null) return [];
+    return variants.map((e) => e.ram ?? '').toSet().toList();
+  }
+
+  List<String> get rom {
+    final variants = product.variants;
+    if(variants == null) return [];
+    return variants.map((e) => e.rom ?? '').toSet().toList();
+  }
+
+  List<String> get color {
+    final variants = product.variants;
+    if(variants == null) return [];
+    return variants.map((e) => e.color ?? '').toSet().toList();
+  }
 
   bool get isLoading => _isLoading;
   bool get isError => _isError;
