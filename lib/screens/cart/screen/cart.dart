@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../widgets/button_widget.dart';
 import '../../../widgets/product_bag_item.dart';
 
-class MyBagScreen extends StatefulWidget {
-  const MyBagScreen({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
   @override
-  State<MyBagScreen> createState() => _MyBagScreenState();
+  State<CartScreen> createState() => _CartScreenState();
 }
 
-class _MyBagScreenState extends State<MyBagScreen> {
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

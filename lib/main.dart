@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
@@ -15,16 +16,13 @@ import 'data/config/app_config.dart';
 late GoRouter system_router;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   system_router = genRoute();
   app_config.init().then((value) {
     try {
       system_router = genRoute();
       try {
-        runApp(MultiProvider(providers: [
-          ChangeNotifierProvider(
-            create: (context) => ProductProvider.instance,
-          )
-        ], child: const MyDisplay()));
+        runApp(const ProviderScope(child: MyDisplay()));
       } catch (e) {
         if (kDebugMode) {
           print(e);

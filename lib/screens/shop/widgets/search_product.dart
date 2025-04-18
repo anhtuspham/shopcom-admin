@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/product_provider.dart';
 import '../../../utils/color_value_key.dart';
 
-class SearchProduct extends StatelessWidget {
+class SearchProduct extends ConsumerStatefulWidget {
   // final ProductProvider productProvider;
-
   const SearchProduct({super.key});
 
   @override
+  ConsumerState<SearchProduct> createState() => _SearchProductState();
+}
+
+class _SearchProductState extends ConsumerState<SearchProduct> {
+  final TextEditingController _searchController = TextEditingController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _searchController.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     // final productProvider = ProductProvider();
-    final productProvider = context.watch<ProductProvider>();
+    final notifier = ref.watch(productProvider.notifier);
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 8, top: 8),
       child: TextField(
         style: TextStyle(color: ColorValueKey.textColor),
-        controller: productProvider.searchTF,
+        controller: _searchController,
         decoration: InputDecoration(
           hintText: 'Search',
           hintStyle: TextStyle(color: Colors.grey[300]),
@@ -36,13 +48,13 @@ class SearchProduct extends StatelessWidget {
             ),
             color: ColorValueKey.textColor,
             onPressed: () {
-              productProvider.searchTF.clear();
-              productProvider.searchProduct();
+              _searchController.clear();
+              notifier.search('');
             },
           ),
         ),
         onChanged: (value) {
-          productProvider.searchProduct();
+          notifier.search(value);
         },
       ),
     );

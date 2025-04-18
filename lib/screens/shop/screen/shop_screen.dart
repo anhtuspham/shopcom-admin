@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/shop/widgets/search_product.dart';
@@ -7,30 +8,39 @@ import 'package:shop_com/widgets/product_card.dart';
 
 import '../../../widgets/loading_widget.dart';
 
-class ShopScreen extends StatefulWidget {
+class ShopScreen extends ConsumerStatefulWidget {
   const ShopScreen({super.key});
 
   @override
-  State<ShopScreen> createState() => _ShopScreenState();
+  ConsumerState<ShopScreen> createState() => _ShopScreenState();
 }
 
-class _ShopScreenState extends State<ShopScreen> {
+class _ShopScreenState extends ConsumerState<ShopScreen> {
   final ScrollController _scrollController = ScrollController();
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.microtask(() {
+  //     final provider = ProductProvider.instance;
+  //     if(provider.products.isEmpty){
+  //       provider.fetchProduct();
+  //     }
+  //   },);
+  // }
+
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      final provider = ProductProvider.instance;
-      if(provider.products.isEmpty){
-        provider.fetchProduct();
-      }
-    },);
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final productProvider = context.watch<ProductProvider>();
+    final state = ref.watch(productProvider);
+    final notifier = ref.read(productProvider.notifier);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -44,7 +54,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 height: 10,
               ),
               Expanded(
-                child: _buildProductGrid(productProvider),
+                child: _buildProductGrid(state),
               ),
             ],
           ),
@@ -93,79 +103,68 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  Widget _buildProductGrid(ProductProvider productProvider) {
-    return ListenableBuilder(
-        listenable: productProvider,
-        builder: (context, child) {
-          if (productProvider.isError) {
-            return const ErrorsWidget();
-          }
-          if (productProvider.isLoading) {
-            return const LoadingWidget();
-          }
-          return Container(
-            margin: const EdgeInsets.only(left: 4.0, right: 8, bottom: 8),
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Colors.grey,
-                width: 1,
-              ),
-            ),
-            child: RawScrollbar(
-              trackVisibility: false,
-              thumbVisibility: true,
-              thumbColor: Colors.grey,
-              controller: _scrollController,
-              padding: const EdgeInsets.only(top: 7, right: 2),
-              crossAxisMargin: 0,
-              radius: const Radius.circular(10),
-              thickness: 6,
-              child: RefreshIndicator(
-                  onRefresh: _refresh,
-                  child: GridView.builder(
-                      controller: _scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.6,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 6,
-                      ),
-                      itemCount: productProvider.filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        return ProductCard(
-                            id: productProvider.filteredProducts[index].id ??
-                                '',
-                            imageUrl: productProvider.filteredProducts[index]
-                                    .defaultVariant?.images?[0] ??
-                                '',
-                            rating: productProvider
-                                    .filteredProducts[index].ratings?.average ??
-                                0,
-                            reviewCount: productProvider
-                                    .filteredProducts[index].ratings?.count ??
-                                0,
-                            brand:
-                                productProvider.filteredProducts[index].brand ??
-                                    '',
-                            title: productProvider.filteredProducts[index].name,
-                            originalPrice: productProvider
-                                    .filteredProducts[index]
-                                    .defaultVariant
-                                    ?.price ??
-                                0,
-                            isNew: true);
-                      })),
-            ),
-          );
-        });
+  Widget _buildProductGrid(ProductState state) {
+    return Container(
+      margin: const EdgeInsets.only(left: 4.0, right: 8, bottom: 8),
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: RawScrollbar(
+        trackVisibility: false,
+        thumbVisibility: true,
+        thumbColor: Colors.grey,
+        controller: _scrollController,
+        padding: const EdgeInsets.only(top: 7, right: 2),
+        crossAxisMargin: 0,
+        radius: const Radius.circular(10),
+        thickness: 6,
+        child: RefreshIndicator(
+            onRefresh: _refresh,
+            child: GridView.builder(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
+                gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.6,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 6,
+                ),
+                itemCount: state.filtered.length,
+                itemBuilder: (context, index) {
+                  return ProductCard(
+                      id: state.filtered[index].id ??
+                          '',
+                      imageUrl: state.filtered[index]
+                          .defaultVariant?.images?[0] ??
+                          '',
+                      rating: state
+                          .filtered[index].ratings?.average ??
+                          0,
+                      reviewCount: state
+                          .filtered[index].ratings?.count ??
+                          0,
+                      brand:
+                      state.filtered[index].brand ??
+                          '',
+                      title: state.filtered[index].name,
+                      originalPrice: state
+                          .filtered[index]
+                          .defaultVariant
+                          ?.price ??
+                          0,
+                      isNew: true);
+                })),
+      ),
+    );
   }
 
   Future<void> _refresh() async {
-    await context.read<ProductProvider>().fetchProduct();
-    return Future.delayed(const Duration(seconds: 1));
+    return ref.read(productProvider.notifier).refresh();
   }
 }

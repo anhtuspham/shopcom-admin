@@ -1,59 +1,72 @@
-import 'package:flutter/material.dart';
+// product_provider.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/config/app_config.dart';
 import '../data/model/product.dart';
 
-class ProductProvider with ChangeNotifier {
-  static ProductProvider? _instance;
-  static ProductProvider get instance {
-    _instance ??= ProductProvider._internal();
-    return _instance!;
+class ProductState {
+  final List<Product> products;
+  final List<Product> filtered;
+  final bool isLoading;
+  final bool isError;
+
+  ProductState({
+    this.products = const [],
+    this.filtered = const [],
+    this.isLoading = false,
+    this.isError = false,
+  });
+
+  ProductState copyWith({
+    List<Product>? products,
+    List<Product>? filtered,
+    bool? isLoading,
+    bool? isError,
+  }) {
+    return ProductState(
+      products: products ?? this.products,
+      filtered: filtered ?? this.filtered,
+      isLoading: isLoading ?? this.isLoading,
+      isError: isError ?? this.isError,
+    );
   }
+}
 
-  ProductProvider._internal();
-
-  List<Product> _products = [];
-  List<Product> _filteredProducts = [];
-
-  final searchTF = TextEditingController();
-  bool _isLoading = false;
-  bool _isError = false;
-
-  List<Product> get products => _products;
-  List<Product> get filteredProducts =>
-      _filteredProducts.isEmpty ? _products : _filteredProducts;
-  bool get isLoading => _isLoading;
-  bool get isError => _isError;
+class ProductNotifier extends StateNotifier<ProductState> {
+  ProductNotifier() : super(ProductState());
 
   Future<void> fetchProduct() async {
-    if (_isLoading || _products.isNotEmpty) return;
-    _isLoading = true;
-    _isError = false;
-    notifyListeners();
+    if (state.isLoading || state.products.isNotEmpty) return;
+    state = state.copyWith(isLoading: true, isError: false);
 
     try {
-      _products = await api.fetchProduct();
-      _filteredProducts = _products;
+      final products = await api.fetchProduct();
+      state = state.copyWith(
+        products: products,
+        filtered: products,
+        isLoading: false,
+      );
     } catch (_) {
-      _products = [];
-      _isError = true;
+      state = state.copyWith(isLoading: false, isError: true);
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
-
-  void searchProduct() {
-    final query = searchTF.text.toLowerCase().trim();
-    _filteredProducts = query.isEmpty
-        ? _products
-        : _products
-        .where((e) => e.name.toLowerCase().contains(query))
+  void search(String query) {
+    final filtered = query.isEmpty
+        ? state.products
+        : state.products
+        .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    notifyListeners();
+    state = state.copyWith(filtered: filtered);
   }
 
-  Future<void> notifier() async {
+  Future<void> refresh() async {
+    state = ProductState();
     await fetchProduct();
   }
 }
+
+final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
+  final notifier = ProductNotifier();
+  notifier.fetchProduct();
+  return notifier;
+});
