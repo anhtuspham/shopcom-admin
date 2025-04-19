@@ -15,4 +15,29 @@ mixin CartApi on BaseApi {
       return Cart.empty();
     }
   }
+
+  Future<Result> addProductToCart(
+      {required String productId,
+      required int variantIndex,
+      required int quantity}) async {
+    return handleRequest(
+        request: () => post('/api/cart/add-product-cart', data: {
+              "productId": productId,
+              "variantIndex": variantIndex,
+              "quantity": quantity
+            }));
+  }
+
+  Future<Result> removeProductFromCart(
+      {required String productId,
+      required int variantIndex,
+      required int quantity}) {
+    return handleRequest(
+      request: () => delete('api/cart/remove-product-cart', data: {
+        "productId": productId,
+        "variantIndex": variantIndex,
+        "quantity": quantity
+      }),
+    );
+  }
 }
