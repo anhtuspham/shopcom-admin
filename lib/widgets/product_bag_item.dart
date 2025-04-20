@@ -8,6 +8,7 @@ class ProductBagItem extends StatefulWidget {
   final String? color;
   final String? price;
   final String? ram;
+  final String? rom;
   final bool? isFavorite;
   final int index;
 
@@ -18,6 +19,7 @@ class ProductBagItem extends StatefulWidget {
       this.name,
       this.color,
       this.ram,
+      this.rom,
       this.price,
       required this.index,
       this.isFavorite = false});
@@ -100,64 +102,69 @@ class _ProductBagItemState extends State<ProductBagItem> {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            widget.name ?? '',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                          Expanded(
+                            child: Text(
+                              widget.name ?? '',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            'Color ${widget.color}',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Ram ${widget.ram}',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: widget.isFavorite == true
+                                ? const Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  )
+                                : const Icon(Icons.favorite_border_outlined),
+                            constraints: const BoxConstraints(),
+                          )
                         ],
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: widget.isFavorite == true
-                              ? const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                )
-                              : const Icon(Icons.favorite_border_outlined))
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Color ${widget.color}',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Ram ${widget.ram}',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${widget.price}\$',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          widget.isFavorite == true
+                              ? _buildAddCartButton()
+                              : _buildQuantityControl()
+                        ],
+                      )
                     ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('${widget.price}\$',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      widget.isFavorite == true
-                          ? _buildAddCartButton()
-                          : _buildQuantityControl()
-                    ],
-                  )
-                ],
+                  );
+                },
               ),
             ),
           ],
