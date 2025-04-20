@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:shop_com/apis/base_url.dart';
 import 'package:shop_com/apis/cart_api.dart';
+import 'package:shop_com/apis/order_api.dart';
 import 'package:shop_com/apis/product_api.dart';
 import 'package:shop_com/apis/user_api.dart';
 import 'package:shop_com/data/config/app_config.dart';
@@ -107,6 +108,6 @@ class BaseApi{
   }
 }
 
-class Api extends BaseApi with AuthUserApi, UserApi, ProductApi, CartApi{
+class Api extends BaseApi with AuthUserApi, UserApi, ProductApi, CartApi, OrderApi{
   Api();
 }
