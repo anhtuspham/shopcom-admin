@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/providers/cart_provider.dart';
 import '../../../providers/product_detail_provider.dart';
 import '../../../widgets/button_widget.dart';
 import '../../../widgets/error_widget.dart';
@@ -7,6 +8,7 @@ import '../../../widgets/loading_widget.dart';
 
 class ProductDetailScreen extends ConsumerStatefulWidget {
   final String id;
+
   const ProductDetailScreen({super.key, required this.id});
 
   @override
@@ -22,13 +24,152 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   int currentPage = 0;
   final PageController _pageController = PageController();
 
+  // Lists to store available variant combinations
+  List<String> availableRAM = [];
+  List<String> availableROM = [];
+  List<String> availableColors = [];
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final state = ref.read(productDetailProvider(widget.id));
-    if (state.ram.isNotEmpty) selectedRAM ??= state.ram.first;
-    if (state.rom.isNotEmpty) selectedROM ??= state.rom.first;
-    if (state.color.isNotEmpty) selectedColor ??= state.color.first;
+
+    // Get all unique variant options from the product variants
+    _updateAvailableOptions(state);
+
+    // Set initial selections if options are available
+    if (availableRAM.isNotEmpty) selectedRAM ??= availableRAM.first;
+    if (availableROM.isNotEmpty) selectedROM ??= availableROM.first;
+    if (availableColors.isNotEmpty) selectedColor ??= availableColors.first;
+  }
+
+  // Method to update available options based on current selections
+  void _updateAvailableOptions(ProductDetailState state) {
+    final variants = state.product.variants ?? [];
+
+    // Reset available options
+    availableRAM = [];
+    availableROM = [];
+    availableColors = [];
+
+    // Extract unique values from variants
+    for (final variant in variants) {
+      if (variant.ram != null && !availableRAM.contains(variant.ram)) {
+        availableRAM.add(variant.ram!);
+      }
+      if (variant.rom != null && !availableROM.contains(variant.rom)) {
+        availableROM.add(variant.rom!);
+      }
+      if (variant.color != null && !availableColors.contains(variant.color)) {
+        availableColors.add(variant.color!);
+      }
+    }
+  }
+
+  // Method to filter available options based on current selections
+  void _filterOptionsBasedOnSelection(ProductDetailState state) {
+    final variants = state.product.variants ?? [];
+    final category = state.product.category?.toLowerCase() ?? '';
+
+    // For laptop we only need to filter ROM based on RAM
+    if (category == 'laptop' && selectedRAM != null) {
+      availableROM = [];
+      for (final variant in variants) {
+        if (variant.ram == selectedRAM && variant.rom != null && !availableROM.contains(variant.rom)) {
+          availableROM.add(variant.rom!);
+        }
+      }
+      // If current ROM selection is no longer valid, reset it
+      if (selectedROM != null && !availableROM.contains(selectedROM)) {
+        selectedROM = availableROM.isNotEmpty ? availableROM.first : null;
+      }
+    }
+
+    // For smartphone and tablet, we need to filter ROM based on RAM and Color
+    else if ((category == 'smartphone' || category == 'tablet')) {
+      // If RAM is selected, filter ROM and Color
+      if (selectedRAM != null) {
+        List<String> tempROM = [];
+        List<String> tempColors = [];
+
+        for (final variant in variants) {
+          if (variant.ram == selectedRAM) {
+            if (variant.rom != null && !tempROM.contains(variant.rom)) {
+              tempROM.add(variant.rom!);
+            }
+            if (variant.color != null && !tempColors.contains(variant.color)) {
+              tempColors.add(variant.color!);
+            }
+          }
+        }
+
+        availableROM = tempROM;
+
+        // Only update available colors if no ROM is selected yet
+        if (selectedROM == null) {
+          availableColors = tempColors;
+        }
+
+        // If current ROM selection is no longer valid, reset it
+        if (selectedROM != null && !availableROM.contains(selectedROM)) {
+          selectedROM = availableROM.isNotEmpty ? availableROM.first : null;
+        }
+      }
+
+      // If ROM is selected, filter RAM and Color
+      if (selectedROM != null) {
+        List<String> tempColors = [];
+
+        for (final variant in variants) {
+          if ((selectedRAM == null || variant.ram == selectedRAM) &&
+              variant.rom == selectedROM &&
+              variant.color != null &&
+              !tempColors.contains(variant.color)) {
+            tempColors.add(variant.color!);
+          }
+        }
+
+        availableColors = tempColors;
+
+        // If current Color selection is no longer valid, reset it
+        if (selectedColor != null && !availableColors.contains(selectedColor)) {
+          selectedColor = availableColors.isNotEmpty ? availableColors.first : null;
+        }
+      }
+
+      // If Color is selected, filter RAM and ROM
+      if (selectedColor != null) {
+        List<String> tempRAM = [];
+        List<String> tempROM = [];
+
+        for (final variant in variants) {
+          if (variant.color == selectedColor) {
+            if ((selectedRAM == null || selectedROM == null) && variant.ram != null && !tempRAM.contains(variant.ram)) {
+              tempRAM.add(variant.ram!);
+            }
+            if ((selectedRAM == null || selectedROM == null || (variant.ram == selectedRAM)) &&
+                variant.rom != null && !tempROM.contains(variant.rom)) {
+              tempROM.add(variant.rom!);
+            }
+          }
+        }
+
+        // Only update if we haven't already selected RAM
+        if (selectedRAM == null) {
+          availableRAM = tempRAM;
+        }
+
+        // Only update if we haven't already selected ROM
+        if (selectedROM == null) {
+          availableROM = tempROM;
+        }
+      }
+    }
+
+    // For headphone, we only have color options
+    else if (category == 'headphone') {
+      // No filtering needed since there's only one option type
+    }
   }
 
   @override
@@ -37,6 +178,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
 
     if (state.isLoading) return const LoadingWidget();
     if (state.isError) return const ErrorsWidget();
+
+    // Update available options whenever state changes
+    _updateAvailableOptions(state);
+    _filterOptionsBasedOnSelection(state);
 
     return Scaffold(
       body: SafeArea(
@@ -59,7 +204,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                           const SizedBox(height: 8),
                           _buildDescription(state),
                           const SizedBox(height: 16),
-                          _buildAddToCartButton(),
+                          _buildAddToCartButton(state),
                           const SizedBox(height: 20),
                           _buildAccordion(),
                         ],
@@ -99,7 +244,8 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) =>
               loadingProgress == null ? child : const LoadingWidget(),
-              errorBuilder: (context, error, stackTrace) => const ErrorsWidget(),
+              errorBuilder: (context, error, stackTrace) =>
+              const ErrorsWidget(),
             ),
           ),
         ),
@@ -132,13 +278,14 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       'headphone': ['Color'],
       'smartphone': ['RAM', 'ROM', 'Color'],
       'tablet': ['RAM', 'ROM', 'Color'],
-    }[category] ?? [];
+    }[category] ??
+        [];
 
     return Wrap(
       spacing: 16,
       runSpacing: 16,
       children: options.map((option) {
-        final items = _getOptions(state, option);
+        final items = _getOptions(option);
         final selected = _getSelected(option);
         return SizedBox(
           width: 150,
@@ -188,6 +335,12 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   }
 
   Widget _buildTitlePriceSection(ProductDetailState state) {
+    // Find the current variant based on selections to display the correct price
+    final variantIndex = _findSelectedVariantIndex(state);
+    final price = variantIndex != -1
+        ? state.product.variants![variantIndex].price
+        : state.product.defaultVariant?.price;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -200,7 +353,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 style: const TextStyle(color: Colors.grey)),
           ],
         ),
-        Text('\$${state.product.defaultVariant?.price ?? ''}',
+        Text('\$${price ?? ''}',
             style: const TextStyle(fontSize: 18)),
       ],
     );
@@ -211,21 +364,44 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     style: const TextStyle(fontSize: 14),
   );
 
-  Widget _buildAddToCartButton() => const SizedBox(
+  Widget _buildAddToCartButton(ProductDetailState state) => SizedBox(
     width: double.infinity,
     child: CommonButtonWidget(
-      callBack: null,
+      callBack: () async {
+        print('selected ram rom color ${selectedRAM} ${selectedROM} ${selectedColor}');
+        final variantIndex = _findSelectedVariantIndex(state);
+        if (variantIndex == -1) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Vui lòng chọn đầy đủ các lựa chọn')),
+          );
+          return;
+        }
+
+        ref.invalidate(cartProvider);
+
+        await ref.read(cartProvider.notifier).addProductToCart(
+          productId: state.product.id ?? '',
+          variantIndex: variantIndex,
+          quantity: 1,
+        );
+
+        if(mounted){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Đã thêm vào giỏ hàng')),
+          );
+        }
+      },
       label: 'Add to cart',
-      style: TextStyle(color: Colors.white),
-      buttonStyle: ButtonStyle(
+      style: const TextStyle(color: Colors.white),
+      buttonStyle: const ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(Colors.black),
       ),
     ),
   );
 
   Widget _buildAccordion() {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         ListTile(
           title: Text('Shipping info'),
           trailing: Icon(Icons.keyboard_arrow_right),
@@ -238,14 +414,14 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     );
   }
 
-  List<String> _getOptions(ProductDetailState state, String type) {
+  List<String> _getOptions(String type) {
     switch (type) {
       case 'RAM':
-        return state.ram;
+        return availableRAM;
       case 'ROM':
-        return state.rom;
+        return availableROM;
       case 'Color':
-        return state.color;
+        return availableColors;
       default:
         return [];
     }
@@ -278,5 +454,22 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
           break;
       }
     });
+  }
+
+  int _findSelectedVariantIndex(ProductDetailState state) {
+    final variants = state.product.variants ?? [];
+
+    for (int i = 0; i < variants.length; i++) {
+      final v = variants[i];
+      final matchRAM = selectedRAM == null || v.ram == selectedRAM;
+      final matchROM = selectedROM == null || v.rom == selectedROM;
+      final matchColor = selectedColor == null || v.color == selectedColor;
+
+      if (matchRAM && matchROM && matchColor) {
+        return i;
+      }
+    }
+
+    return -1;
   }
 }
