@@ -18,17 +18,6 @@ class ShopScreen extends ConsumerStatefulWidget {
 class _ShopScreenState extends ConsumerState<ShopScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.microtask(() {
-  //     final provider = ProductProvider.instance;
-  //     if(provider.products.isEmpty){
-  //       provider.fetchProduct();
-  //     }
-  //   },);
-  // }
-
   @override
   void dispose() {
     // TODO: implement dispose
