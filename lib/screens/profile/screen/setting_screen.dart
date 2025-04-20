@@ -35,6 +35,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   separatorBuilder: (context, index) =>
                   const Divider(height: 28),
                   itemBuilder: (context, index) => ProductBagItem(
+                    productId: '1',
                     index: index,
                     imageUrl: [
                       'https://res.cloudinary.com/dcfihmhw7/image/upload/v1739206400/ssndwy0dpvuoowzchfk9.jpg',

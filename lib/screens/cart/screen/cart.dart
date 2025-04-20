@@ -4,6 +4,7 @@ import 'package:shop_com/providers/cart_provider.dart';
 import 'package:shop_com/widgets/loading_widget.dart';
 
 import '../../../widgets/button_widget.dart';
+import '../../../widgets/error_widget.dart';
 import '../../../widgets/product_bag_item.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
@@ -18,15 +19,19 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.microtask(() {
-      ref.read(cartProvider.notifier).fetchCart();
-    },);
+    Future.microtask(
+      () {
+        ref.read(cartProvider.notifier).fetchCart();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(cartProvider);
-    print('state: ${state.cart.products}');
+    // if (state.isLoading) return const LoadingWidget();
+    // if (state.isError) return const ErrorsWidget();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -44,20 +49,34 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               const SizedBox(height: 14),
 
               Expanded(
-                child: state.cart.products!.isEmpty ? _buildEmptyCart() : ListView.separated(
-                  itemCount: state.cart.products?.length ?? 0,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 28),
-                  itemBuilder: (context, index) => ProductBagItem(
-                    index: index,
-                    imageUrl: state.cart.products?[index].variantProduct?[0].images?[0],
-                    name: state.cart.products?[index].productName,
-                    color: state.cart.products?[index].variantProduct?[0].color,
-                    ram: state.cart.products?[index].variantProduct?[0].ram,
-                    rom: state.cart.products?[index].variantProduct?[0].rom,
-                    price: state.cart.products?[index].variantProduct?[0].price.toString()
-                  ),
-                ),
+                child: state.cart.products!.isEmpty
+                    ? state.isLoading
+                        ? const LoadingWidget()
+                        : _buildEmptyCart()
+                    : ListView.separated(
+                        itemCount: state.cart.products?.length ?? 0,
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 28),
+                        itemBuilder: (context, index) => ProductBagItem(
+                            productId:
+                                state.cart.products?[index].productId ?? '',
+                            index: index,
+                            quantity: state.cart.products?[index].quantity,
+                            variantIndex:
+                                state.cart.products?[index].variantIndex,
+                            imageUrl: state.cart.products?[index]
+                                .variantProduct?[0].images?[0],
+                            name: state.cart.products?[index].productName,
+                            color: state
+                                .cart.products?[index].variantProduct?[0].color,
+                            ram: state
+                                .cart.products?[index].variantProduct?[0].ram,
+                            rom: state
+                                .cart.products?[index].variantProduct?[0].rom,
+                            price: state
+                                .cart.products?[index].variantProduct?[0].price
+                                .toString()),
+                      ),
               ),
 
               const SizedBox(
@@ -77,10 +96,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               const SizedBox(height: 12),
 
               // Total amount
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Total amount:',
                     style: TextStyle(
                       fontSize: 16,
@@ -88,8 +107,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ),
                   ),
                   Text(
-                    '124\$',
-                    style: TextStyle(
+                    '${state.cart.totalPrice}\$',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -113,7 +132,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     );
   }
 
-  Widget _buildEmptyCart(){
-    return Center(child: Text('Giỏ hàng trống'),);
+  Widget _buildEmptyCart() {
+    return const Center(
+      child: Text('Giỏ hàng trống'),
+    );
   }
 }

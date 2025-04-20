@@ -33,7 +33,7 @@ mixin CartApi on BaseApi {
     required int variantIndex,
   }) {
     return handleRequest(
-      request: () => delete('api/cart/remove-product-cart', data: {
+      request: () => post('api/cart/remove-product-cart', data: {
         "productId": productId,
         "variantIndex": variantIndex,
       }),

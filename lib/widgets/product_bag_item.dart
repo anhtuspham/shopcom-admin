@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/providers/cart_provider.dart';
 
-class ProductBagItem extends StatefulWidget {
+class ProductBagItem extends ConsumerStatefulWidget {
+  final int? quantity;
+  final String productId;
   final String? imageUrl;
+  final int? variantIndex;
   final String? brand;
   final String? name;
   final String? color;
@@ -14,7 +19,10 @@ class ProductBagItem extends StatefulWidget {
 
   const ProductBagItem(
       {super.key,
+      this.quantity,
+      required this.productId,
       this.imageUrl,
+      this.variantIndex,
       this.brand,
       this.name,
       this.color,
@@ -25,11 +33,17 @@ class ProductBagItem extends StatefulWidget {
       this.isFavorite = false});
 
   @override
-  State<ProductBagItem> createState() => _ProductBagItemState();
+  ConsumerState<ProductBagItem> createState() => _ProductBagItemState();
 }
 
-class _ProductBagItemState extends State<ProductBagItem> {
-  ValueNotifier<int> countProduct = ValueNotifier(0);
+class _ProductBagItemState extends ConsumerState<ProductBagItem> {
+  late ValueNotifier<int> countProduct;
+
+  @override
+  void initState() {
+    super.initState();
+    countProduct = ValueNotifier(widget.quantity ?? 1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +73,19 @@ class _ProductBagItemState extends State<ProductBagItem> {
                   child: const Text("Cancel"),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
+                  onPressed: () async {
+                    ref.invalidate(cartProvider);
+                    await ref.read(cartProvider.notifier).removeProductFromCart(
+                        productId: widget.productId,
+                        variantIndex: widget.variantIndex ?? 0);
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('${widget.name} removed from cart')),
+                      );
+                    }
+                    Navigator.of(context).pop(true);
+                  },
                   child: const Text("Delete"),
                 ),
               ],
@@ -214,7 +240,7 @@ class _ProductBagItemState extends State<ProductBagItem> {
           builder: (context, value, child) {
             return IconButton(
               icon: const Icon(Icons.remove),
-              onPressed: countProduct.value > 0 ? _decrement : null,
+              onPressed: countProduct.value > 1 ? _decrement : null,
               color: Colors.grey[600],
               style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -227,11 +253,25 @@ class _ProductBagItemState extends State<ProductBagItem> {
     );
   }
 
-  void _increment() => countProduct.value++;
+  Future<void> _increment() async {
+    countProduct.value++;
+    if(!mounted) return;
+    await ref.read(cartProvider.notifier).addProductToCart(
+        productId: widget.productId,
+        variantIndex: widget.variantIndex ?? 0,
+        quantity: 1);
+    ref.invalidate(cartProvider);
+  }
 
-  void _decrement() {
-    if (countProduct.value > 0) {
+  Future<void> _decrement() async {
+    if (countProduct.value > 1) {
       countProduct.value--;
+      if(!mounted) return;
+      await ref.read(cartProvider.notifier).addProductToCart(
+          productId: widget.productId,
+          variantIndex: widget.variantIndex ?? 0,
+          quantity: -1);
+      ref.invalidate(cartProvider);
     }
   }
 }

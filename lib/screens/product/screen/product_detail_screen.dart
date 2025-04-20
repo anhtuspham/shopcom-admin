@@ -368,7 +368,6 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     width: double.infinity,
     child: CommonButtonWidget(
       callBack: () async {
-        print('selected ram rom color ${selectedRAM} ${selectedROM} ${selectedColor}');
         final variantIndex = _findSelectedVariantIndex(state);
         if (variantIndex == -1) {
           ScaffoldMessenger.of(context).showSnackBar(

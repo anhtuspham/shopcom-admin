@@ -53,6 +53,7 @@ class CartNotifier extends StateNotifier<CartState> {
     final result = await api.addProductToCart(
         productId: productId, variantIndex: variantIndex, quantity: quantity);
     if (result.isValue) {
+      print('fetch cart');
       await fetchCart();
     } else {
       state = state.copyWith(isLoading: false, isError: true);

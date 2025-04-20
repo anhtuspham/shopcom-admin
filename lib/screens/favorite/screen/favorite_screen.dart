@@ -90,6 +90,7 @@ class FavoritesScreen extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       // itemBuilder: (context, index) => _buildFavoriteItem(context, favoriteProducts[index]),
       itemBuilder: (context, index) => ProductBagItem(
+          productId: '1',
           index: index,
           isFavorite: true,
           imageUrl: [
