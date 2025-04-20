@@ -28,15 +28,14 @@ mixin CartApi on BaseApi {
             }));
   }
 
-  Future<Result> removeProductFromCart(
-      {required String productId,
-      required int variantIndex,
-      required int quantity}) {
+  Future<Result> removeProductFromCart({
+    required String productId,
+    required int variantIndex,
+  }) {
     return handleRequest(
       request: () => delete('api/cart/remove-product-cart', data: {
         "productId": productId,
         "variantIndex": variantIndex,
-        "quantity": quantity
       }),
     );
   }

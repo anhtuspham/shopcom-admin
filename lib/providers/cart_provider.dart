@@ -60,12 +60,10 @@ class CartNotifier extends StateNotifier<CartState> {
   }
 
   Future<void> removeProductFromCart(
-      {required String productId,
-      required int variantIndex,
-      required int quantity}) async {
+      {required String productId, required int variantIndex}) async {
     state = state.copyWith(isLoading: true, isError: false);
     final result = await api.removeProductFromCart(
-        productId: productId, variantIndex: variantIndex, quantity: quantity);
+        productId: productId, variantIndex: variantIndex);
     if (result.isValue) {
       await fetchCart();
     } else {
