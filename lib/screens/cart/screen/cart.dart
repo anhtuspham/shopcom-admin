@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/providers/cart_provider.dart';
+import 'package:shop_com/widgets/loading_widget.dart';
 
 import '../../../widgets/button_widget.dart';
 import '../../../widgets/product_bag_item.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  ConsumerState<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _CartScreenState extends ConsumerState<CartScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      ref.read(cartProvider.notifier).fetchCart();
+    },);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(cartProvider);
+    print('state: ${state.cart.products}');
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -21,7 +35,7 @@ class _CartScreenState extends State<CartScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'My Bag',
+                'Cart',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -30,21 +44,18 @@ class _CartScreenState extends State<CartScreen> {
               const SizedBox(height: 14),
 
               Expanded(
-                child: ListView.separated(
-                  itemCount: 3,
+                child: state.cart.products!.isEmpty ? _buildEmptyCart() : ListView.separated(
+                  itemCount: state.cart.products?.length ?? 0,
                   separatorBuilder: (context, index) =>
                       const Divider(height: 28),
                   itemBuilder: (context, index) => ProductBagItem(
                     index: index,
-                    imageUrl: [
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133884/felix-fischer-1m0BBZpeSUs-unsplash_pjtywt.jpg',
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133884/dimitri-karastelev-DjkYRklN0QI-unsplash_qrycsa.jpg',
-                      'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133883/anh-nhat-uCqMa_s-JDg-unsplash_dvy4ii.jpg',
-                    ][index],
-                    name: ['Iphone 15', 'IPhone 14', 'Samsung S21 Ultra'][index],
-                    color: ['Blue', 'Gray', 'Black'][index],
-                    ram: ['8', '8', '16'][index],
-                    price: ['755', '699', '999'][index]
+                    imageUrl: state.cart.products?[index].variantProduct?[0].images?[0],
+                    name: state.cart.products?[index].productName,
+                    color: state.cart.products?[index].variantProduct?[0].color,
+                    ram: state.cart.products?[index].variantProduct?[0].ram,
+                    rom: state.cart.products?[index].variantProduct?[0].rom,
+                    price: state.cart.products?[index].variantProduct?[0].price.toString()
                   ),
                 ),
               ),
@@ -100,5 +111,9 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildEmptyCart(){
+    return Center(child: Text('Giỏ hàng trống'),);
   }
 }
