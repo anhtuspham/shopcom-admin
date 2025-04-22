@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_com/providers/order_detail_provider.dart';
 import 'package:shop_com/providers/product_detail_provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/cart/screen/cart_screen.dart';
@@ -94,7 +95,18 @@ GoRouter genRoute() {
             GoRoute(
               path: '/orderDetail',
               name: 'orderDetail',
-              builder: (context, state) => const OrderDetailScreen(),
+              builder: (context, state) {
+                final id = state.extra as String;
+                return ProviderScope(overrides: [
+                  orderDetailProvider.overrideWith(
+                    (ref, arg) {
+                      final notifier = OrderDetailNotifier();
+                      notifier.fetchOrder(id);
+                      return notifier;
+                    },
+                  )
+                ], child: OrderDetailScreen(id: id));
+              },
             ),
             GoRoute(
               path: '/productDetail',

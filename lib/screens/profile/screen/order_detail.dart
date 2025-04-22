@@ -1,18 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/providers/order_detail_provider.dart';
+import 'package:shop_com/providers/order_provider.dart';
+import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/widgets/button_widget.dart';
+import 'package:shop_com/widgets/error_widget.dart';
+import 'package:shop_com/widgets/loading_widget.dart';
 import '../../../widgets/custom_header_info.dart';
 import '../widgets/order_product_item.dart';
 
-class OrderDetailScreen extends StatefulWidget {
-  const OrderDetailScreen({super.key});
+class OrderDetailScreen extends ConsumerStatefulWidget {
+  final String id;
+
+  const OrderDetailScreen({super.key, required this.id});
 
   @override
-  State<OrderDetailScreen> createState() => _OrderDetailScreenState();
+  ConsumerState<OrderDetailScreen> createState() => _OrderDetailScreenState();
 }
 
-class _OrderDetailScreenState extends State<OrderDetailScreen> {
+class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
+  final List statusOrder = ["pending", "processing", "delivered", "cancelled"];
+  final List statusColor = [
+    Colors.orange[600],
+    Colors.blue[400],
+    Colors.green[600],
+    Colors.red[600]
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(orderDetailProvider(widget.id));
+    if (state.isLoading) return const LoadingWidget();
+    if (state.isError) return const ErrorsWidget();
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -25,15 +45,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildHeaderInfo(),
+                    _buildHeaderInfo(state),
                     const SizedBox(height: 24),
-                    const Text(
-                      '3 items',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 12),
-                    _buildOrderItems(),
+                    _buildOrderItems(state),
                     const SizedBox(height: 20),
                     _buildOrderInformation(),
                     const SizedBox(height: 20),
@@ -67,64 +81,34 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
 
-  Widget _buildHeaderInfo() {
-    return const Column(
+  Widget _buildHeaderInfo(OrderDetailState state) {
+    return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 200,
-              child: CustomHeaderInfo(
-                title: 'Order',
-                value: '19234',
-                headerWidth: 70,
-                headerFontWeight: FontWeight.w700,
-                valueFontWeight: FontWeight.w700,
-              ),
-            ),
-            Text('01-04-2025'),
-          ],
-        ),
-        SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 250,
-              child: CustomHeaderInfo(
-                title: 'Tracking number',
-                value: 'IW3452344',
-                headerWidth: 150,
-                fontSize: 16,
-                valueFontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              'Delivered',
-              style:
-                  TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
-            ),
-          ],
+        CustomHeaderInfo(title: 'OrderID', value: state.order.id ?? ''),
+        CustomHeaderInfo(
+            title: 'Order time',
+            value: getStringFromDateTime(
+                state.order.createdAt ?? DateTime.now(), 'HH:mm - dd/MM/yyyy')),
+        CustomHeaderInfo(
+          title: 'Status',
+          value: upperCaseFirstLetter(state.order.status ?? ''),
+          valueFontWeight: FontWeight.w700,
+          valueColor: statusColor[statusOrder.indexOf(state.order.status)],
         )
       ],
     );
   }
 
-  Widget _buildOrderItems() {
-    final items = List.generate(3, (index) {
+  Widget _buildOrderItems(OrderDetailState state) {
+    final items = List.generate(state.order.products?.length ?? 0, (index) {
       return OrderProductItem(
           index: index,
-          imageUrl: [
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133884/felix-fischer-1m0BBZpeSUs-unsplash_pjtywt.jpg',
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133884/dimitri-karastelev-DjkYRklN0QI-unsplash_qrycsa.jpg',
-            'https://res.cloudinary.com/dcfihmhw7/image/upload/v1744133883/anh-nhat-uCqMa_s-JDg-unsplash_dvy4ii.jpg',
-          ][index],
-          unit: ['1', '1', '1'][index],
-          name: ['Iphone 15', 'IPhone 14', 'Samsung S21 Ultra'][index],
-          color: ['Blue', 'Gray', 'Black'][index],
-          ram: ['8', '8', '16'][index],
-          price: ['755', '699', '999'][index]);
+          imageUrl: state.order.products?[index].variantProduct?[0].images?[0],
+          unit: state.order.products?[index].quantity.toString(),
+          name: state.order.products?[index].productName,
+          color: state.order.products?[index].variantProduct?[0].color,
+          ram: state.order.products?[index].variantProduct?[0].ram,
+          price: state.order.products?[index].price.toString());
     });
 
     return Column(
