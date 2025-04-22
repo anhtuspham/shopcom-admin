@@ -67,6 +67,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
 final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
   final notifier = ProductNotifier();
+  print('fetchProduct');
   notifier.fetchProduct();
   return notifier;
 });

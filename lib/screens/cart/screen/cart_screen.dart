@@ -17,7 +17,6 @@ class CartScreen extends ConsumerStatefulWidget {
 class _CartScreenState extends ConsumerState<CartScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
       () {

@@ -2,6 +2,8 @@ import 'package:shop_com/apis/base_api.dart';
 import 'package:shop_com/data/model/product.dart';
 import 'package:async/async.dart';
 
+import '../data/config/app_config.dart';
+
 mixin ProductApi on BaseApi {
   Future<List<Product>> fetchProduct() async {
     Result result = await handleRequest(
@@ -23,7 +25,7 @@ mixin ProductApi on BaseApi {
           try {
             return Product.fromJson(e);
           } catch (err) {
-            print('❌ Lỗi khi parse product: $err\nRaw item: $e');
+            app_config.printLog("e", " API_USER_FETCH_PRODUCT : ${err.toString()} ");
             return null;
           }
         })

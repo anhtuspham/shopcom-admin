@@ -6,16 +6,16 @@ class CustomHeaderInfo extends StatelessWidget {
   final double? headerWidth;
   final double? fontSize;
   final FontWeight? headerFontWeight;
-  final FontWeight? infoFontWeight;
+  final FontWeight? valueFontWeight;
 
   const CustomHeaderInfo(
       {super.key,
         required this.title,
         required this.value,
         this.headerWidth = 150,
-        this.fontSize = 18,
+        this.fontSize = 14,
         this.headerFontWeight = FontWeight.w400,
-        this.infoFontWeight = FontWeight.w400});
+        this.valueFontWeight = FontWeight.w400});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,8 @@ class CustomHeaderInfo extends StatelessWidget {
         Expanded(
             child: Text(
               value,
-              style: TextStyle(fontSize: fontSize, fontWeight: infoFontWeight),
+              textAlign: TextAlign.end,
+              style: TextStyle(fontSize: fontSize, fontWeight: valueFontWeight),
               softWrap: true,
             ))
       ],

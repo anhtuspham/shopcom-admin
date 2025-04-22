@@ -4,21 +4,20 @@ import '../data/config/app_config.dart';
 import '../data/model/order.dart';
 
 class OrderState {
-  final Order order;
+  final List<Order>? orders;
   final bool isLoading;
   final bool isError;
 
   const OrderState({
-    required this.order,
+    this.orders,
     this.isLoading = false,
     this.isError = false,
   });
 
-  factory OrderState.initial() => OrderState(order: Order.empty());
-
-  OrderState copyWith({Order? order, bool? isLoading, bool? isError}) {
+  factory OrderState.initial() => const OrderState();
+  OrderState copyWith({List<Order>? orders, bool? isLoading, bool? isError}) {
     return OrderState(
-      order: order ?? this.order,
+      orders: orders ?? this.orders,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
     );
@@ -32,8 +31,8 @@ class OrderNotifier extends StateNotifier<OrderState> {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      final order = await api.fetchOrder();
-      state = state.copyWith(order: order, isLoading: false);
+      final orders = await api.fetchOrder();
+      state = state.copyWith(orders: orders, isLoading: false, isError: false);
     } catch (_) {
       state = state.copyWith(isLoading: false, isError: true);
     }

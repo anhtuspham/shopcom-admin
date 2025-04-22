@@ -27,3 +27,8 @@ String getStringFromDateTime(DateTime datetime, String format) {
     return '';
   }
 }
+
+String upperCaseFirstLetter(String str){
+  if(str.isEmpty) return '';
+  return str[0].toUpperCase() + str.substring(1);
+}

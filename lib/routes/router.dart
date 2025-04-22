@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_com/providers/product_detail_provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
-import 'package:shop_com/screens/cart/screen/cart.dart';
+import 'package:shop_com/screens/cart/screen/cart_screen.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com/screens/product/screen/product_detail_screen.dart';
 import 'package:shop_com/screens/profile/screen/order_detail.dart';

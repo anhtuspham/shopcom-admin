@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:shop_com/data/model/product.dart';
+import 'package:shop_com/data/model/product_cart.dart';
 
 class Order {
   String? userId;
-  List<Product>? products;
+  List<ProductCart>? products;
   double? totalAmount;
   String? status;
   String? paymentMethod;
@@ -31,9 +31,9 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     userId: json["userId"],
-    products: List<Product>.from(
-        json["products"].map((x) => Product.fromJson(x))),
-    totalAmount: json["totalAmount"],
+    products: List<ProductCart>.from(
+        json["products"].map((x) => ProductCart.fromJson(x))),
+    totalAmount: json["totalAmount"].toDouble(),
     status: json["status"],
     paymentMethod: json["paymentMethod"],
     id: json["_id"],

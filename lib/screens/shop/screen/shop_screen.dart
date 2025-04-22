@@ -28,7 +28,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productProvider);
-    final notifier = ref.read(productProvider.notifier);
+    // final notifier = ref.read(productProvider.notifier);
 
     return Scaffold(
       body: SafeArea(

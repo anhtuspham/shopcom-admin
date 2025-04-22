@@ -110,7 +110,7 @@ class _OrderProductItemState extends State<OrderProductItem> {
                           value: widget.unit ?? '',
                           headerWidth: 30,
                           fontSize: 14,
-                          infoFontWeight: FontWeight.w700,
+                          valueFontWeight: FontWeight.w700,
                         )),
                     Text('${widget.price}\$',
                         style: TextStyle(

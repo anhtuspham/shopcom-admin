@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/widgets/button_widget.dart';
+import 'package:shop_com/widgets/custom_header_info.dart';
 
-class OrderItem extends StatefulWidget {
-  const OrderItem({super.key});
+
+class OrderItem extends ConsumerStatefulWidget {
+  final String? orderId;
+  final String? orderStatus;
+  final String? orderTime;
+  final int? numberProducts;
+  final double? totalAmount;
+
+  const OrderItem(
+      {super.key,
+      this.orderId,
+      this.orderStatus,
+      this.orderTime,
+      this.numberProducts,
+      this.totalAmount});
 
   @override
-  State<StatefulWidget> createState() => _OrderItemState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _OrderItemState();
 }
 
-class _OrderItemState extends State<OrderItem> {
+class _OrderItemState extends ConsumerState<OrderItem> {
+  final List statusOrder = ["pending", "processing", "delivered", "cancelled"];
+  final List statusColor = [Colors.orange[600], Colors.blue[400], Colors.green[600], Colors.red[600]];
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Material(
       borderRadius: BorderRadius.circular(8),
       elevation: 2,
@@ -28,29 +44,9 @@ class _OrderItemState extends State<OrderItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 3,
               children: [
-                const Row(
-                  children: [
-                    Text('Order: 19234'),
-                    Spacer(),
-                    Text('01/04/2025'),
-                  ],
-                ),
-                const Text('Tracking number: IW3452344'),
-                Row(
-                  children: [
-                    const Text('Quantity: 3'),
-                    const Spacer(),
-                    RichText(
-                        text: const TextSpan(
-                            style: TextStyle(color: Colors.black, fontSize: 16),
-                            children: [
-                          TextSpan(text: 'Total Amount: ', style: TextStyle(fontSize: 14)),
-                          TextSpan(
-                              text: '2453\$',
-                              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15))
-                        ])),
-                  ],
-                ),
+                CustomHeaderInfo(title: 'OrderID', value: '#${widget.orderId }'),
+                CustomHeaderInfo(title: 'Order time', value: widget.orderTime ?? ''),
+                CustomHeaderInfo(title: 'Total amount', value: '${widget.totalAmount}\$', headerFontWeight: FontWeight.w700, fontSize: 16, valueFontWeight: FontWeight.w700),
                 Row(
                   children: [
                     CommonButtonWidget(
@@ -59,9 +55,9 @@ class _OrderItemState extends State<OrderItem> {
                         },
                         label: 'Details'),
                     const Spacer(),
-                    const Text('Delivered',
+                    Text(upperCaseFirstLetter(widget.orderStatus ?? ''),
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, color: Colors.green))
+                            fontWeight: FontWeight.w700, color: statusColor[statusOrder.indexOf(widget.orderStatus)]))
                   ],
                 )
               ],

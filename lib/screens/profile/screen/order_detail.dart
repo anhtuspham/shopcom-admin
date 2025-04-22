@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_com/widgets/button_widget.dart';
 import '../../../widgets/custom_header_info.dart';
-import '../../../widgets/order_product_item.dart';
+import '../widgets/order_product_item.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   const OrderDetailScreen({super.key});
@@ -80,7 +80,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 value: '19234',
                 headerWidth: 70,
                 headerFontWeight: FontWeight.w700,
-                infoFontWeight: FontWeight.w700,
+                valueFontWeight: FontWeight.w700,
               ),
             ),
             Text('01-04-2025'),
@@ -97,7 +97,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 value: 'IW3452344',
                 headerWidth: 150,
                 fontSize: 16,
-                infoFontWeight: FontWeight.w700,
+                valueFontWeight: FontWeight.w700,
               ),
             ),
             Text(
@@ -150,25 +150,25 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         CustomHeaderInfo(
             title: 'Shipping Address',
             value: 'Ho Chi Minh city',
-            infoFontWeight: FontWeight.w700),
+            valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Payment Method',
             value: 'Momo',
-            infoFontWeight: FontWeight.w700),
+            valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Delivery Method',
             value: 'Fast Delivery',
-            infoFontWeight: FontWeight.w700),
+            valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
         CustomHeaderInfo(
-            title: 'Discount', value: '', infoFontWeight: FontWeight.w700),
+            title: 'Discount', value: '', valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Total Amount',
             value: '\$2453',
-            infoFontWeight: FontWeight.w700),
+            valueFontWeight: FontWeight.w700),
       ],
     );
   }
