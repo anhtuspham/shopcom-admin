@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/providers/cart_provider.dart';
+import 'package:shop_com/providers/order_provider.dart';
 import 'package:shop_com/widgets/loading_widget.dart';
 
 import '../../../widgets/button_widget.dart';
@@ -15,6 +16,8 @@ class CartScreen extends ConsumerStatefulWidget {
 }
 
 class _CartScreenState extends ConsumerState<CartScreen> {
+  bool _isProcessingOrder = false;
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +26,43 @@ class _CartScreenState extends ConsumerState<CartScreen> {
         ref.read(cartProvider.notifier).fetchCart();
       },
     );
+  }
+
+  Future<void> _refreshCart() async {
+    await ref.read(cartProvider.notifier).refresh();
+  }
+
+  Future<void> _handleCheckout() async {
+    if (_isProcessingOrder) return;
+    setState(() {
+      _isProcessingOrder = true;
+    });
+
+    try {
+      await ref.read(orderProvider.notifier).createOrder();
+
+      await ref.read(cartProvider.notifier).refresh();
+      await ref.read(orderProvider.notifier).refresh();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Đặt hàng thành công'),
+          backgroundColor: Colors.green,
+        ));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Đặt hàng thất bại: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessingOrder = false;
+        });
+      }
+    }
   }
 
   @override
@@ -38,12 +78,21 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Cart',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  const Text(
+                    'Cart',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: _refreshCart,
+                    icon: const Icon(Icons.refresh),
+                    tooltip: 'Refresh cart',
+                  )
+                ],
               ),
               const SizedBox(height: 14),
 
@@ -52,29 +101,32 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ? state.isLoading
                         ? const LoadingWidget()
                         : _buildEmptyCart()
-                    : ListView.separated(
-                        itemCount: state.cart.products?.length ?? 0,
-                        separatorBuilder: (context, index) =>
-                            const Divider(height: 28),
-                        itemBuilder: (context, index) => ProductBagItem(
-                            productId:
-                                state.cart.products?[index].productId ?? '',
-                            index: index,
-                            quantity: state.cart.products?[index].quantity,
-                            variantIndex:
-                                state.cart.products?[index].variantIndex,
-                            imageUrl: state.cart.products?[index]
-                                .variantProduct?[0].images?[0],
-                            name: state.cart.products?[index].productName,
-                            color: state
-                                .cart.products?[index].variantProduct?[0].color,
-                            ram: state
-                                .cart.products?[index].variantProduct?[0].ram,
-                            rom: state
-                                .cart.products?[index].variantProduct?[0].rom,
-                            price: state
-                                .cart.products?[index].variantProduct?[0].price
-                                .toString()),
+                    : RefreshIndicator(
+                        onRefresh: _refreshCart,
+                        child: ListView.separated(
+                          itemCount: state.cart.products?.length ?? 0,
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 28),
+                          itemBuilder: (context, index) => ProductBagItem(
+                              productId:
+                                  state.cart.products?[index].productId ?? '',
+                              index: index,
+                              quantity: state.cart.products?[index].quantity,
+                              variantIndex:
+                                  state.cart.products?[index].variantIndex,
+                              imageUrl: state.cart.products?[index]
+                                  .variantProduct?[0].images?[0],
+                              name: state.cart.products?[index].productName,
+                              color: state.cart.products?[index]
+                                  .variantProduct?[0].color,
+                              ram: state
+                                  .cart.products?[index].variantProduct?[0].ram,
+                              rom: state
+                                  .cart.products?[index].variantProduct?[0].rom,
+                              price: state.cart.products?[index]
+                                  .variantProduct?[0].price
+                                  .toString()),
+                        ),
                       ),
               ),
 
@@ -115,14 +167,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              const SizedBox(
+              SizedBox(
                   width: double.infinity,
                   child: CommonButtonWidget(
-                    callBack: null,
-                    label: 'CHECK OUT',
-                    style: TextStyle(color: Colors.white),
+                    callBack: _handleCheckout,
+                    label: _isProcessingOrder ? 'PROCESSING...' : 'CHECK OUT',
+                    style: const TextStyle(color: Colors.white),
                     buttonStyle: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(Colors.black)),
+                        backgroundColor: WidgetStatePropertyAll(_isProcessingOrder ? Colors.grey : Colors.black)),
                   ))
             ],
           ),
@@ -132,8 +184,21 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   }
 
   Widget _buildEmptyCart() {
-    return const Center(
-      child: Text('Giỏ hàng trống'),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Giỏ hàng trống',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          // ElevatedButton(
+          //   onPressed: _refreshCart,
+          //   child: const Text('Refresh'),
+          // ),
+        ],
+      ),
     );
   }
 }

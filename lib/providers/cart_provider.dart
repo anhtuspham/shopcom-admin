@@ -7,21 +7,23 @@ class CartState {
   final Cart cart;
   final bool isLoading;
   final bool isError;
+  final String? errorMessage;
 
-  const CartState({
-    required this.cart,
-    this.isLoading = false,
-    this.isError = false,
-  });
+  const CartState(
+      {required this.cart,
+      this.isLoading = false,
+      this.isError = false,
+      this.errorMessage});
 
   factory CartState.initial() => CartState(cart: Cart.empty());
 
-  CartState copyWith({Cart? cart, bool? isLoading, bool? isError}) {
+  CartState copyWith(
+      {Cart? cart, bool? isLoading, bool? isError, String? errorMessage}) {
     return CartState(
-      cart: cart ?? this.cart,
-      isLoading: isLoading ?? this.isLoading,
-      isError: isError ?? this.isError,
-    );
+        cart: cart ?? this.cart,
+        isLoading: isLoading ?? this.isLoading,
+        isError: isError ?? this.isError,
+        errorMessage: errorMessage ?? this.errorMessage);
   }
 }
 
@@ -34,40 +36,66 @@ class CartNotifier extends StateNotifier<CartState> {
     try {
       final cart = await api.fetchCart();
       state = state.copyWith(cart: cart, isLoading: false);
-    } catch (_) {
-      state = state.copyWith(isLoading: false, isError: true);
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 
   Future<void> refresh() async {
-    state = CartState.initial();
+    state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
     await fetchCart();
   }
 
-  Future<void> addProductToCart({
+  Future<bool> addProductToCart({
     required String productId,
     required int variantIndex,
     required int quantity,
   }) async {
     state = state.copyWith(isLoading: true, isError: false);
-    final result = await api.addProductToCart(
-        productId: productId, variantIndex: variantIndex, quantity: quantity);
-    if (result.isValue) {
-      await fetchCart();
-    } else {
-      state = state.copyWith(isLoading: false, isError: true);
+    try{
+      final result = await api.addProductToCart(
+          productId: productId, variantIndex: variantIndex, quantity: quantity);
+      if (result.isValue) {
+        await fetchCart();
+        return true;
+      } else {
+        state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to add product to cart");
+        return false;
+      }
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+      return false;
     }
   }
 
-  Future<void> removeProductFromCart(
-      {required String productId, required int variantIndex}) async {
+  Future<bool> removeProductFromCart({
+    required String productId,
+    required int variantIndex
+  }) async {
     state = state.copyWith(isLoading: true, isError: false);
-    final result = await api.removeProductFromCart(
-        productId: productId, variantIndex: variantIndex);
-    if (result.isValue) {
-      await fetchCart();
-    } else {
-      state = state.copyWith(isLoading: false, isError: true);
+    try {
+      final result = await api.removeProductFromCart(
+          productId: productId, variantIndex: variantIndex);
+
+      if (result.isValue) {
+        await fetchCart(); // Refresh cart data after successful removal
+        return true;
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isError: true,
+          errorMessage: 'Failed to remove product from cart',
+        );
+        return false;
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        isError: true,
+        errorMessage: e.toString(),
+      );
+      return false;
     }
   }
 }
