@@ -90,7 +90,7 @@ class BaseApi{
   }) async {
     try {
       final response = await request();
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return Result.value(response.data);
       } else {
         throw DioException.badResponse(
