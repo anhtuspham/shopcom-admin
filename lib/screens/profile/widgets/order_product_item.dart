@@ -85,12 +85,12 @@ class _OrderProductItemState extends State<OrderProductItem> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Color ${widget.color}',
+                          'Color: ${widget.color}',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Ram ${widget.ram}',
+                          'Ram: ${widget.ram}',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                       ],

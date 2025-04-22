@@ -7,19 +7,28 @@ class OrderState {
   final List<Order>? orders;
   final bool isLoading;
   final bool isError;
+  final String? errorMessage;
 
   const OrderState({
     this.orders,
     this.isLoading = false,
     this.isError = false,
+    this.errorMessage,
   });
 
   factory OrderState.initial() => const OrderState();
-  OrderState copyWith({List<Order>? orders, bool? isLoading, bool? isError}) {
+
+  OrderState copyWith({
+    List<Order>? orders,
+    bool? isLoading,
+    bool? isError,
+    String? errorMessage,
+  }) {
     return OrderState(
       orders: orders ?? this.orders,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 }
@@ -33,30 +42,43 @@ class OrderNotifier extends StateNotifier<OrderState> {
     try {
       final orders = await api.fetchOrder();
       state = state.copyWith(orders: orders, isLoading: false, isError: false);
-    } catch (_) {
-      state = state.copyWith(isLoading: false, isError: true);
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        isError: true,
+        errorMessage: e.toString(),
+      );
     }
   }
 
   Future<void> refresh() async {
-    state = OrderState.initial();
+    state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
     await fetchOrder();
   }
 
-  Future<void> createOrder({
-    required String productId,
-    required int variantIndex,
-    required int quantity,
-  }) async {
+  Future<void> createOrder() async {
     state = state.copyWith(isLoading: true, isError: false);
-    final result = await api.createOrder();
-    if (result.isValue) {
-      await fetchOrder();
-    } else {
-      state = state.copyWith(isLoading: false, isError: true);
+    try {
+      final result = await api.createOrder();
+      print('result $result');
+
+      if (result.isValue) {
+        await fetchOrder();
+      } else {
+        app_config.printLog("e", " API_CREATE_ORDER : ${result.asError?.error} ");
+        throw Exception("Failed to create order: ${result.asError?.error}");
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        isError: true,
+        errorMessage: e.toString(),
+      );
+      throw e;
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
   }
-
 }
 
 final orderProvider = StateNotifierProvider<OrderNotifier, OrderState>((ref) {

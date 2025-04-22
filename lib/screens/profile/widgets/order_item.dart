@@ -5,7 +5,6 @@ import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/widgets/button_widget.dart';
 import 'package:shop_com/widgets/custom_header_info.dart';
 
-
 class OrderItem extends ConsumerStatefulWidget {
   final String? orderId;
   final String? orderStatus;
@@ -51,7 +50,7 @@ class _OrderItemState extends ConsumerState<OrderItem> {
                   children: [
                     CommonButtonWidget(
                         callBack: () {
-                          context.push('/orderDetail');
+                          context.push('/orderDetail', extra: widget.orderId);
                         },
                         label: 'Details'),
                     const Spacer(),

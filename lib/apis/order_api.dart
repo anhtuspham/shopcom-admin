@@ -38,6 +38,17 @@ mixin OrderApi on BaseApi {
     return handleRequest(request: () => post('/api/order'));
   }
 
+  Future<Order> fetchOrderDetail({required String orderId}) async {
+    Result result = await handleRequest(request: () async {
+      return get('/api/order/get-order/$orderId');
+    });
+    try {
+      return Order.fromJson(result.asValue!.value);
+    } catch (_) {
+      return Order.empty();
+    }
+  }
+
 // Future<Result> removeProductFromOrder({
 //   required String productId,
 //   required int variantIndex,

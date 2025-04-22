@@ -15,7 +15,6 @@ class OrderScreen extends ConsumerStatefulWidget {
 class _OrderScreenState extends ConsumerState<OrderScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
       () {
@@ -142,7 +141,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
             numberProducts: order.products?.length,
             orderStatus: order.status,
             orderTime: getStringFromDateTime(
-                order.createdAt ?? DateTime.now(), 'dd-MM-yyyy'),
+                order.createdAt ?? DateTime.now(), 'HH:mm - dd/MM/yyyy'),
             totalAmount: order.totalAmount,
           );
         },
