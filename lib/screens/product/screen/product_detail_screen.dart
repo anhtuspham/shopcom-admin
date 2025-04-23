@@ -376,8 +376,6 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
           return;
         }
 
-        ref.invalidate(cartProvider);
-
         await ref.read(cartProvider.notifier).addProductToCart(
           productId: state.product.id ?? '',
           variantIndex: variantIndex,

@@ -42,7 +42,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       await ref.read(orderProvider.notifier).createOrder();
 
       await ref.read(cartProvider.notifier).refresh();
-      await ref.read(orderProvider.notifier).refresh();
+      // await ref.read(orderProvider.notifier).refresh();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Đặt hàng thành công'),
@@ -68,8 +68,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(cartProvider);
-    // if (state.isLoading) return const LoadingWidget();
-    // if (state.isError) return const ErrorsWidget();
+    if (state.isLoading) return const LoadingWidget();
+    if (state.isError) return const ErrorsWidget();
 
     return Scaffold(
       body: SafeArea(

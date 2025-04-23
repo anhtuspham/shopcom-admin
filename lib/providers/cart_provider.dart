@@ -44,7 +44,7 @@ class CartNotifier extends StateNotifier<CartState> {
 
   Future<void> refresh() async {
     state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
-    await fetchCart();
+    await _updateCartState();
   }
 
   Future<bool> addProductToCart({
@@ -57,7 +57,7 @@ class CartNotifier extends StateNotifier<CartState> {
       final result = await api.addProductToCart(
           productId: productId, variantIndex: variantIndex, quantity: quantity);
       if (result.isValue) {
-        await fetchCart();
+        await _updateCartState();
         return true;
       } else {
         state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to add product to cart");
@@ -79,7 +79,7 @@ class CartNotifier extends StateNotifier<CartState> {
           productId: productId, variantIndex: variantIndex);
 
       if (result.isValue) {
-        await fetchCart(); // Refresh cart data after successful removal
+        await _updateCartState();
         return true;
       } else {
         state = state.copyWith(
@@ -96,6 +96,15 @@ class CartNotifier extends StateNotifier<CartState> {
         errorMessage: e.toString(),
       );
       return false;
+    }
+  }
+
+  Future<void> _updateCartState() async{
+    try{
+      final cart = await api.fetchCart();
+      state = state.copyWith(cart: cart, isLoading: false);
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 }
