@@ -53,17 +53,17 @@ class OrderNotifier extends StateNotifier<OrderState> {
 
   Future<void> refresh() async {
     state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
-    await fetchOrder();
+    await _updateOrderState();
   }
 
   Future<void> createOrder() async {
     state = state.copyWith(isLoading: true, isError: false);
     try {
       final result = await api.createOrder();
-      print('result $result');
 
       if (result.isValue) {
-        await fetchOrder();
+        await api.fetchCart();
+        await _updateOrderState();
       } else {
         app_config.printLog("e", " API_CREATE_ORDER : ${result.asError?.error} ");
         throw Exception("Failed to create order: ${result.asError?.error}");
@@ -77,6 +77,14 @@ class OrderNotifier extends StateNotifier<OrderState> {
       throw e;
     } finally {
       state = state.copyWith(isLoading: false);
+    }
+  }
+  Future<void> _updateOrderState() async{
+    try{
+      final order = await api.fetchOrder();
+      state = state.copyWith(orders: order, isLoading: false);
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 }
