@@ -60,7 +60,7 @@ GoRouter genRoute() {
             GoRoute(
               path: '/home',
               name: 'home',
-              builder: (context, state) => const Text('123'),
+              builder: (context, state) => const DashboardScreen(),
             ),
             GoRoute(
               path: '/shop',

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/widgets/button_widget.dart';
 
+import '../../../data/config/app_config.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -36,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUserInfo() {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -48,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Column(
           children: [
             Text(
-              'Pham Anh Tu',
+              app_config.user?.name ?? '',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -56,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 2),
             Text(
-              'panhtu0902@mail.com',
+              app_config.user?.email ?? '',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,

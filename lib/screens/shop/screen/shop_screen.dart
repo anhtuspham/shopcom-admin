@@ -29,13 +29,18 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ref.read(productProvider.notifier).fetchProduct();
+    Future.microtask(
+      () {
+        ref.read(productProvider.notifier).fetchProduct();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productProvider);
-    // final notifier = ref.read(productProvider.notifier);
+    if (state.isLoading) return const LoadingWidget();
+    if (state.isError) return const ErrorsWidget();
 
     return Scaffold(
       body: SafeArea(
@@ -124,8 +129,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
             child: GridView.builder(
                 controller: _scrollController,
                 physics: const BouncingScrollPhysics(),
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.6,
                   mainAxisSpacing: 16,
@@ -134,26 +138,16 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                 itemCount: state.filtered.length,
                 itemBuilder: (context, index) {
                   return ProductCard(
-                      id: state.filtered[index].id ??
-                          '',
-                      imageUrl: state.filtered[index]
-                          .defaultVariant?.images?[0] ??
-                          '',
-                      rating: state
-                          .filtered[index].ratings?.average ??
-                          0,
-                      reviewCount: state
-                          .filtered[index].ratings?.count ??
-                          0,
-                      brand:
-                      state.filtered[index].brand ??
-                          '',
+                      id: state.filtered[index].id ?? '',
+                      imageUrl:
+                          state.filtered[index].defaultVariant?.images?[0] ??
+                              '',
+                      rating: state.filtered[index].ratings?.average ?? 0,
+                      reviewCount: state.filtered[index].ratings?.count ?? 0,
+                      brand: state.filtered[index].brand ?? '',
                       title: state.filtered[index].name,
-                      originalPrice: state
-                          .filtered[index]
-                          .defaultVariant
-                          ?.price ??
-                          0,
+                      originalPrice:
+                          state.filtered[index].defaultVariant?.price ?? 0,
                       isNew: true);
                 })),
       ),

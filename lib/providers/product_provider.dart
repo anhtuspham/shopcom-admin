@@ -64,8 +64,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   Future<void> _updateProductsState() async{
     try{
       final products = await api.fetchProduct();
-      print('products $products}');
-      state = state.copyWith(products: products, isLoading: false, isError: false);
+      state = state.copyWith(products: products, filtered: products, isLoading: false, isError: false);
     } catch(e){
       state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
     }
