@@ -1,7 +1,7 @@
 class User {
   final String email;
   final String name;
-  final String? isAdmin;
+  final bool? isAdmin;
   final String? address;
 
   User({

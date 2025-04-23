@@ -3,22 +3,24 @@ import 'dart:convert';
 import 'package:shop_com/data/model/product_cart.dart';
 
 class Order {
+  String? id;
   String? userId;
   List<ProductCart>? products;
   double? totalAmount;
   String? status;
+  String? address;
   String? paymentMethod;
-  String? id;
   DateTime? createdAt;
   int? v;
 
   Order({
+    this.id,
     this.userId,
     this.products,
     this.totalAmount,
     this.status,
+    this.address,
     this.paymentMethod,
-    this.id,
     this.createdAt,
     this.v,
   });
@@ -30,13 +32,14 @@ class Order {
   String toRawJson() => json.encode(toJson());
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
+    id: json["_id"],
     userId: json["userId"],
     products: List<ProductCart>.from(
         json["products"].map((x) => ProductCart.fromJson(x))),
     totalAmount: json["totalAmount"].toDouble(),
     status: json["status"],
+    address: json["address"],
     paymentMethod: json["paymentMethod"],
-    id: json["_id"],
     createdAt: DateTime.parse(json["createdAt"]),
     v: json["__v"],
   );
@@ -46,6 +49,7 @@ class Order {
     "products": List<dynamic>.from(products!.map((x) => x.toJson())),
     "totalAmount": totalAmount,
     "status": status,
+    "address": address,
     "paymentMethod": paymentMethod,
     "_id": id,
     "createdAt": createdAt?.toIso8601String(),

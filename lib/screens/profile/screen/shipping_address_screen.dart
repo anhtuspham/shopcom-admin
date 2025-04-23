@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/data/config/app_config.dart';
 import 'package:shop_com/providers/order_provider.dart';
+import 'package:shop_com/providers/user_provider.dart';
 import 'package:shop_com/screens/profile/widgets/order_item.dart';
 import 'package:shop_com/utils/util.dart';
+import 'package:shop_com/widgets/error_widget.dart';
 import 'package:shop_com/widgets/loading_widget.dart';
+
+import '../../../widgets/button_widget.dart';
+import '../../../widgets/input_form_widget.dart';
 
 class ShippingAddress extends ConsumerStatefulWidget {
   const ShippingAddress({super.key});
@@ -13,93 +19,132 @@ class ShippingAddress extends ConsumerStatefulWidget {
 }
 
 class _ShippingAddressState extends ConsumerState<ShippingAddress> {
+  bool _isProcessingSave = false;
+  String? email;
+  String? name;
+  String? address;
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController addressController;
+
   @override
   void initState() {
     super.initState();
     Future.microtask(
-          () {
-        ref.read(orderProvider.notifier).fetchOrder();
+      () {
+        ref.read(userProvider.notifier).getUserInfo();
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(orderProvider);
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildAppBar(context),
-              Expanded(
+    final state = ref.watch(userProvider);
+    if (state.isLoading) return const LoadingWidget();
+    if (state.isError) return const ErrorsWidget();
+    nameController = TextEditingController(text: state.user.name);
+    emailController = TextEditingController(text: state.user.email);
+    addressController = TextEditingController(text: state.user.address);
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildAppBar(context),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _refresh,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 6.0, vertical: 12.0),
+                      horizontal: 20.0, vertical: 12.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TabBar(
-                        labelPadding: EdgeInsets.zero,
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Colors.black,
-                        labelStyle:
-                        const TextStyle(fontWeight: FontWeight.bold),
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.black,
-                        ),
-                        unselectedLabelStyle:
-                        const TextStyle(fontWeight: FontWeight.w700),
-                        indicatorSize: TabBarIndicatorSize.label,
-                        tabs: const [
-                          Tab(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                child: Text('Pending'),
-                              )),
-                          Tab(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                child: Text('Processing'),
-                              )),
-                          Tab(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                child: Text('Delivered'),
-                              )),
-                          Tab(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
-                                child: Text('Canceled'),
-                              )),
+                      Column(
+                        children: [
+                          InputForm(
+                            labelText: 'Full name',
+                            hintText: 'Full name',
+                            controller: nameController,
+                            // initialValue: state.user.name,
+                            onSaved: (newValue) => name = newValue,
+                          ),
+                          const SizedBox(height: 20),
+                          InputForm(
+                            labelText: 'Email',
+                            hintText: '123@gmail.com',
+                            controller: emailController,
+                            // initialValue: state.user.email,
+                            onSaved: (newValue) => email = newValue,
+                          ),
+                          const SizedBox(height: 20),
+                          InputForm(
+                            labelText: 'Address',
+                            hintText: 'Ho Chi Minh city',
+                            controller: addressController,
+                            // initialValue: state.user.address,
+                            onSaved: (newValue) => address = newValue,
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 20),
-                      Expanded(
-                          child: TabBarView(
-                            children: [
-                              _buildOrderItemSection(state, 'pending'),
-                              _buildOrderItemSection(state, 'processing'),
-                              _buildOrderItemSection(state, 'delivered'),
-                              _buildOrderItemSection(state, 'cancelled')
-                            ],
+                      SizedBox(
+                          width: double.infinity,
+                          child: CommonButtonWidget(
+                            callBack: _handleUpdateInfo,
+                            label: _isProcessingSave
+                                ? 'PROCESSING...'
+                                : 'SAVE ADDRESS',
+                            style: const TextStyle(color: Colors.white),
+                            buttonStyle: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                    _isProcessingSave
+                                        ? Colors.grey
+                                        : Colors.black)),
                           ))
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Future<void> _handleUpdateInfo() async {
+    if (_isProcessingSave) return;
+    setState(() {
+      _isProcessingSave = true;
+    });
+
+    try {
+      print('name: $name address $address');
+      await ref
+          .read(userProvider.notifier)
+          .updateUserInfo(email: emailController.text, name: nameController.text, address: addressController.text);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Cập nhật thành công'),
+          backgroundColor: Colors.green,
+        ));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Cập nhật thất bại: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessingSave = false;
+        });
+      }
+    }
   }
 
   Future<void> _refresh() {
@@ -122,40 +167,6 @@ class _ShippingAddressState extends ConsumerState<ShippingAddress> {
           )
         ],
       ),
-    );
-  }
-
-  Widget _buildOrderItemSection(OrderState state, String status) {
-    if (state.isLoading) return const LoadingWidget();
-    final filtered =
-    state.orders?.where((element) => element.status == status).toList();
-    if (filtered!.isEmpty) return _buildEmptyOrderItemSection();
-
-    return RefreshIndicator(
-      onRefresh: _refresh,
-      child: ListView.separated(
-        itemBuilder: (context, index) {
-          final order = filtered[index];
-          return OrderItem(
-            orderId: order.id,
-            numberProducts: order.products?.length,
-            orderStatus: order.status,
-            orderTime: getStringFromDateTime(
-                order.createdAt ?? DateTime.now(), 'HH:mm - dd/MM/yyyy'),
-            totalAmount: order.totalAmount,
-          );
-        },
-        itemCount: filtered.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-      ),
-    );
-  }
-
-  Widget _buildEmptyOrderItemSection() {
-    return ListView.separated(
-      itemBuilder: (context, index) => const Offstage(),
-      itemCount: 0,
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
     );
   }
 }

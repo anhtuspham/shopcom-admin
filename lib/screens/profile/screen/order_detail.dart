@@ -133,7 +133,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         SizedBox(height: 12),
         CustomHeaderInfo(
             title: 'Shipping Address',
-            value: 'Ho Chi Minh city',
+            value: state.order.address ?? '',
             valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
         CustomHeaderInfo(

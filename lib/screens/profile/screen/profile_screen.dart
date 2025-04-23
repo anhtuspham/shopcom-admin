@@ -72,8 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildOrderSection() {
     final menuItems = [
-      {'title': 'My orders', 'trailing': 'Already have 3 orders'},
-      {'title': 'Shipping addresses', 'trailing': '1 addresses'},
+      {'title': 'My orders', 'trailing': ''},
+      {'title': 'Shipping addresses', 'trailing': ''},
       {'title': 'Payment methods', 'trailing': 'Momo 0395****38'},
       {'title': 'Promocodes', 'trailing': 'You have special promocodes'},
       {'title': 'My reviews', 'trailing': 'Reviews for 4 items'},
