@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shop_com/data/config/app_config.dart';
 
 import '../data/model/user.dart';
 import 'base_api.dart';
@@ -16,6 +17,16 @@ mixin UserApi on BaseApi {
       return rawList.map((e) => User.fromJson(e)).toList();
     } catch (e) {
       return [];
+    }
+  }
+  
+  Future<User> getUserInfo() async{
+    Result result = await handleRequest(request: () => get('/api/users/profile'),);
+    try{
+      return User.fromJson(result.asValue!.value);
+    }catch(e){
+      app_config.printLog("e", " API_FETCH_USER_INFO : ${e.toString()}");
+      return User.empty();
     }
   }
 
@@ -45,22 +56,19 @@ mixin UserApi on BaseApi {
   }
 
   Future<Result> editUser({
-    required String code,
-    required String name,
-    required String password,
-    required String des,
-    required String role,
-    required String phone,
+    String? email,
+    String? name,
+    String? password,
+    String? address,
   }) async {
     return handleRequest(
       request: () => put(
-        '/User/edit/$code',
+        '/api/users/profile',
         data: {
+          'email': email,
           'name': name,
           'password': password,
-          'des': des,
-          'role': role,
-          'phone': phone,
+          'address': address,
         },
       ),
     );
