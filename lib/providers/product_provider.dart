@@ -8,25 +8,28 @@ class ProductState {
   final List<Product> filtered;
   final bool isLoading;
   final bool isError;
+  final String? errorMessage;
 
   ProductState({
     this.products = const [],
     this.filtered = const [],
     this.isLoading = false,
     this.isError = false,
+    this.errorMessage
   });
 
   ProductState copyWith({
     List<Product>? products,
     List<Product>? filtered,
     bool? isLoading,
-    bool? isError,
+    bool? isError, String? errorMessage
   }) {
     return ProductState(
       products: products ?? this.products,
       filtered: filtered ?? this.filtered,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
+      errorMessage: errorMessage ?? this.errorMessage
     );
   }
 }
@@ -35,18 +38,12 @@ class ProductNotifier extends StateNotifier<ProductState> {
   ProductNotifier() : super(ProductState());
 
   Future<void> fetchProduct() async {
-    if (state.isLoading || state.products.isNotEmpty) return;
+    if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
-
     try {
-      final products = await api.fetchProduct();
-      state = state.copyWith(
-        products: products,
-        filtered: products,
-        isLoading: false,
-      );
-    } catch (_) {
-      state = state.copyWith(isLoading: false, isError: true);
+      await _updateProductsState();
+    } catch (e) {
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 
@@ -60,14 +57,23 @@ class ProductNotifier extends StateNotifier<ProductState> {
   }
 
   Future<void> refresh() async {
-    state = ProductState();
-    await fetchProduct();
+    state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
+    await _updateProductsState();
+  }
+
+  Future<void> _updateProductsState() async{
+    try{
+      final products = await api.fetchProduct();
+      print('products $products}');
+      state = state.copyWith(products: products, isLoading: false, isError: false);
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+    }
   }
 }
 
 final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
   final notifier = ProductNotifier();
-  print('fetchProduct');
   notifier.fetchProduct();
   return notifier;
 });

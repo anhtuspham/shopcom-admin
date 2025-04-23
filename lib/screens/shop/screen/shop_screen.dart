@@ -26,6 +26,13 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ref.read(productProvider.notifier).fetchProduct();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = ref.watch(productProvider);
     // final notifier = ref.read(productProvider.notifier);

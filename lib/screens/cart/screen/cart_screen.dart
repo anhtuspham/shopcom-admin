@@ -78,21 +78,12 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Text(
-                    'Cart',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: _refreshCart,
-                    icon: const Icon(Icons.refresh),
-                    tooltip: 'Refresh cart',
-                  )
-                ],
+              const Text(
+                'Cart',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 14),
 
@@ -193,10 +184,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 16),
-          // ElevatedButton(
-          //   onPressed: _refreshCart,
-          //   child: const Text('Refresh'),
-          // ),
+          ElevatedButton(
+            onPressed: _refreshCart,
+            child: const Text('Refresh'),
+          ),
         ],
       ),
     );

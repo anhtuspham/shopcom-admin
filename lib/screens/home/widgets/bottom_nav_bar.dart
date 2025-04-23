@@ -14,7 +14,7 @@ class BottomNavBar extends StatelessWidget {
       onTap: (index) {
         switch (index) {
           case 0:
-            context.go('/tab1');
+            context.go('/home');
             break;
           case 1:
             context.go('/shop');
@@ -43,7 +43,7 @@ class BottomNavBar extends StatelessWidget {
   int _getSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
 
-    if (location == '/tab1') return 0;
+    if (location == '/home') return 0;
     if (location == '/shop') return 1;
     if (location == '/bag') return 2;
     if (location == '/favorite') return 3;

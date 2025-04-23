@@ -49,7 +49,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     const SizedBox(height: 24),
                     _buildOrderItems(state),
                     const SizedBox(height: 20),
-                    _buildOrderInformation(),
+                    _buildOrderInformation(state),
                     const SizedBox(height: 20),
                     _buildButtonSection()
                   ],
@@ -122,8 +122,8 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
     );
   }
 
-  Widget _buildOrderInformation() {
-    return const Column(
+  Widget _buildOrderInformation(OrderDetailState state) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -138,7 +138,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Payment Method',
-            value: 'Momo',
+            value: state.order.paymentMethod ?? '',
             valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
         CustomHeaderInfo(
@@ -151,7 +151,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Total Amount',
-            value: '\$2453',
+            value: '\$${state.order.totalAmount}',
             valueFontWeight: FontWeight.w700),
       ],
     );

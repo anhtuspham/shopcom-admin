@@ -1,17 +1,18 @@
 // import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:provider/provider.dart';
 // import 'package:shop_com/providers/product_provider.dart';
 // import '../../../data/model/product.dart';
 // import '../../../widgets/product_card.dart';
 //
-// class DashboardScreen extends StatefulWidget {
+// class DashboardScreen extends ConsumerStatefulWidget {
 //   const DashboardScreen({super.key});
 //
 //   @override
-//   State<DashboardScreen> createState() => _DashboardScreenState();
+//   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 // }
 //
-// class _DashboardScreenState extends State<DashboardScreen> {
+// class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 //   @override
 //   void initState() {
 //     // TODO: implement initState
@@ -28,7 +29,7 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     final productProvider = context.watch<ProductProvider>();
+//     final state = ref.watch(productProvider);
 //     return Scaffold(
 //       body: SafeArea(
 //         child: ListenableBuilder(

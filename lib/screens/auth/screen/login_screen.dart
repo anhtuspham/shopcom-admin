@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ));
       reloadApiUrl();
       if (mounted) {
-        context.goNamed("tab1", extra: true);
+        context.goNamed("home", extra: true);
       }
       // Future.microtask(() => context.go("/tab1"));
     } else {

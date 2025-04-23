@@ -58,8 +58,8 @@ GoRouter genRoute() {
           builder: (context, state, child) => HomeScreen(child: child),
           routes: [
             GoRoute(
-              path: '/tab1',
-              name: 'tab1',
+              path: '/home',
+              name: 'home',
               builder: (context, state) => const Text('123'),
             ),
             GoRoute(
