@@ -14,6 +14,7 @@ import 'package:shop_com/screens/profile/screen/order_detail.dart';
 import 'package:shop_com/screens/profile/screen/order_screen.dart';
 import 'package:shop_com/screens/profile/screen/profile_screen.dart';
 import 'package:shop_com/screens/profile/screen/setting_screen.dart';
+import 'package:shop_com/screens/profile/screen/shipping_address_screen.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
@@ -87,6 +88,10 @@ GoRouter genRoute() {
               name: 'setting',
               builder: (context, state) => const SettingScreen(),
             ),
+            GoRoute(
+                path: '/shippingAddress',
+                name: 'shippingAddress',
+                builder: (context, state) => const ShippingAddress()),
             GoRoute(
               path: '/order',
               name: 'order',

@@ -108,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             case 0:
               context.push('/order');
             case 1:
-              context.push('/setting');
+              context.push('/shippingAddress');
               break;
             case 2:
               context.push('/setting');
