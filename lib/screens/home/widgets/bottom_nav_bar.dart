@@ -20,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
             context.go('/shop');
             break;
           case 2:
-            context.go('/bag');
+            context.go('/cart');
             break;
           case 3:
             context.go('/favorite');
@@ -45,7 +45,7 @@ class BottomNavBar extends StatelessWidget {
 
     if (location == '/home') return 0;
     if (location == '/shop') return 1;
-    if (location == '/bag') return 2;
+    if (location == '/cart') return 2;
     if (location == '/favorite') return 3;
     if (location.startsWith('/profile')) return 4;
 

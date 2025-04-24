@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shop_com/providers/cart_provider.dart';
 import '../../../providers/product_detail_provider.dart';
 import '../../../widgets/button_widget.dart';
@@ -384,7 +385,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
 
         if(mounted){
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Đã thêm vào giỏ hàng')),
+            const SnackBar(content: Text('Đã thêm vào giỏ hàng'), backgroundColor: Colors.green,),
           );
         }
       },
@@ -397,11 +398,12 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   );
 
   Widget _buildAccordion() {
-    return const Column(
+    return Column(
       children: [
         ListTile(
-          title: Text('Shipping info'),
+          title: Text('Reviews'),
           trailing: Icon(Icons.keyboard_arrow_right),
+          onTap: () => context.push('/review'),
         ),
         ListTile(
           title: Text('Support'),

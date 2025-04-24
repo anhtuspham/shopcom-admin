@@ -105,25 +105,25 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   }
 
   Widget _buildProductGrid(ProductState state) {
-    return Container(
-      margin: const EdgeInsets.only(left: 4.0, right: 8, bottom: 8),
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Colors.grey,
-          width: 1,
+    return RawScrollbar(
+      trackVisibility: false,
+      thumbVisibility: false,
+      thumbColor: Colors.grey,
+      controller: _scrollController,
+      padding: const EdgeInsets.only(top: 7, left: 2),
+      crossAxisMargin: 0,
+      radius: const Radius.circular(10),
+      thickness: 3,
+      child: Container(
+        margin: const EdgeInsets.only(left: 4.0, right: 8, bottom: 8),
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.grey,
+            width: 1,
+          ),
         ),
-      ),
-      child: RawScrollbar(
-        trackVisibility: false,
-        thumbVisibility: true,
-        thumbColor: Colors.grey,
-        controller: _scrollController,
-        padding: const EdgeInsets.only(top: 7, right: 2),
-        crossAxisMargin: 0,
-        radius: const Radius.circular(10),
-        thickness: 6,
         child: RefreshIndicator(
             onRefresh: _refresh,
             child: GridView.builder(
