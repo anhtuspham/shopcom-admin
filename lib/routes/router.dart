@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ import 'package:shop_com/screens/profile/screen/order_screen.dart';
 import 'package:shop_com/screens/profile/screen/profile_screen.dart';
 import 'package:shop_com/screens/profile/screen/setting_screen.dart';
 import 'package:shop_com/screens/profile/screen/shipping_address_screen.dart';
+import 'package:shop_com/widgets/error_page_widget.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
@@ -51,7 +53,7 @@ GoRouter genRoute() {
 
   GoRouter router = GoRouter(
       navigatorKey: _rootNavigatorKey,
-      initialLocation: '/auth',
+      initialLocation: '/home',
       routes: [
         screenLogin,
         ShellRoute(
@@ -69,8 +71,8 @@ GoRouter genRoute() {
               builder: (context, state) => const ShopScreen(),
             ),
             GoRoute(
-              path: '/bag',
-              name: 'bag',
+              path: '/cart',
+              name: 'cart',
               builder: (context, state) => const CartScreen(),
             ),
             GoRoute(
@@ -136,6 +138,6 @@ GoRouter genRoute() {
           ],
         ),
       ],
-      redirect: systemRedirect);
+      redirect: systemRedirect, errorBuilder: (context, state) => const ErrorPageWidget());
   return router;
 }
