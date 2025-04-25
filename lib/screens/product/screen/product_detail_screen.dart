@@ -401,11 +401,11 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     return Column(
       children: [
         ListTile(
-          title: Text('Reviews'),
-          trailing: Icon(Icons.keyboard_arrow_right),
+          title: const Text('Reviews'),
+          trailing: const Icon(Icons.keyboard_arrow_right),
           onTap: () => context.push('/review'),
         ),
-        ListTile(
+        const ListTile(
           title: Text('Support'),
           trailing: Icon(Icons.keyboard_arrow_right),
         ),
