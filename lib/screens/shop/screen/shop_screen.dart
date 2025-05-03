@@ -17,6 +17,8 @@ class ShopScreen extends ConsumerStatefulWidget {
 
 class _ShopScreenState extends ConsumerState<ShopScreen> {
   final ScrollController _scrollController = ScrollController();
+  bool showSortPrice = false;
+  String? _currentSort;
 
   @override
   void dispose() {
@@ -27,11 +29,10 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
       () {
-        ref.read(productProvider.notifier).fetchProduct();
+        ref.read(productProvider.notifier).fetchProduct(sort: _currentSort);
       },
     );
   }
@@ -78,27 +79,47 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
         const SizedBox(height: 16),
         Row(
           children: [
-            _buildFilterButton(Icons.tune, 'Filters'),
+            // _buildFilterButton(icon: Icons.tune, text: 'Filters'),
             const SizedBox(width: 16),
-            _buildFilterButton(Icons.sort, 'Sort by'),
-            const Spacer(),
-            IconButton(
-              icon: const Icon(Icons.grid_view),
-              onPressed: () {},
+            DropdownButton(
+              hint: Text(
+                  'Giá ${_currentSort == null ? '' : _currentSort == 'priceAsc' ? 'tăng dần' : 'giảm dần'}'),
+              items: const [
+                DropdownMenuItem(
+                    value: 'priceAsc', child: Text('Giá tăng dần')),
+                DropdownMenuItem(
+                  value: 'priceDesc',
+                  child: Text('Giá giảm dần'),
+                )
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _currentSort = value;
+                });
+                ref.read(productProvider.notifier).fetchProduct(sort: value);
+              },
+              borderRadius: BorderRadius.circular(10),
             ),
+            const Spacer(),
+            // IconButton(
+            //   icon: const Icon(Icons.grid_view),
+            //   onPressed: () {},
+            // ),
           ],
         ),
+        if (showSortPrice) _buildDropdown()
       ],
     );
   }
 
-  Widget _buildFilterButton(IconData icon, String text) {
+  Widget _buildFilterButton(
+      {required IconData icon, required String text, VoidCallback? onPress}) {
     return OutlinedButton.icon(
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         side: BorderSide(color: Colors.grey[300]!),
       ),
-      onPressed: () {},
+      onPressed: onPress ?? () {},
       icon: Icon(icon, size: 20),
       label: Text(text),
     );
@@ -106,8 +127,8 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
 
   Widget _buildProductGrid(ProductState state) {
     return RawScrollbar(
-      trackVisibility: false,
-      thumbVisibility: false,
+      trackVisibility: true,
+      thumbVisibility: true,
       thumbColor: Colors.grey,
       controller: _scrollController,
       padding: const EdgeInsets.only(top: 7, left: 2),
@@ -119,10 +140,10 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.grey,
-            width: 1,
-          ),
+          // border: Border.all(
+          //   color: Colors.grey,
+          //   width: 1,
+          // ),
         ),
         child: RefreshIndicator(
             onRefresh: _refresh,
@@ -150,6 +171,18 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                           state.filtered[index].defaultVariant?.price ?? 0,
                       isNew: true);
                 })),
+      ),
+    );
+  }
+
+  Widget _buildDropdown() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          ElevatedButton(onPressed: null, child: const Text('Cao nhất')),
+          ElevatedButton(onPressed: null, child: const Text('Thấp nhất'))
+        ],
       ),
     );
   }

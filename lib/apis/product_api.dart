@@ -5,10 +5,10 @@ import 'package:async/async.dart';
 import '../data/config/app_config.dart';
 
 mixin ProductApi on BaseApi {
-  Future<List<Product>> fetchProduct() async {
+  Future<List<Product>> fetchProduct({String? sortBy}) async {
     Result result = await handleRequest(
       request: () async {
-        return get('/api/Products');
+        return get('/api/Products', queryParameters: {"sort": sortBy});
       },
     );
     try {

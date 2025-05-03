@@ -37,11 +37,16 @@ class ProductState {
 class ProductNotifier extends StateNotifier<ProductState> {
   ProductNotifier() : super(ProductState());
 
-  Future<void> fetchProduct() async {
+  String _currentSort = 'newest';
+
+  Future<void> fetchProduct({String? sort}) async {
+    final sortParams = sort ?? _currentSort;
+    _currentSort = sortParams;
+
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      await _updateProductsState();
+      await _updateProductsState(sortBy: sortParams);
     } catch (e) {
       state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
     }
@@ -61,9 +66,10 @@ class ProductNotifier extends StateNotifier<ProductState> {
     await _updateProductsState();
   }
 
-  Future<void> _updateProductsState() async{
+  Future<void> _updateProductsState({String? sortBy}) async{
+
     try{
-      final products = await api.fetchProduct();
+      final products = await api.fetchProduct(sortBy: sortBy);
       state = state.copyWith(products: products, filtered: products, isLoading: false, isError: false);
     } catch(e){
       state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
@@ -71,7 +77,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   }
 }
 
-final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
+final productProvider = StateNotifierProvider.autoDispose<ProductNotifier, ProductState>((ref) {
   final notifier = ProductNotifier();
   notifier.fetchProduct();
   return notifier;

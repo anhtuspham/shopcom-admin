@@ -44,6 +44,7 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.black),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
