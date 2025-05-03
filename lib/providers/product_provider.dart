@@ -10,27 +10,25 @@ class ProductState {
   final bool isError;
   final String? errorMessage;
 
-  ProductState({
-    this.products = const [],
-    this.filtered = const [],
-    this.isLoading = false,
-    this.isError = false,
-    this.errorMessage
-  });
+  ProductState(
+      {this.products = const [],
+      this.filtered = const [],
+      this.isLoading = false,
+      this.isError = false,
+      this.errorMessage});
 
-  ProductState copyWith({
-    List<Product>? products,
-    List<Product>? filtered,
-    bool? isLoading,
-    bool? isError, String? errorMessage
-  }) {
+  ProductState copyWith(
+      {List<Product>? products,
+      List<Product>? filtered,
+      bool? isLoading,
+      bool? isError,
+      String? errorMessage}) {
     return ProductState(
-      products: products ?? this.products,
-      filtered: filtered ?? this.filtered,
-      isLoading: isLoading ?? this.isLoading,
-      isError: isError ?? this.isError,
-      errorMessage: errorMessage ?? this.errorMessage
-    );
+        products: products ?? this.products,
+        filtered: filtered ?? this.filtered,
+        isLoading: isLoading ?? this.isLoading,
+        isError: isError ?? this.isError,
+        errorMessage: errorMessage ?? this.errorMessage);
   }
 }
 
@@ -39,16 +37,17 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
   String _currentSort = 'newest';
 
-  Future<void> fetchProduct({String? sort}) async {
+  Future<void> fetchProduct({String? sort, String? page, String? limit}) async {
     final sortParams = sort ?? _currentSort;
     _currentSort = sortParams;
 
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      await _updateProductsState(sortBy: sortParams);
+      await _updateProductsState(sortBy: sortParams, page: page, limit: limit);
     } catch (e) {
-      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+      state = state.copyWith(
+          isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 
@@ -56,8 +55,8 @@ class ProductNotifier extends StateNotifier<ProductState> {
     final filtered = query.isEmpty
         ? state.products
         : state.products
-        .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+            .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
     state = state.copyWith(filtered: filtered);
   }
 
@@ -66,18 +65,26 @@ class ProductNotifier extends StateNotifier<ProductState> {
     await _updateProductsState();
   }
 
-  Future<void> _updateProductsState({String? sortBy}) async{
+  Future<void> _updateProductsState(
+      {String? sortBy, String? page, String? limit}) async {
+    try {
+      final products =
+          await api.fetchProduct(sortBy: sortBy, page: page, limit: limit);
 
-    try{
-      final products = await api.fetchProduct(sortBy: sortBy);
-      state = state.copyWith(products: products, filtered: products, isLoading: false, isError: false);
-    } catch(e){
-      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+      state = state.copyWith(
+          products: products,
+          filtered: products,
+          isLoading: false,
+          isError: false);
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 }
 
-final productProvider = StateNotifierProvider.autoDispose<ProductNotifier, ProductState>((ref) {
+final productProvider =
+    StateNotifierProvider.autoDispose<ProductNotifier, ProductState>((ref) {
   final notifier = ProductNotifier();
   notifier.fetchProduct();
   return notifier;
