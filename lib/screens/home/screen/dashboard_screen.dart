@@ -17,7 +17,6 @@ class DashboardScreen extends ConsumerStatefulWidget {
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
       () {
@@ -49,7 +48,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               // New section
               _newSection(),
 
-              _buildProductGrid(state),
+              _productsGrid(state),
             ],
           ),
         ),
@@ -217,9 +216,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  Widget _buildProductGrid(ProductState state) {
+  Widget _productsGrid(ProductState state) {
+    final newestProduct = state.products.take(4).toList();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -227,8 +227,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           mainAxisSpacing: 12,
           crossAxisSpacing: 6,
         ),
-        itemCount: state.products.length,
-        itemBuilder: (context, index) => _buildProductCard(state.products[index]),
+        itemCount: newestProduct.length,
+        itemBuilder: (context, index) => _buildProductCard(newestProduct[index]),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
       ),
