@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/providers/cart_provider.dart';
+import 'package:shop_com/providers/currency_provider.dart';
+import 'package:shop_com/utils/util.dart';
 import '../../../providers/product_detail_provider.dart';
 import '../../../widgets/button_widget.dart';
 import '../../../widgets/error_widget.dart';
@@ -176,6 +178,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productDetailProvider(widget.id));
+    // final formattedPrice = formatPrice(usdPrice, currency)
 
     if (state.isLoading) return const LoadingWidget();
     if (state.isError) return const ErrorsWidget();
@@ -201,7 +204,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                         children: [
                           _buildDynamicDropdowns(state),
                           const SizedBox(height: 16),
-                          _buildTitlePriceSection(state),
+                          _buildTitlePriceSection(state, ref),
                           const SizedBox(height: 8),
                           _buildDescription(state),
                           const SizedBox(height: 16),
@@ -228,6 +231,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () => Navigator.pop(context),
       ),
+      backgroundColor: Colors.grey[300],
     );
   }
 
@@ -335,12 +339,14 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     );
   }
 
-  Widget _buildTitlePriceSection(ProductDetailState state) {
+  Widget _buildTitlePriceSection(ProductDetailState state, WidgetRef ref) {
     // Find the current variant based on selections to display the correct price
     final variantIndex = _findSelectedVariantIndex(state);
     final price = variantIndex != -1
         ? state.product.variants![variantIndex].price
         : state.product.defaultVariant?.price;
+    final currency = ref.watch(currencyProvider);
+    final formattedPrice = formatMoney(price ?? 0, currency);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -354,7 +360,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 style: const TextStyle(color: Colors.grey)),
           ],
         ),
-        Text('\$${price ?? ''}',
+        Text(formattedPrice ?? '',
             style: const TextStyle(fontSize: 18)),
       ],
     );

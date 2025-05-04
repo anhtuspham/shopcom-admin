@@ -101,7 +101,7 @@ class FavoritesScreen extends StatelessWidget {
           name: ['Iphone 15', 'IPhone 16', 'Samsung S23'][index],
           color: ['Black', 'Blue', 'Grey'][index],
           ram: ['8', '8', '16'][index],
-          price: ['899', '1099', '999'][index]),
+          price: [double.parse('899'), double.parse('899'), double.parse('899')][index]),
     );
   }
 

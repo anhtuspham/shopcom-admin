@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/providers/currency_provider.dart';
+import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/widgets/custom_header_info.dart';
 
-class OrderProductItem extends StatefulWidget {
+class OrderProductItem extends ConsumerStatefulWidget {
   final String? imageUrl;
   final String? brand;
   final String? name;
   final String? color;
   final String? unit;
   final String? ram;
-  final String? price;
+  final double? price;
   final bool? isFavorite;
   final int index;
 
@@ -26,10 +29,10 @@ class OrderProductItem extends StatefulWidget {
       this.isFavorite = false});
 
   @override
-  State<OrderProductItem> createState() => _OrderProductItemState();
+  ConsumerState<OrderProductItem> createState() => _OrderProductItemState();
 }
 
-class _OrderProductItemState extends State<OrderProductItem> {
+class _OrderProductItemState extends ConsumerState<OrderProductItem> {
   ValueNotifier<int> countProduct = ValueNotifier(0);
 
   @override
@@ -112,9 +115,11 @@ class _OrderProductItemState extends State<OrderProductItem> {
                           fontSize: 14,
                           valueFontWeight: FontWeight.w700,
                         )),
-                    Text('${widget.price}\$',
-                        style: TextStyle(
-                          fontSize: 18,
+                    Text(
+                        formatMoney(
+                            widget.price ?? 0, ref.watch(currencyProvider)),
+                        style: const TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         )),
                   ],

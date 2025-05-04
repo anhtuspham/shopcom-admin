@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/providers/order_detail_provider.dart';
 import 'package:shop_com/providers/order_provider.dart';
 import 'package:shop_com/utils/util.dart';
@@ -108,7 +109,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
           name: state.order.products?[index].productName,
           color: state.order.products?[index].variantProduct?[0].color,
           ram: state.order.products?[index].variantProduct?[0].ram,
-          price: state.order.products?[index].price.toString());
+          price: state.order.products?[index].price);
     });
 
     return Column(
@@ -151,7 +152,8 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
         SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Total Amount',
-            value: '\$${state.order.totalAmount}',
+            value: formatMoney(
+                state.order.totalAmount ?? 0, ref.watch(currencyProvider)),
             valueFontWeight: FontWeight.w700),
       ],
     );

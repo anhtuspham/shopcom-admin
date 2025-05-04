@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shop_com/providers/currency_provider.dart';
+import 'package:shop_com/utils/util.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends ConsumerStatefulWidget {
   final String id;
   final String imageUrl;
   final String? discount;
@@ -28,10 +31,10 @@ class ProductCard extends StatefulWidget {
   });
 
   @override
-  State<ProductCard> createState() => _ProductCardState();
+  ConsumerState<ProductCard> createState() => _ProductCardState();
 }
 
-class _ProductCardState extends State<ProductCard> {
+class _ProductCardState extends ConsumerState<ProductCard> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -181,10 +184,11 @@ class _ProductCardState extends State<ProductCard> {
               child: Row(
                 children: [
                   Text(
-                    '${widget.originalPrice}\$',
+                    formatMoney(widget.originalPrice, ref.watch(currencyProvider)),
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey,
+                      color: widget.discountedPrice != null ? Colors.grey : Colors.red[400],
+                      fontWeight: FontWeight.w700,
                       decoration: widget.discountedPrice != null
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
@@ -193,7 +197,7 @@ class _ProductCardState extends State<ProductCard> {
                   if (widget.discountedPrice != null) ...[
                     const SizedBox(width: 4),
                     Text(
-                      '${widget.discountedPrice}\$',
+                      formatMoney(widget.discountedPrice ?? 0, ref.watch(currencyProvider)),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.red,

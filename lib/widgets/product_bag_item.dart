@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/providers/cart_provider.dart';
+import 'package:shop_com/providers/currency_provider.dart';
+import 'package:shop_com/utils/util.dart';
 
 class ProductBagItem extends ConsumerStatefulWidget {
   final int? quantity;
@@ -11,7 +13,7 @@ class ProductBagItem extends ConsumerStatefulWidget {
   final String? brand;
   final String? name;
   final String? color;
-  final String? price;
+  final double? price;
   final String? ram;
   final String? rom;
   final bool? isFavorite;
@@ -143,7 +145,7 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
                             child: Text(
                               widget.name ?? '',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                               maxLines: 2,
@@ -168,19 +170,20 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
                       ),
                       Text(
                         'Color ${widget.color}',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Ram ${widget.ram}',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${widget.price}\$',
-                              style: TextStyle(
-                                fontSize: 18,
+                          
+                          Text(formatMoney(widget.price ?? 0, ref.watch(currencyProvider)),
+                              style: const TextStyle(
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               )),
                           widget.isFavorite == true
@@ -226,7 +229,7 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
                   CircleBorder(side: BorderSide(color: Colors.black12)))),
         ),
         Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(1.0),
           child: ValueListenableBuilder(
             valueListenable: countProduct,
             builder: (context, value, child) {
@@ -255,22 +258,24 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
 
   Future<void> _increment() async {
     countProduct.value++;
-    if(!mounted) return;
-    await ref.read(cartProvider.notifier).addProductToCart(
+    final notifier = ref.read(cartProvider.notifier);
+    await notifier.addProductToCart(
         productId: widget.productId,
         variantIndex: widget.variantIndex ?? 0,
         quantity: 1);
+    if(!mounted) return;
     ref.invalidate(cartProvider);
   }
 
   Future<void> _decrement() async {
     if (countProduct.value > 1) {
       countProduct.value--;
-      if(!mounted) return;
-      await ref.read(cartProvider.notifier).addProductToCart(
+      final notifier = ref.read(cartProvider.notifier);
+      await notifier.addProductToCart(
           productId: widget.productId,
           variantIndex: widget.variantIndex ?? 0,
           quantity: -1);
+      if(!mounted) return;
       ref.invalidate(cartProvider);
     }
   }

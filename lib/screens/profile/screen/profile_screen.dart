@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/widgets/button_widget.dart';
+import 'package:flag/flag.dart';
 
 import '../../../data/config/app_config.dart';
+import '../../../providers/currency_provider.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +30,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               // My Orders section
               Expanded(
-                child: _buildOrderSection(),
+                child: _buildOrderSection(ref),
               ),
-              CommonButtonWidget(callBack: () => context.go('/auth'), label: 'Log out')
+              CommonButtonWidget(
+                  callBack: () => context.go('/auth'), label: 'Log out')
             ],
           ),
         ),
@@ -70,13 +74,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildOrderSection() {
+  Widget _buildOrderSection(WidgetRef ref) {
     final menuItems = [
       {'title': 'My orders', 'trailing': ''},
       {'title': 'Shipping addresses', 'trailing': ''},
       {'title': 'Payment methods', 'trailing': 'Momo 0395****38'},
       {'title': 'Promocodes', 'trailing': 'You have special promocodes'},
       {'title': 'My reviews', 'trailing': 'Reviews for 4 items'},
+      {'title': 'Currency', 'trailing': 'USD'},
       {'title': 'Settings', 'trailing': 'Notifications, password'},
     ];
 
@@ -94,15 +99,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        subtitle: Text(
-          menuItems[index]['trailing']!,
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 12,
-          ),
-        ),
-        trailing:
-            IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
+        // subtitle: Text(
+        //   menuItems[index]['trailing']!,
+        //   style: TextStyle(
+        //     color: Colors.grey[600],
+        //     fontSize: 12,
+        //   ),
+        // ),
+        trailing: menuItems[index]['title'] == 'Currency'
+            ? DropdownButton<Currency>(
+                value: ref.watch(currencyProvider),
+                onChanged: (value) {
+                  if (value != null) {
+                    ref.read(currencyProvider.notifier).set(value);
+                  }
+                },
+                items: Currency.values.map((cur) {
+                  return DropdownMenuItem(
+                      value: cur,
+                      child: Row(
+                        children: [
+                          Flag.fromString(
+                            cur == Currency.usd ? 'US' : 'VN',
+                            height: 18,
+                            width: 27,
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(cur == Currency.usd ? 'USD' : 'VND')
+                        ],
+                      ));
+                }).toList(),
+              )
+            : IconButton(
+                onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
         onTap: () {
           switch (index) {
             case 0:

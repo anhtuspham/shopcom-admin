@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/providers/cart_provider.dart';
+import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/providers/order_provider.dart';
+import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/widgets/loading_widget.dart';
 
 import '../../../widgets/button_widget.dart';
@@ -115,8 +117,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               rom: state
                                   .cart.products?[index].variantProduct?[0].rom,
                               price: state.cart.products?[index]
-                                  .variantProduct?[0].price
-                                  .toString()),
+                                  .variantProduct?[0].price),
                         ),
                       ),
               ),
@@ -149,7 +150,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ),
                   ),
                   Text(
-                    '${state.cart.totalPrice}\$',
+                    formatMoney(state.cart.totalPrice ?? 0, ref.watch(currencyProvider)),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

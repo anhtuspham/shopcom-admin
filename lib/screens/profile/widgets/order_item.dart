@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/widgets/button_widget.dart';
 import 'package:shop_com/widgets/custom_header_info.dart';
@@ -26,7 +27,13 @@ class OrderItem extends ConsumerStatefulWidget {
 
 class _OrderItemState extends ConsumerState<OrderItem> {
   final List statusOrder = ["pending", "processing", "delivered", "cancelled"];
-  final List statusColor = [Colors.orange[600], Colors.blue[400], Colors.green[600], Colors.red[600]];
+  final List statusColor = [
+    Colors.orange[600],
+    Colors.blue[400],
+    Colors.green[600],
+    Colors.red[600]
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -43,9 +50,16 @@ class _OrderItemState extends ConsumerState<OrderItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 3,
               children: [
-                CustomHeaderInfo(title: 'OrderID', value: '#${widget.orderId }'),
-                CustomHeaderInfo(title: 'Order time', value: widget.orderTime ?? ''),
-                CustomHeaderInfo(title: 'Total amount', value: '${widget.totalAmount}\$', headerFontWeight: FontWeight.w700, fontSize: 16, valueFontWeight: FontWeight.w700),
+                CustomHeaderInfo(title: 'OrderID', value: '#${widget.orderId}'),
+                CustomHeaderInfo(
+                    title: 'Order time', value: widget.orderTime ?? ''),
+                CustomHeaderInfo(
+                    title: 'Total amount',
+                    value:
+                        formatMoney(widget.totalAmount ?? 0, ref.watch(currencyProvider)),
+                    headerFontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    valueFontWeight: FontWeight.w700),
                 Row(
                   children: [
                     CommonButtonWidget(
@@ -56,7 +70,9 @@ class _OrderItemState extends ConsumerState<OrderItem> {
                     const Spacer(),
                     Text(upperCaseFirstLetter(widget.orderStatus ?? ''),
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, color: statusColor[statusOrder.indexOf(widget.orderStatus)]))
+                            fontWeight: FontWeight.w700,
+                            color: statusColor[
+                                statusOrder.indexOf(widget.orderStatus)]))
                   ],
                 )
               ],
