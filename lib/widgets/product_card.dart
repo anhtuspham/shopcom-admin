@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/providers/currency_provider.dart';
+import 'package:shop_com/providers/favorite_provider.dart';
 import 'package:shop_com/utils/util.dart';
 
 class ProductCard extends ConsumerStatefulWidget {
@@ -15,20 +16,23 @@ class ProductCard extends ConsumerStatefulWidget {
   final double originalPrice;
   final double? discountedPrice;
   final bool isNew;
+  final bool isFavorite;
+  final bool showToggleFavorite;
 
-  const ProductCard({
-    super.key,
-    required this.id,
-    required this.imageUrl,
-    this.discount,
-    required this.rating,
-    required this.reviewCount,
-    required this.brand,
-    required this.title,
-    required this.originalPrice,
-    this.discountedPrice,
-    required this.isNew,
-  });
+  const ProductCard(
+      {super.key,
+      required this.id,
+      required this.imageUrl,
+      this.discount,
+      required this.rating,
+      required this.reviewCount,
+      required this.brand,
+      required this.title,
+      required this.originalPrice,
+      this.discountedPrice,
+      required this.isNew,
+      required this.isFavorite,
+      this.showToggleFavorite = true});
 
   @override
   ConsumerState<ProductCard> createState() => _ProductCardState();
@@ -102,33 +106,50 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                       ),
                     ),
                   ),
-                Positioned(
-                  right: 10,
-                  top: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+                widget.showToggleFavorite == false
+                    ? const Offstage()
+                    : Positioned(
+                        right: 10,
+                        top: 10,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              widget.isFavorite == false
+                                  ? await ref
+                                      .read(favoriteProvider.notifier)
+                                      .addProductToFavorite(
+                                          productId: widget.id)
+                                  : await ref
+                                      .read(favoriteProvider.notifier)
+                                      .removeProductFromFavorite(
+                                          productId: widget.id);
+                              if (!mounted) return;
+                              ref.invalidate(favoriteProvider);
+                            },
+                            child: Icon(
+                              widget.isFavorite == false
+                                  ? Icons.favorite_outline
+                                  : Icons.favorite,
+                              size: 20,
+                              color: widget.isFavorite == false
+                                  ? Colors.grey
+                                  : Colors.red,
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        print('tap');
-                      },
-                      child: const Icon(
-                        Icons.favorite_outline,
-                        size: 20,
                       ),
-                    ),
-                  ),
-                ),
               ],
             ),
 
@@ -189,10 +210,13 @@ class _ProductCardState extends ConsumerState<ProductCard> {
               child: Row(
                 children: [
                   Text(
-                    formatMoney(widget.originalPrice, ref.watch(currencyProvider)),
+                    formatMoney(
+                        widget.originalPrice, ref.watch(currencyProvider)),
                     style: TextStyle(
                       fontSize: 12,
-                      color: widget.discountedPrice != null ? Colors.grey : Colors.red[400],
+                      color: widget.discountedPrice != null
+                          ? Colors.grey
+                          : Colors.red[400],
                       fontWeight: FontWeight.w700,
                       decoration: widget.discountedPrice != null
                           ? TextDecoration.lineThrough
@@ -202,7 +226,8 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                   if (widget.discountedPrice != null) ...[
                     const SizedBox(width: 4),
                     Text(
-                      formatMoney(widget.discountedPrice ?? 0, ref.watch(currencyProvider)),
+                      formatMoney(widget.discountedPrice ?? 0,
+                          ref.watch(currencyProvider)),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.red,

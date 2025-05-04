@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import '../../../data/model/product.dart';
+import '../../../providers/favorite_provider.dart';
 import '../../../widgets/error_widget.dart';
 import '../../../widgets/loading_widget.dart';
 import '../../../widgets/product_card.dart';
@@ -28,6 +29,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productProvider);
+    final favoriteState = ref.watch(favoriteProvider);
+    final favoriteList = favoriteState.favorite.map((e) => e.id).toList();
     if (state.isLoading) return const LoadingWidget();
     if (state.isError) return const ErrorsWidget();
     return Scaffold(
@@ -163,6 +166,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ][index],
               originalPrice: [400, 500, 600][index].toDouble(),
               discountedPrice: [380, 450, 540][index].toDouble(),
+              isFavorite: false,
             );
           },
           separatorBuilder: (context, index) {
@@ -228,7 +232,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           crossAxisSpacing: 6,
         ),
         itemCount: newestProduct.length,
-        itemBuilder: (context, index) => _buildProductCard(newestProduct[index]),
+        itemBuilder: (context, index) =>
+            _buildProductCard(newestProduct[index]),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
       ),
@@ -237,14 +242,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   Widget _buildProductCard(Product product) {
     return ProductCard(
-        id: product.id ?? '',
-        imageUrl:
-            product.defaultVariant?.images?[0] ?? '',
-        rating: product.ratings?.average ?? 0,
-        reviewCount: product.ratings?.count ?? 0,
-        brand: product.brand ?? '',
-        title: product.name,
-        originalPrice: product.defaultVariant?.price ?? 0,
-        isNew: true);
+      id: product.id ?? '',
+      imageUrl: product.defaultVariant?.images?[0] ?? '',
+      rating: product.ratings?.average ?? 0,
+      reviewCount: product.ratings?.count ?? 0,
+      brand: product.brand ?? '',
+      title: product.name,
+      originalPrice: product.defaultVariant?.price ?? 0,
+      isNew: true,
+      isFavorite: false,
+      showToggleFavorite: false,
+    );
   }
 }

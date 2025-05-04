@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_com/providers/favorite_provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/shop/widgets/search_product.dart';
 import 'package:shop_com/widgets/error_widget.dart';
@@ -39,6 +40,9 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productProvider);
+    final favoriteState = ref.watch(favoriteProvider);
+    final favoriteList = favoriteState.favorite.map((e) => e.id).toList();
+
     if (state.isLoading) return const LoadingWidget();
     if (state.isError) return const ErrorsWidget();
 
@@ -55,7 +59,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                 height: 10,
               ),
               Expanded(
-                child: _buildProductGrid(state),
+                child: _buildProductGrid(state, favoriteList),
               ),
             ],
           ),
@@ -124,7 +128,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
     );
   }
 
-  Widget _buildProductGrid(ProductState state) {
+  Widget _buildProductGrid(ProductState state, List<String?> favoriteList) {
     return RawScrollbar(
       trackVisibility: true,
       thumbVisibility: true,
@@ -168,6 +172,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                       title: state.filtered[index].name,
                       originalPrice:
                           state.filtered[index].defaultVariant?.price ?? 0,
+                      isFavorite: favoriteList.contains(state.filtered[index].id),
                       isNew: true);
                 })),
       ),
