@@ -118,9 +118,14 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.favorite_outline,
-                      size: 20,
+                    child: InkWell(
+                      onTap: () {
+                        print('tap');
+                      },
+                      child: const Icon(
+                        Icons.favorite_outline,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),

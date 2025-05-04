@@ -5,6 +5,8 @@ import 'package:shop_com/providers/cart_provider.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/utils/util.dart';
 
+import '../providers/favorite_provider.dart';
+
 class ProductBagItem extends ConsumerStatefulWidget {
   final int? quantity;
   final String productId;
@@ -51,7 +53,9 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(widget.index.toString()),
-      direction: DismissDirection.endToStart,
+      direction: widget.isFavorite == false
+          ? DismissDirection.endToStart
+          : DismissDirection.none,
       background: Container(
         color: Colors.red[400],
         alignment: Alignment.centerRight,
@@ -156,9 +160,19 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
                           IconButton(
                             onPressed: () {},
                             icon: widget.isFavorite == true
-                                ? const Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
+                                ? InkWell(
+                                    onTap: () async {
+                                      await ref
+                                          .read(favoriteProvider.notifier)
+                                          .removeProductFromFavorite(
+                                              productId: widget.productId);
+                                      if (!mounted) return;
+                                      ref.invalidate(favoriteProvider);
+                                    },
+                                    child: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ),
                                   )
                                 : const Icon(Icons.favorite_border_outlined),
                             constraints: const BoxConstraints(),
@@ -180,8 +194,9 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          
-                          Text(formatMoney(widget.price ?? 0, ref.watch(currencyProvider)),
+                          Text(
+                              formatMoney(widget.price ?? 0,
+                                  ref.watch(currencyProvider)),
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -263,7 +278,7 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
         productId: widget.productId,
         variantIndex: widget.variantIndex ?? 0,
         quantity: 1);
-    if(!mounted) return;
+    if (!mounted) return;
     ref.invalidate(cartProvider);
   }
 
@@ -275,7 +290,7 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
           productId: widget.productId,
           variantIndex: widget.variantIndex ?? 0,
           quantity: -1);
-      if(!mounted) return;
+      if (!mounted) return;
       ref.invalidate(cartProvider);
     }
   }

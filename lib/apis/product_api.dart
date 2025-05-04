@@ -13,7 +13,7 @@ mixin ProductApi on BaseApi {
 
     Result result = await handleRequest(
       request: () async {
-        return get('/api/Products', queryParameters: query);
+        return get('/api/products', queryParameters: query);
       },
     );
     try {
