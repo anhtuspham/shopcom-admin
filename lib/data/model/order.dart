@@ -7,10 +7,14 @@ class Order {
   String? userId;
   List<ProductCart>? products;
   double? totalAmount;
+  double? discountAmount;
+  double? finalAmount;
+  String? coupon;
   String? status;
   String? address;
   String? paymentMethod;
   DateTime? createdAt;
+
   int? v;
 
   Order({
@@ -18,6 +22,9 @@ class Order {
     this.userId,
     this.products,
     this.totalAmount,
+    this.discountAmount,
+    this.finalAmount,
+    this.coupon,
     this.status,
     this.address,
     this.paymentMethod,
@@ -37,6 +44,9 @@ class Order {
     products: List<ProductCart>.from(
         json["products"].map((x) => ProductCart.fromJson(x))),
     totalAmount: json["totalAmount"].toDouble(),
+    discountAmount: json["discountAmount"].toDouble(),
+    finalAmount: json["finalAmount"].toDouble(),
+    coupon: json["coupon"],
     status: json["status"],
     address: json["address"],
     paymentMethod: json["paymentMethod"],

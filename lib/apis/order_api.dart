@@ -22,20 +22,24 @@ mixin OrderApi on BaseApi {
   List<Order> safeParseOrders(List rawList) {
     return rawList
         .map<Order?>((e) {
-      try {
-        return Order.fromJson(e);
-      } catch (err) {
-        app_config.printLog("e", " API_USER_FETCH_ORDER : ${err.toString()} \n Item: $e");
-        // print('❌ Lỗi khi parse product: $err\nRaw item: $e');
-        return null;
-      }
-    })
+          try {
+            return Order.fromJson(e);
+          } catch (err) {
+            app_config.printLog(
+                "e", " API_USER_FETCH_ORDER : ${err.toString()} \n Item: $e");
+            // print('❌ Lỗi khi parse product: $err\nRaw item: $e');
+            return null;
+          }
+        })
         .whereType<Order>()
         .toList();
   }
 
-  Future<Result> createOrder() async {
-    return handleRequest(request: () => post('/api/order'));
+  Future<Result> createOrder(
+      {String? paymentMethod, String? couponCode}) async {
+    return handleRequest(
+        request: () => post('/api/order',
+            data: {"paymentMethod": paymentMethod, "couponCode": couponCode}));
   }
 
   Future<Order> fetchOrderDetail({required String orderId}) async {

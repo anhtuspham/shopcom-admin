@@ -142,7 +142,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
             orderStatus: order.status,
             orderTime: getStringFromDateTime(
                 order.createdAt ?? DateTime.now(), 'HH:mm - dd/MM/yyyy'),
-            totalAmount: order.totalAmount,
+            totalAmount: order.finalAmount,
           );
         },
         itemCount: filtered.length,

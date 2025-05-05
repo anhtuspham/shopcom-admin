@@ -142,19 +142,28 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             value: state.order.paymentMethod ?? '',
             valueFontWeight: FontWeight.w700),
         SizedBox(height: 8),
-        CustomHeaderInfo(
+        const CustomHeaderInfo(
             title: 'Delivery Method',
             value: 'Fast Delivery',
             valueFontWeight: FontWeight.w700),
-        SizedBox(height: 8),
-        CustomHeaderInfo(
-            title: 'Discount', value: '', valueFontWeight: FontWeight.w700),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         CustomHeaderInfo(
             title: 'Total Amount',
             value: formatMoney(
                 state.order.totalAmount ?? 0, ref.watch(currencyProvider)),
-            valueFontWeight: FontWeight.w700),
+            valueFontWeight: FontWeight.w500),
+        const SizedBox(height: 8),
+        CustomHeaderInfo(
+            title: 'Discount',
+            value: '-${formatMoney(
+                state.order.discountAmount ?? 0, ref.watch(currencyProvider))}',
+            valueFontWeight: FontWeight.w500),
+        const SizedBox(height: 8),
+        CustomHeaderInfo(
+            title: 'Final amount',
+            value: formatMoney(
+                state.order.finalAmount ?? 0, ref.watch(currencyProvider)),
+            valueFontWeight: FontWeight.w700, fontSize: 15,),
       ],
     );
   }

@@ -56,10 +56,10 @@ class OrderNotifier extends StateNotifier<OrderState> {
     await _updateOrderState();
   }
 
-  Future<void> createOrder() async {
+  Future<void> createOrder({String? paymentMethod, String? couponCode}) async {
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      final result = await api.createOrder();
+      final result = await api.createOrder(paymentMethod: paymentMethod, couponCode: couponCode);
 
       if (result.isValue) {
         await api.fetchCart();

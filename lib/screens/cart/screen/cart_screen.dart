@@ -19,6 +19,7 @@ class CartScreen extends ConsumerStatefulWidget {
 
 class _CartScreenState extends ConsumerState<CartScreen> {
   bool _isProcessingOrder = false;
+  final ValueNotifier<String> _couponCode = ValueNotifier('');
 
   @override
   void initState() {
@@ -41,7 +42,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     });
 
     try {
-      await ref.read(orderProvider.notifier).createOrder();
+      await ref.read(orderProvider.notifier).createOrder(
+          couponCode: _couponCode.value.isNotEmpty ? _couponCode.value : null);
 
       await ref.read(cartProvider.notifier).refresh();
       // await ref.read(orderProvider.notifier).refresh();
@@ -127,14 +129,20 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               ),
 
               // Promo code
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter your promo code',
-                  border: UnderlineInputBorder(),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  suffixIcon: Icon(Icons.arrow_forward, color: Colors.grey),
-                ),
+              ValueListenableBuilder<String>(
+                valueListenable: _couponCode,
+                builder: (context, value, child) {
+                  return TextField(
+                    onChanged: (val) => _couponCode.value = val.trim(),
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your promo code',
+                      border: UnderlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      suffixIcon: Icon(Icons.arrow_forward, color: Colors.grey),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 12),
 
@@ -150,7 +158,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     ),
                   ),
                   Text(
-                    formatMoney(state.cart.totalPrice ?? 0, ref.watch(currencyProvider)),
+                    formatMoney(state.cart.totalPrice ?? 0,
+                        ref.watch(currencyProvider)),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -166,7 +175,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     label: _isProcessingOrder ? 'PROCESSING...' : 'CHECK OUT',
                     style: const TextStyle(color: Colors.white),
                     buttonStyle: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(_isProcessingOrder ? Colors.grey : Colors.black)),
+                        backgroundColor: WidgetStatePropertyAll(
+                            _isProcessingOrder ? Colors.grey : Colors.black)),
                   ))
             ],
           ),
