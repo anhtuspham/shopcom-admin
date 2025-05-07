@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/providers/order_provider.dart';
-import 'package:shop_com/screens/profile/widgets/order_item.dart';
 import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/widgets/loading_widget.dart';
+import 'package:shop_com/utils/widgets/appbar_widget.dart';
+
+import '../../../utils/widgets/loading_widget.dart';
+import '../widgets/order_item.dart';
 
 class OrderScreen extends ConsumerStatefulWidget {
   const OrderScreen({super.key});
@@ -33,7 +35,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildAppBar(context),
+              const AppBarWidget(title: 'My Orders'),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -104,25 +106,6 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
 
   Future<void> _refresh() {
     return ref.read(orderProvider.notifier).refresh();
-  }
-
-  Widget _buildAppBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_ios),
-          ),
-          const SizedBox(width: 4),
-          const Text(
-            'My Orders',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          )
-        ],
-      ),
-    );
   }
 
   Widget _buildOrderItemSection(OrderState state, String status) {

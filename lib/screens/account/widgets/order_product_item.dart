@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/widgets/custom_header_info.dart';
+
+import '../../../utils/widgets/custom_header_info.dart';
 
 class OrderProductItem extends ConsumerStatefulWidget {
   final String? imageUrl;

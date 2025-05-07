@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:shop_com/providers/favorite_provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/shop/widgets/search_product.dart';
-import 'package:shop_com/widgets/error_widget.dart';
-import 'package:shop_com/widgets/product_card.dart';
 
-import '../../../widgets/loading_widget.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
+import '../../../utils/widgets/product_card.dart';
 
 class ShopScreen extends ConsumerStatefulWidget {
   const ShopScreen({super.key});

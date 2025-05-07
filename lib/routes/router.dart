@@ -16,7 +16,6 @@ import 'package:shop_com/screens/account/sub-screen/order_detail.dart';
 import 'package:shop_com/screens/account/sub-screen/order_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/setting_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/shipping_address_screen.dart';
-import 'package:shop_com/widgets/error_page_widget.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
@@ -24,6 +23,7 @@ import '../screens/home/home.dart';
 import '../screens/auth/screen/login_screen.dart';
 import '../screens/home/screen/dashboard_screen.dart';
 import '../screens/shop/screen/shop_screen.dart';
+import '../utils/widgets/error_page_widget.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =

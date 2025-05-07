@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
 import '../../../data/model/product.dart';
 import '../../../providers/favorite_provider.dart';
-import '../../../widgets/error_widget.dart';
-import '../../../widgets/loading_widget.dart';
-import '../../../widgets/product_card.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
+import '../../../utils/widgets/product_card.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});

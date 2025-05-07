@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com/widgets/button_widget.dart';
 import 'package:flag/flag.dart';
 
 import '../../../data/config/app_config.dart';
 import '../../../providers/currency_provider.dart';
+import '../../../utils/widgets/button_widget.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});

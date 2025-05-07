@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/widgets/button_widget.dart';
-import 'package:shop_com/widgets/custom_header_info.dart';
+
+import '../../../utils/widgets/button_widget.dart';
+import '../../../utils/widgets/custom_header_info.dart';
 
 class OrderItem extends ConsumerStatefulWidget {
   final String? orderId;

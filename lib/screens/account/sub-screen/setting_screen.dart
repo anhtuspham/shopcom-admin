@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../widgets/product_bag_item.dart';
+import '../../../utils/widgets/product_bag_item.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});

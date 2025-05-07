@@ -4,11 +4,12 @@ import 'package:shop_com/providers/cart_provider.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/providers/order_provider.dart';
 import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/widgets/loading_widget.dart';
 
-import '../../../widgets/button_widget.dart';
-import '../../../widgets/error_widget.dart';
-import '../../../widgets/product_bag_item.dart';
+import '../../../utils/widgets/button_widget.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
+import '../../../utils/widgets/product_bag_item.dart';
+
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});

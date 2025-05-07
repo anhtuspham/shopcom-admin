@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/data/config/app_config.dart';
 import 'package:shop_com/providers/order_provider.dart';
 import 'package:shop_com/providers/user_provider.dart';
-import 'package:shop_com/screens/profile/widgets/order_item.dart';
-import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/widgets/error_widget.dart';
-import 'package:shop_com/widgets/loading_widget.dart';
 
-import '../../../widgets/button_widget.dart';
-import '../../../widgets/input_form_widget.dart';
+import '../../../utils/widgets/appbar_widget.dart';
+import '../../../utils/widgets/button_widget.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/input_form_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
 
 class ShippingAddress extends ConsumerStatefulWidget {
   const ShippingAddress({super.key});
@@ -51,7 +50,7 @@ class _ShippingAddressState extends ConsumerState<ShippingAddress> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAppBar(context),
+            const AppBarWidget(title: 'Shipping Address'),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refresh,

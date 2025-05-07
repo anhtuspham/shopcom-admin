@@ -4,10 +4,11 @@ import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/providers/order_detail_provider.dart';
 import 'package:shop_com/providers/order_provider.dart';
 import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/widgets/button_widget.dart';
-import 'package:shop_com/widgets/error_widget.dart';
-import 'package:shop_com/widgets/loading_widget.dart';
-import '../../../widgets/custom_header_info.dart';
+import 'package:shop_com/utils/widgets/appbar_widget.dart';
+import '../../../utils/widgets/button_widget.dart';
+import '../../../utils/widgets/custom_header_info.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
 import '../widgets/order_product_item.dart';
 
 class OrderDetailScreen extends ConsumerStatefulWidget {
@@ -38,7 +39,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(context),
+            const AppBarWidget(title: 'Order Details'),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -59,25 +60,6 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_ios),
-          ),
-          const SizedBox(width: 4),
-          const Text(
-            'Order Details',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          )
-        ],
       ),
     );
   }

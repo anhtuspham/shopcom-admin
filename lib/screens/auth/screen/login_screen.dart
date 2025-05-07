@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shop_com/data/config/app_config.dart';
 import 'package:shop_com/providers/auth_provider.dart';
 
-import '../../../widgets/input_form_widget.dart';
+import '../../../utils/widgets/input_form_widget.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

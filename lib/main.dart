@@ -60,12 +60,14 @@ class _MyDisplay extends State<MyDisplay> {
       debugShowCheckedModeBanner: false,
       routerConfig: system_router,
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white, foregroundColor: Colors.black, elevation: 2),
         scrollbarTheme: ScrollbarThemeData(
           thumbColor: WidgetStateProperty.resolveWith<Color?>((states) {
             if (states.contains(WidgetState.hovered)) {
-              return ColorValueKey.textColor.withOpacity(0.5);
+              return ColorValueKey.textColor.withValues(alpha: 0.5);
             }
-            return ColorValueKey.textColor.withOpacity(0.5);
+            return ColorValueKey.textColor.withValues(alpha: 0.5);
           }),
           thumbVisibility: const WidgetStatePropertyAll(true),
           trackVisibility: const WidgetStatePropertyAll(true),
@@ -96,7 +98,7 @@ class _MyDisplay extends State<MyDisplay> {
         ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(
-            color: ColorValueKey.textColor.withOpacity(0.4),
+            color: ColorValueKey.textColor.withValues(alpha: 0.4),
           ),
           floatingLabelStyle: TextStyle(
             color: ColorValueKey.textColor,
@@ -107,7 +109,7 @@ class _MyDisplay extends State<MyDisplay> {
             ),
           ),
           hintStyle: TextStyle(
-            color: ColorValueKey.textColor.withOpacity(0.4),
+            color: ColorValueKey.textColor.withValues(alpha: 0.4),
           ),
         ),
       ),

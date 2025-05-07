@@ -4,10 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shop_com/providers/cart_provider.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/utils/util.dart';
+import 'package:shop_com/utils/widgets/appbar_widget.dart';
 import '../../../providers/product_detail_provider.dart';
-import '../../../widgets/button_widget.dart';
-import '../../../widgets/error_widget.dart';
-import '../../../widgets/loading_widget.dart';
+import '../../../utils/widgets/button_widget.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
 
 class ProductDetailScreen extends ConsumerStatefulWidget {
   final String id;
@@ -191,7 +192,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(state.product.name),
+            AppBarWidget(title: state.product.name),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -221,17 +222,6 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildAppBar(String title) {
-    return AppBar(
-      title: Text(title),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios),
-        onPressed: () => Navigator.pop(context),
-      ),
-      backgroundColor: Colors.grey[300],
     );
   }
 

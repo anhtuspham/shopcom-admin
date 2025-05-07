@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../../widgets/input_form_widget.dart';
+
+import '../../../utils/widgets/input_form_widget.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

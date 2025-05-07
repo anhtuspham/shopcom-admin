@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com/providers/favorite_provider.dart';
-import 'package:shop_com/widgets/product_bag_item.dart';
 
-import '../../../widgets/error_widget.dart';
-import '../../../widgets/loading_widget.dart';
+import '../../../utils/widgets/error_widget.dart';
+import '../../../utils/widgets/loading_widget.dart';
+import '../../../utils/widgets/product_bag_item.dart';
 
 class FavoritesScreen extends ConsumerStatefulWidget {
   const FavoritesScreen({super.key});
