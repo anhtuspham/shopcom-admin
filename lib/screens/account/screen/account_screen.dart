@@ -7,14 +7,14 @@ import 'package:flag/flag.dart';
 import '../../../data/config/app_config.dart';
 import '../../../providers/currency_provider.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
+class AccountScreen extends ConsumerStatefulWidget {
+  const AccountScreen({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _AccountScreenState extends ConsumerState<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:shop_com/providers/order_detail_provider.dart';
 import 'package:shop_com/providers/product_detail_provider.dart';
 import 'package:shop_com/providers/product_provider.dart';
+import 'package:shop_com/screens/account/screen/account_screen.dart';
 import 'package:shop_com/screens/cart/screen/cart_screen.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com/screens/product/screen/product_detail_screen.dart';
-import 'package:shop_com/screens/profile/screen/order_detail.dart';
-import 'package:shop_com/screens/profile/screen/order_screen.dart';
-import 'package:shop_com/screens/profile/screen/profile_screen.dart';
-import 'package:shop_com/screens/profile/screen/setting_screen.dart';
-import 'package:shop_com/screens/profile/screen/shipping_address_screen.dart';
+import 'package:shop_com/screens/account/sub-screen/order_detail.dart';
+import 'package:shop_com/screens/account/sub-screen/order_screen.dart';
+import 'package:shop_com/screens/account/sub-screen/setting_screen.dart';
+import 'package:shop_com/screens/account/sub-screen/shipping_address_screen.dart';
 import 'package:shop_com/widgets/error_page_widget.dart';
 
 import '../data/config/app_config.dart';
@@ -81,9 +81,9 @@ GoRouter genRoute() {
               builder: (context, state) => const FavoritesScreen(),
             ),
             GoRoute(
-              path: '/profile',
-              name: 'profile',
-              builder: (context, state) => const ProfileScreen(),
+              path: '/account',
+              name: 'account',
+              builder: (context, state) => const AccountScreen(),
             ),
             GoRoute(
               path: '/setting',
