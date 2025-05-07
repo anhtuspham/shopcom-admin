@@ -16,6 +16,7 @@ import 'package:shop_com/screens/account/sub-screen/order_detail.dart';
 import 'package:shop_com/screens/account/sub-screen/order_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/setting_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/shipping_address_screen.dart';
+import 'package:shop_com/screens/product/sub-screen/review_screen.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
@@ -135,9 +136,15 @@ GoRouter genRoute() {
                     ));
               },
             ),
+            GoRoute(
+              path: '/review',
+              name: 'review',
+              builder: (context, state) => const ReviewScreen(),
+            )
           ],
         ),
       ],
-      redirect: systemRedirect, errorBuilder: (context, state) => const ErrorPageWidget());
+      redirect: systemRedirect,
+      errorBuilder: (context, state) => const ErrorPageWidget());
   return router;
 }
