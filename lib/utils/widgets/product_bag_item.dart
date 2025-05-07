@@ -5,7 +5,7 @@ import 'package:shop_com/providers/cart_provider.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/utils/util.dart';
 
-import '../providers/favorite_provider.dart';
+import '../../providers/favorite_provider.dart';
 
 class ProductBagItem extends ConsumerStatefulWidget {
   final int? quantity;
