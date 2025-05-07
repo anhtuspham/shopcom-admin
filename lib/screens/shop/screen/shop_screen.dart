@@ -47,6 +47,16 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
     if (state.isError) return const ErrorsWidget();
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Shop',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: false,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -72,14 +82,6 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Shop',
-          style: TextStyle(
-            fontSize: 34,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
         Row(
           children: [
             // _buildFilterButton(icon: Icons.tune, text: 'Filters'),

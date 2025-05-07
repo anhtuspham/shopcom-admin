@@ -10,7 +10,6 @@ import '../../../utils/widgets/error_widget.dart';
 import '../../../utils/widgets/loading_widget.dart';
 import '../../../utils/widgets/product_bag_item.dart';
 
-
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
 
@@ -77,21 +76,22 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     if (state.isError) return const ErrorsWidget();
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Cart',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: false,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Cart',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 14),
-
               Expanded(
                 child: state.cart.products!.isEmpty
                     ? state.isLoading

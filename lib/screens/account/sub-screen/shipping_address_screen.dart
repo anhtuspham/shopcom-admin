@@ -46,17 +46,17 @@ class _ShippingAddressState extends ConsumerState<ShippingAddress> {
     addressController = TextEditingController(text: state.user.address);
 
     return Scaffold(
+      appBar: const AppBarWidget(title: 'Shipping Address'),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AppBarWidget(title: 'Shipping Address'),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _refresh,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 12.0),
+                      horizontal: 20.0, vertical: 18.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

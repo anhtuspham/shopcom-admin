@@ -36,10 +36,10 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
     if (state.isError) return const ErrorsWidget();
 
     return Scaffold(
+      appBar: const AppBarWidget(title: 'Order Details',),
       body: SafeArea(
         child: Column(
           children: [
-            const AppBarWidget(title: 'Order Details'),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(

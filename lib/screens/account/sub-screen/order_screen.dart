@@ -31,11 +31,11 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
+        appBar: const AppBarWidget(title: 'My Orders'),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AppBarWidget(title: 'My Orders'),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(

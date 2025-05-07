@@ -189,10 +189,11 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     _filterOptionsBasedOnSelection(state);
 
     return Scaffold(
+      appBar: AppBarWidget(title: state.product.name,),
       body: SafeArea(
         child: Column(
           children: [
-            AppBarWidget(title: state.product.name),
+            // AppBarWidget(title: state.product.name),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
