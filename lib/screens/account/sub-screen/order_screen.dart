@@ -129,6 +129,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
           );
         },
         itemCount: filtered.length,
+        padding: const EdgeInsets.all(4),
         separatorBuilder: (context, index) => const SizedBox(height: 16),
       ),
     );

@@ -37,48 +37,43 @@ class _OrderItemState extends ConsumerState<OrderItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(8),
-      elevation: 2,
-      shadowColor: Colors.grey.withValues(),
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8), color: Colors.white),
-        child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 3,
-              children: [
-                CustomHeaderInfo(title: 'OrderID', value: '#${widget.orderId}'),
-                CustomHeaderInfo(
-                    title: 'Order time', value: widget.orderTime ?? ''),
-                CustomHeaderInfo(
-                    title: 'Total amount',
-                    value:
-                        formatMoney(widget.totalAmount ?? 0, ref.watch(currencyProvider)),
-                    headerFontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    valueFontWeight: FontWeight.w700),
-                Row(
-                  children: [
-                    CommonButtonWidget(
-                        callBack: () {
-                          context.push('/orderDetail', extra: widget.orderId);
-                        },
-                        label: 'Details'),
-                    const Spacer(),
-                    Text(upperCaseFirstLetter(widget.orderStatus ?? ''),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: statusColor[
-                                statusOrder.indexOf(widget.orderStatus)]))
-                  ],
-                )
-              ],
-            )),
-      ),
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8), color: Colors.white, border: Border.all(color: Colors.grey)),
+      child: Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 3,
+            children: [
+              CustomHeaderInfo(title: 'OrderID', value: '#${widget.orderId}'),
+              CustomHeaderInfo(
+                  title: 'Order time', value: widget.orderTime ?? ''),
+              CustomHeaderInfo(
+                  title: 'Total amount',
+                  value:
+                      formatMoney(widget.totalAmount ?? 0, ref.watch(currencyProvider)),
+                  headerFontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  valueFontWeight: FontWeight.w700),
+              Row(
+                children: [
+                  CommonButtonWidget(
+                      callBack: () {
+                        context.push('/orderDetail', extra: widget.orderId);
+                      },
+                      label: 'Details'),
+                  const Spacer(),
+                  Text(upperCaseFirstLetter(widget.orderStatus ?? ''),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: statusColor[
+                              statusOrder.indexOf(widget.orderStatus)]))
+                ],
+              )
+            ],
+          )),
     );
   }
 }

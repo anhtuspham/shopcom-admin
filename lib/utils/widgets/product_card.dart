@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shop_com/providers/currency_provider.dart';
 import 'package:shop_com/providers/favorite_provider.dart';
 import 'package:shop_com/utils/util.dart';
+import 'package:shop_com/utils/widgets/rating_start_widget.dart';
 
 class ProductCard extends ConsumerStatefulWidget {
   final String id;
@@ -154,27 +155,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
             ),
 
             // Product rating
-            Padding(
-              padding: const EdgeInsets.only(left: 10, top: 8),
-              child: Row(
-                children: [
-                  for (int i = 0; i < 5; i++)
-                    Icon(
-                      i < widget.rating ? Icons.star : Icons.star_border,
-                      size: 14,
-                      color: Colors.amber,
-                    ),
-                  const SizedBox(width: 4),
-                  Text(
-                    '(${widget.reviewCount})',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            RatingStartWidget(rating: widget.rating, reviewCount: widget.reviewCount),
 
             // Brand name
             Padding(
