@@ -21,13 +21,25 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       appBar: const AppBarWidget(
         title: 'Rating and reviews',
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: null,
+        label: const Text(
+          'Write a review',
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: const Icon(Icons.edit, color: Colors.white),
+        backgroundColor: const Color(0xff000000),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+      ),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             _buildRating(),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             const Expanded(
               child: CustomerReviews(
                 nameCustomer: 'Kim',
