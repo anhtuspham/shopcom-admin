@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:shop_com/utils/widgets/appbar_widget.dart';
+import 'package:shop_com/utils/widgets/button_widget.dart';
 import 'package:shop_com/utils/widgets/custom_reviews_widget.dart';
 
 import '../../../utils/widgets/rating_start_widget.dart';
@@ -22,7 +24,50 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         title: 'Rating and reviews',
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: null,
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text('What is your rate'),
+                    RatingBar(
+                      initialRating: 0,
+                      itemCount: 5,
+                      ratingWidget: RatingWidget(
+                          full: Icon(Icons.star, color: Colors.orange[300]),
+                          half: Icon(Icons.star_half),
+                          empty: Icon(Icons.star_border)),
+                      onRatingUpdate: (value) {
+                        print(value);
+                      },
+                    ),
+                    TextFormField(
+                      maxLines: 6,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          label: Text('Your review')),
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CommonButtonWidget(
+                        callBack: () => Navigator.pop(context),
+                        label: 'SEND REVIEW',
+                        style: const TextStyle(color: Colors.white),
+                        buttonStyle: const ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(Colors.black)),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          );
+        },
         label: const Text(
           'Write a review',
           style: TextStyle(color: Colors.white),
