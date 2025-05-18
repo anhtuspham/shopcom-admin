@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shop_com/data/config/app_config.dart';
+import 'package:shop_com_admin_web/data/config/app_config.dart';
 
 import '../data/model/user.dart';
 import 'base_api.dart';

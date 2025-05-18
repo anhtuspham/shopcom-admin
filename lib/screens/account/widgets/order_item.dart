@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com/providers/currency_provider.dart';
-import 'package:shop_com/utils/util.dart';
+import 'package:shop_com_admin_web/providers/currency_provider.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
 
 import '../../../utils/widgets/button_widget.dart';
 import '../../../utils/widgets/custom_header_info.dart';

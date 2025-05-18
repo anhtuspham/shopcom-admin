@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com/providers/currency_provider.dart';
-import 'package:shop_com/providers/favorite_provider.dart';
-import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/utils/widgets/rating_start_widget.dart';
+import 'package:shop_com_admin_web/providers/currency_provider.dart';
+import 'package:shop_com_admin_web/providers/favorite_provider.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
+import 'package:shop_com_admin_web/utils/widgets/rating_start_widget.dart';
 
 class ProductCard extends ConsumerStatefulWidget {
   final String id;

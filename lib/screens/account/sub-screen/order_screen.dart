@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shop_com/providers/order_provider.dart';
-import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/utils/widgets/appbar_widget.dart';
+import 'package:shop_com_admin_web/providers/order_provider.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
+import 'package:shop_com_admin_web/utils/widgets/appbar_widget.dart';
 
 import '../../../utils/widgets/loading_widget.dart';
 import '../widgets/order_item.dart';

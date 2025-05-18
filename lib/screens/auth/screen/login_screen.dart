@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com/data/config/app_config.dart';
-import 'package:shop_com/providers/auth_provider.dart';
+import 'package:shop_com_admin_web/data/config/app_config.dart';
+import 'package:shop_com_admin_web/providers/auth_provider.dart';
 
 import '../../../utils/widgets/input_form_widget.dart';
 

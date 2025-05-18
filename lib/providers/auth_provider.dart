@@ -1,6 +1,6 @@
 
 import 'package:async/async.dart';
-import 'package:shop_com/data/model/auth_user.dart';
+import 'package:shop_com_admin_web/data/model/auth_user.dart';
 
 import '../data/config/app_config.dart';
 

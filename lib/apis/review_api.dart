@@ -1,7 +1,7 @@
 import 'package:async/async.dart';
-import 'package:shop_com/apis/base_api.dart';
-import 'package:shop_com/data/config/app_config.dart';
-import 'package:shop_com/data/model/product.dart';
+import 'package:shop_com_admin_web/apis/base_api.dart';
+import 'package:shop_com_admin_web/data/config/app_config.dart';
+import 'package:shop_com_admin_web/data/model/product.dart';
 
 import '../data/model/review.dart';
 

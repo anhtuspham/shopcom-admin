@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shop_com/data/config/app_config.dart';
+import 'package:shop_com_admin_web/data/config/app_config.dart';
 
 import '../data/model/review.dart';
 

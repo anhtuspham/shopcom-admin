@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:shop_com/data/model/variant.dart';
+import 'package:shop_com_admin_web/data/model/variant.dart';
 
 class ProductCart {
   String? productId;

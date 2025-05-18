@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_com/screens/home/widgets/bottom_nav_bar.dart';
+import 'package:shop_com_admin_web/screens/home/widgets/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   final Widget child;

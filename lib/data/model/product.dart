@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:shop_com/data/model/rating.dart';
-import 'package:shop_com/data/model/variant.dart';
-import 'package:shop_com/utils/util.dart';
+import 'package:shop_com_admin_web/data/model/rating.dart';
+import 'package:shop_com_admin_web/data/model/variant.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
 
 class Product {
   String? id;

@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:shop_com/apis/base_url.dart';
-import 'package:shop_com/apis/cart_api.dart';
-import 'package:shop_com/apis/favorite_api.dart';
-import 'package:shop_com/apis/order_api.dart';
-import 'package:shop_com/apis/product_api.dart';
-import 'package:shop_com/apis/review_api.dart';
-import 'package:shop_com/apis/user_api.dart';
-import 'package:shop_com/data/config/app_config.dart';
+import 'package:shop_com_admin_web/apis/base_url.dart';
+import 'package:shop_com_admin_web/apis/cart_api.dart';
+import 'package:shop_com_admin_web/apis/favorite_api.dart';
+import 'package:shop_com_admin_web/apis/order_api.dart';
+import 'package:shop_com_admin_web/apis/product_api.dart';
+import 'package:shop_com_admin_web/apis/review_api.dart';
+import 'package:shop_com_admin_web/apis/user_api.dart';
+import 'package:shop_com_admin_web/data/config/app_config.dart';
 import 'package:async/async.dart';
 
 import 'api_exception.dart';

@@ -1,8 +1,8 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_com/utils/util.dart';
-import 'package:shop_com/utils/widgets/rating_start_widget.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
+import 'package:shop_com_admin_web/utils/widgets/rating_start_widget.dart';
 
 import '../../data/model/review.dart';
 

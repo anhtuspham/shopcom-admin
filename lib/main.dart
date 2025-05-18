@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:shop_com/providers/product_provider.dart';
-import 'package:shop_com/routes/router.dart';
-import 'package:shop_com/utils/color_value_key.dart';
+import 'package:shop_com_admin_web/routes/router.dart';
+import 'package:shop_com_admin_web/utils/color_value_key.dart';
 
 import 'data/config/app_config.dart';
 

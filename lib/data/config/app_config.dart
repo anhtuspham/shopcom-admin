@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:encrypt/encrypt.dart' as EncryptSys;
 import 'package:logger/logger.dart';
-import 'package:shop_com/data/model/auth_user.dart';
-import 'package:shop_com/providers/auth_provider.dart';
-import 'package:shop_com/utils/app_color.dart';
+import 'package:shop_com_admin_web/data/model/auth_user.dart';
+import 'package:shop_com_admin_web/providers/auth_provider.dart';
+import 'package:shop_com_admin_web/utils/app_color.dart';
 
 import '../../apis/base_api.dart';
 import '../../utils/data_store.dart';

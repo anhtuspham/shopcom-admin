@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_com/providers/product_provider.dart';
+import 'package:shop_com_admin_web/providers/product_provider.dart';
 import '../../../data/model/product.dart';
 import '../../../providers/favorite_provider.dart';
 import '../../../utils/widgets/error_widget.dart';

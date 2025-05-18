@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shop_com/providers/cart_provider.dart';
-import 'package:shop_com/providers/currency_provider.dart';
-import 'package:shop_com/utils/util.dart';
+import 'package:shop_com_admin_web/providers/cart_provider.dart';
+import 'package:shop_com_admin_web/providers/currency_provider.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
 
 import '../../providers/favorite_provider.dart';
 

@@ -1,5 +1,5 @@
-import 'package:shop_com/apis/base_api.dart';
-import 'package:shop_com/data/model/product.dart';
+import 'package:shop_com_admin_web/apis/base_api.dart';
+import 'package:shop_com_admin_web/data/model/product.dart';
 import 'package:async/async.dart';
 
 import '../data/config/app_config.dart';

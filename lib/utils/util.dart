@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
-import 'package:shop_com/providers/currency_provider.dart';
+import 'package:shop_com_admin_web/providers/currency_provider.dart';
 
 Color convertColorFromString(String data) {
   int value = int.parse(data, radix: 16);
