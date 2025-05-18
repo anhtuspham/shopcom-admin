@@ -5,13 +5,14 @@ class RatingStartWidget extends StatelessWidget {
   final double? iconFontSize;
   final double rating;
   final int? reviewCount;
+  final double? paddingLeft;
 
-  const RatingStartWidget({super.key, required this.rating, this.reviewCount, this.iconFontSize});
+  const RatingStartWidget({super.key, required this.rating, this.reviewCount, this.iconFontSize, this.paddingLeft});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(left: 10, top: 8),
+        padding: EdgeInsets.only(left: paddingLeft ?? 10, top: 8),
         child: Row(children: [
           for (int i = 0; i < 5; i++)
             Icon(

@@ -1,22 +1,15 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_com/utils/util.dart';
 import 'package:shop_com/utils/widgets/rating_start_widget.dart';
 
-class CustomerReviews extends StatefulWidget {
-  final String nameCustomer;
-  final double ratings;
-  final String dateRating;
-  final int? reviewCount;
-  final String comment;
+import '../../data/model/review.dart';
 
-  const CustomerReviews(
-      {super.key,
-      required this.nameCustomer,
-      required this.ratings,
-      required this.dateRating,
-      this.reviewCount,
-      required this.comment});
+class CustomerReviews extends StatefulWidget {
+  final List<Review> reviews;
+
+  const CustomerReviews({super.key, required this.reviews});
 
   @override
   State<CustomerReviews> createState() => _CustomerReviewsState();
@@ -28,7 +21,9 @@ class _CustomerReviewsState extends State<CustomerReviews> {
     return Container(
       decoration: const BoxDecoration(color: Colors.white),
       child: ListView.separated(
+          itemCount: widget.reviews.length,
           itemBuilder: (context, index) {
+            final review = widget.reviews[index];
             return Container(
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -42,26 +37,26 @@ class _CustomerReviewsState extends State<CustomerReviews> {
                         offset: Offset(0, 2),
                         blurRadius: 3),
                     BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.20),
-                      offset: Offset(0, -1),
-                      blurRadius: 2
-                    )
+                        color: Color.fromRGBO(0, 0, 0, 0.20),
+                        offset: Offset(0, -1),
+                        blurRadius: 2)
                   ],
                   borderRadius: BorderRadius.circular(4)),
               padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.nameCustomer),
+                  Text(review.userId?.name ?? 'Anonymous', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RatingStartWidget(rating: widget.ratings),
-                      Text(widget.dateRating)
+                      RatingStartWidget(rating: review.rating?.toDouble() ?? 0, paddingLeft: 0),
+                      Text(getStringFromDateTime(
+                          review.createdAt ?? DateTime.now(), 'dd/MM/yyyy'), style: const TextStyle(color: Colors.grey, fontSize: 12),)
                     ],
                   ),
                   ExpandableText(
-                    widget.comment,
+                    review.comment ?? '',
                     expandText: 'Show more',
                     collapseText: 'Show less',
                     maxLines: 4,
@@ -77,8 +72,7 @@ class _CustomerReviewsState extends State<CustomerReviews> {
           padding: const EdgeInsets.all(8),
           separatorBuilder: (context, index) => const SizedBox(
                 height: 12,
-              ),
-          itemCount: widget.reviewCount ?? 0),
+              )),
     );
   }
 }

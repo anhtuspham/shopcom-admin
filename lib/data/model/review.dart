@@ -27,7 +27,7 @@ class Review {
 
   factory Review.fromJson(Map<String, dynamic> json) => Review(
     id: json["_id"],
-    userId: UserId.fromJson(json["userId"]),
+    userId: json["userId"] != null ? UserId.fromJson(json["userId"]) : null,
     productId: json["productId"],
     rating: json["rating"],
     comment: json["comment"],

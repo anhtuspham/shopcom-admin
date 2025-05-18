@@ -4,22 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:shop_com/providers/order_detail_provider.dart';
 import 'package:shop_com/providers/product_detail_provider.dart';
-import 'package:shop_com/providers/product_provider.dart';
 import 'package:shop_com/screens/account/screen/account_screen.dart';
 import 'package:shop_com/screens/cart/screen/cart_screen.dart';
 import 'package:shop_com/screens/favorite/screen/favorite_screen.dart';
-import 'package:shop_com/screens/product/screen/product_detail_screen.dart';
+import 'package:shop_com/screens/product_detail/screen/product_detail_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/order_detail.dart';
 import 'package:shop_com/screens/account/sub-screen/order_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/setting_screen.dart';
 import 'package:shop_com/screens/account/sub-screen/shipping_address_screen.dart';
-import 'package:shop_com/screens/product/sub-screen/review_screen.dart';
+import 'package:shop_com/screens/product_detail/sub-screen/review_screen.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
+import '../data/model/product.dart';
 import '../screens/home/home.dart';
 import '../screens/auth/screen/login_screen.dart';
 import '../screens/home/screen/dashboard_screen.dart';
@@ -139,7 +138,11 @@ GoRouter genRoute() {
             GoRoute(
               path: '/review',
               name: 'review',
-              builder: (context, state) => const ReviewScreen(),
+              builder: (context, state) {
+                final product = state.extra as Product;
+
+                return ReviewScreen(product: product);
+              },
             )
           ],
         ),

@@ -212,7 +212,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                           const SizedBox(height: 16),
                           _buildAddToCartButton(state),
                           const SizedBox(height: 20),
-                          _buildAccordion(),
+                          _buildAccordion(state),
                         ],
                       ),
                     )
@@ -394,13 +394,13 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     ),
   );
 
-  Widget _buildAccordion() {
+  Widget _buildAccordion(ProductDetailState state) {
     return Column(
       children: [
         ListTile(
           title: const Text('Reviews'),
           trailing: const Icon(Icons.keyboard_arrow_right),
-          onTap: () => context.push('/review'),
+          onTap: () => context.push('/review', extra: state.product),
         ),
         const ListTile(
           title: Text('Support'),

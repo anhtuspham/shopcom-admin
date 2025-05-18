@@ -40,7 +40,7 @@ mixin ProductApi on BaseApi {
 
   Future<Product> fetchProductDetail({required String id}) async {
     Result result = await handleRequest(request: () async {
-      return get('/api/product/$id');
+      return get('/api/product/get/$id');
     });
     try {
       return Product.fromJson(result.asValue!.value);

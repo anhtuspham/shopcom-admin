@@ -112,7 +112,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
     if (state.isLoading) return const LoadingWidget();
     final filtered =
         state.orders?.where((element) => element.status == status).toList();
-    if (filtered!.isEmpty) return _buildEmptyOrderItemSection();
+    if (filtered == null || filtered.isEmpty) return _buildEmptyOrderItemSection();
 
     return RefreshIndicator(
       onRefresh: _refresh,
