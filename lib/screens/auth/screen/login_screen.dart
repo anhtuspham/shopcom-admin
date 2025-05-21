@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shop_com_admin_web/data/config/app_config.dart';
 import 'package:shop_com_admin_web/providers/auth_provider.dart';
 
@@ -23,112 +24,112 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 50),
-            // Back button
-            // IconButton(
-            //   icon: const Icon(Icons.arrow_back),
-            //   onPressed: () {},
-            // ),
-            // Title
-            Center(
-              child: const Text(
-                "Login",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 30),
-            // Email field
-            Form(
-              key: _formKey,
+      body: Center(
+        child: FractionallySizedBox(
+          widthFactor: getValueForScreenType(context: context, mobile: 1, desktop: 0.4, tablet: 0.8),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InputForm(
-                      labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      suffixIcon: const Icon(Icons.check, color: Colors.green),
-                      hintText: 'anhtu@gmail.com',
-                      onSaved: (newValue) {
-                        _email = newValue.toString();
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter email";
-                        } else {
-                          return null;
-                        }
-                      }),
-                  const SizedBox(height: 20),
-                  // Password field
-                  InputForm(
-                    obscureText: true,
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    onSaved: (newValue) {
-                      _password = newValue.toString();
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter password";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  // Forgot Password
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text("Forgot your password?",
-                              style: TextStyle(color: Colors.black87)),
-                          Icon(Icons.arrow_right_alt, color: Colors.red),
-                        ],
-                      ),
+                  const Center(
+                    child: Text(
+                      "Login",
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // Login Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _onLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                  const SizedBox(height: 30),
+                  // Email field
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        InputForm(
+                            labelText: 'Email',
+                            prefixIcon: const Icon(Icons.email_outlined),
+                            suffixIcon: const Icon(Icons.check, color: Colors.green),
+                            hintText: 'anhtu@gmail.com',
+                            onSaved: (newValue) {
+                              _email = newValue.toString();
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter email";
+                              } else {
+                                return null;
+                              }
+                            }),
+                        const SizedBox(height: 20),
+                        // Password field
+                        InputForm(
+                          obscureText: true,
+                          labelText: 'Password',
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          onSaved: (newValue) {
+                            _password = newValue.toString();
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter password";
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text("LOGIN",
-                          style: TextStyle(color: Colors.white, fontSize: 18)),
+                        const SizedBox(height: 10),
+                        // Forgot Password
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Forgot your password?",
+                                    style: TextStyle(color: Colors.black87)),
+                                Icon(Icons.arrow_right_alt, color: Colors.red),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Login Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _onLogin,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: const Text("LOGIN",
+                                style: TextStyle(color: Colors.white, fontSize: 18)),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  const SizedBox(height: 30),
+                  // Or login with
+                  const Center(child: Text("Or auth with social account")),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _socialButton(FontAwesomeIcons.google, Colors.white),
+                      const SizedBox(width: 20),
+                      _socialButton(FontAwesomeIcons.facebook, Colors.white),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
-            // Or login with
-            const Center(child: Text("Or auth with social account")),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _socialButton(FontAwesomeIcons.google, Colors.white),
-                const SizedBox(width: 20),
-                _socialButton(FontAwesomeIcons.facebook, Colors.white),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );

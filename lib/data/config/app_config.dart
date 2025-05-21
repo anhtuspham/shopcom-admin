@@ -7,6 +7,7 @@ import 'package:shop_com_admin_web/providers/auth_provider.dart';
 import 'package:shop_com_admin_web/utils/app_color.dart';
 
 import '../../apis/base_api.dart';
+import '../../utils/app_menu.dart';
 import '../../utils/data_store.dart';
 
 const bool app_encryption = false;
@@ -33,6 +34,8 @@ class AppConfig {
   final DataStore app_dataStore = DataStore(key: app_key, iv: app_iv, isEncryption: app_encryption);
   final List<ItemAppColor> store_color = [];
   String _selected_color = "";
+  final List<MenuItem> store_menu = [];
+  List<MenuItem> get setupMenu => store_menu;
 
   AuthUser? _user;
 
@@ -55,6 +58,7 @@ class AppConfig {
 
   Future<void> init() async{
     await app_dataStore.initStore();
+    getAppConfigMenuFromStore();
     loadUser();
   }
 
@@ -72,6 +76,36 @@ class AppConfig {
       default:
         logger.i(txt);
         break;
+    }
+  }
+
+  bool getAppConfigMenuFromStore() {
+    try {
+      final String? data = app_dataStore.loadFromLocal("cfg_menu");
+
+      if (data == null) {
+        return false;
+      }
+      final List<dynamic> tmp = jsonDecode(data);
+      List<MenuItem> tmps = tmp.map((item) => MenuItem.fromJson(item)).toList();
+      store_menu.clear();
+      store_menu.addAll(tmps);
+      return true;
+    } catch (e) {
+      printLog("e", e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> setAppConfigMenuToStore(List<MenuItem> items) async {
+    try {
+      String data = jsonEncode(items);
+      return app_dataStore.saveToLocal("cfg_menu", data).then((value) {
+        return value;
+      });
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 

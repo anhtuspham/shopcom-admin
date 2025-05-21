@@ -24,6 +24,30 @@ class AppColor {
       datas[tmp.key] = convertColorFromString(tmp.value.toString());
     }
   }
+  Color mainColor = const Color(0xffA3ADB2);
+  Color backgroundColor = Colors.white;
+  Color selectedColor = const Color(0xff96CCCC);
+  Color selectedColor2 = const Color(0xff96CCCC);
+  Color tableBorder = Colors.black;
+  Color alternateCellBg = Colors.grey.shade300;
+  Color textColor = const Color(0xFF0B2C43);
+  Color buttonColor = const Color(0xFFEDF2F4);
+  Color searchColor = Colors.white;
+  Color activeTextColor =  Colors.white;
+  Color btnTextColor = const Color(0xFF0B2C43);
+  Color chartBgColor = Colors.white;
+  Color lineChart = Colors.black;
+  Color iconBgColor = Colors.teal;
+  Color accountTextColor = Colors.black;
+  Color accountColor = Colors.black;
+  Color notificationExpandBgColor = Colors.lightBlue.shade50;
+  Color notificationWarning = Colors.amber;
+  Color scrollbarColor = const Color(0xff000000);
+  Color expandBgColor = const Color(0xffe1f5fe);
+  Color titleBlockBGColor = const Color(0xff000000);
+  Color titleBlockTextColor = const Color(0xffffffff);
+  Color activatedCheckboxColor = const Color(0xff563d2d);
+  Color deactivatedCheckboxColor = const Color(0xff000000);
 
   Map<String,String> exportToJson() {
     Map<String,String> bufs = Map<String,String>();
