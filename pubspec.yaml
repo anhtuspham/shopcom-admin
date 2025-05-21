@@ -58,6 +58,10 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   responsive_builder: ^0.7.1
   sidebarx: ^0.17.1
+  syncfusion_flutter_datagrid: ^29.2.5
+  easy_debounce: ^2.0.3
+  cached_network_image: ^3.4.1
+  syncfusion_flutter_core: ^29.2.5
 
 dev_dependencies:
   flutter_test:

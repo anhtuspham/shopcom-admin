@@ -8,6 +8,7 @@ import 'package:shop_com_admin_web/utils/app_color.dart';
 
 import '../../apis/base_api.dart';
 import '../../utils/app_menu.dart';
+import '../../utils/app_value_key.dart';
 import '../../utils/data_store.dart';
 
 const bool app_encryption = false;
@@ -37,12 +38,31 @@ class AppConfig {
   final List<MenuItem> store_menu = [];
   List<MenuItem> get setupMenu => store_menu;
 
+  String _selected_key_value = "";
+
+  String get selectedKeyValue => _selected_key_value;
+
+  set selectedKeyValue(String item) => _selected_key_value = item;
+
+  final List<ItemAppKeyValue> store_key_value = [];
+
+  List<String> get listSelectKeyValue => store_key_value.map((s) => s.code).toList();
+
   AuthUser? _user;
 
   AuthUser? get user => _user;
 
   void set user(AuthUser? tmp) {
     _user = tmp;
+  }
+
+  AppKeyValue? get appKeyValue {
+    ItemAppKeyValue? tmp = store_key_value.where((s) => s.code.compareTo(_selected_key_value) == 0).firstOrNull;
+    if (tmp == null) {
+      return null;
+    } else {
+      return tmp.keys;
+    }
   }
 
   AppColor? get appColor {
