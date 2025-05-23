@@ -9,7 +9,7 @@ mixin UserApi on BaseApi {
   Future<List<User>> fetchUsers() async {
     Result result = await handleRequest(
       request: () async {
-        return get('/User/list');
+        return get('/api/admin/user/get-all-user');
       },
     );
     try {
@@ -19,37 +19,30 @@ mixin UserApi on BaseApi {
       return [];
     }
   }
-  
-  Future<User> getUserInfo() async{
-    Result result = await handleRequest(request: () => get('/api/users/profile'),);
-    try{
+
+  Future<User> getUserInfo() async {
+    Result result = await handleRequest(
+      request: () => get('/api/users/profile'),
+    );
+    try {
       return User.fromJson(result.asValue!.value);
-    }catch(e){
+    } catch (e) {
       app_config.printLog("e", " API_FETCH_USER_INFO : ${e.toString()}");
       return User.empty();
     }
   }
 
-  Future<Result> createUser({
-    required String code,
-    required String username,
-    required String name,
-    required String password,
-    required String des,
-    required String role,
-    required String phone,
-  }) async {
+  Future<Result> createUser(
+      {String? name, String? email, String? password, String? address, bool? isAdmin}) async {
     return handleRequest(
       request: () => post(
-        '/User/create',
+        '/api/admin/user/create',
         data: {
-          'code': code,
-          'username': username,
           'name': name,
+          'email': email,
           'password': password,
-          'des': des,
-          'role': role,
-          'phone': phone,
+          'address': address,
+          'isAdmin': isAdmin,
         },
       ),
     );
@@ -74,12 +67,19 @@ mixin UserApi on BaseApi {
     );
   }
 
+  Future<Result> updateUserRole({String? id, bool? isAdmin}) async {
+    return handleRequest(
+      request: () => put(
+        '/api/admin/user/role',
+        data: {'id': id, 'isAdmin': isAdmin},
+      ),
+    );
+  }
 
-  Future<Result> changePassword({
-    required String confirmPassword,
-    required String oldPassword,
-    required String newPassword
-  }) async {
+  Future<Result> changePassword(
+      {required String confirmPassword,
+      required String oldPassword,
+      required String newPassword}) async {
     return handleRequest(
       request: () => put(
         '/User/changePassword',

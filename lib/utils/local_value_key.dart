@@ -11,6 +11,7 @@ String getText(String key, String text) {
 
 class LocalValueKey {
   static String get username => getText("username", "Tài khoản");
+  static String get email => getText("email", "Email");
   static String get enterUsername => getText("enterUsername", "Nhập vào tài khoản");
   static String get enterCode => getText("enterCode", "Nhập mã");
   static String get pleaseFillInAllInfo => getText("pleaseFillInAllInfo", "Vui lòng nhập đủ thông tin");

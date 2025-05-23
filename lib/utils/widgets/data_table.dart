@@ -580,6 +580,7 @@ class CustomDataSource<T> extends DataGridSource {
           } else {
             children.add(
               Container(
+                alignment: Alignment.center,
                 child: const Text(" * * Extended * *"),
               ),
             );
@@ -587,6 +588,7 @@ class CustomDataSource<T> extends DataGridSource {
         } else {
           children.add(
             Container(
+              alignment: Alignment.center,
               child: const Text(" * Extended * "),
             ),
           );
@@ -594,6 +596,7 @@ class CustomDataSource<T> extends DataGridSource {
       } else {
         children.add(
           Container(
+            alignment: Alignment.center,
             child: const Text("Extended"),
           ),
         );

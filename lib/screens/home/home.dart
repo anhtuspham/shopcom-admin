@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Hard-coded menu items
   final List<Map<String, String>> _menus = [
     {'code': 'home', 'name': 'Home', 'route': '/home'},
-    {'code': 'setting', 'name': 'Setting', 'route': '/setting'},
+    {'code': 'setting', 'name': 'Setting', 'route': '/user'},
   ];
 
   // Hard-coded sidebar items for Setting menu with icons
@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {'code': 'user', 'name': 'User', 'route': '/user', 'icon': Icons.person},
     {'code': 'product', 'name': 'Product', 'route': '/product', 'icon': Icons.inventory},
     {'code': 'order', 'name': 'Order', 'route': '/order', 'icon': Icons.shopping_cart},
+    {'code': 'coupon', 'name': 'Coupon', 'route': '/coupon', 'icon': Icons.local_offer}
   ];
 
   @override

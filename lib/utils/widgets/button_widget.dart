@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../color_value_key.dart';
 
@@ -28,6 +29,47 @@ class CommonButtonWidget extends StatelessWidget {
               side: WidgetStatePropertyAll(BorderSide(color: Colors.grey))),
       child: Text(isUppercase == true ? label.toUpperCase() : label,
           style: style ?? const TextStyle(color: Colors.black)),
+    );
+  }
+}
+
+class CreateButtonWidget extends ConsumerWidget {
+  final void Function()? callBack;
+  final bool? isTopWidget;
+  final String tooltip;
+  final double? sizeIcon;
+  const CreateButtonWidget({
+    super.key,
+    required this.callBack,
+    this.isTopWidget,
+    this.sizeIcon,
+    required this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Tooltip(
+      message: tooltip,
+      child: SizedBox(
+        height:  50,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(color: ColorValueKey.lineButtonBorder),
+            shape: RoundedRectangleBorder(
+              borderRadius: isTopWidget != null ? BorderRadius.circular(5) : BorderRadius.circular(8),
+            ),
+            backgroundColor: ColorValueKey.mainColor,
+            foregroundColor: ColorValueKey.btnTextColor,
+          ),
+          onPressed: callBack,
+          child:  Icon(
+            Icons.add,
+            size: sizeIcon ?? 24,
+            color: ColorValueKey.textColor,
+          ),
+
+        ),
+      ),
     );
   }
 }

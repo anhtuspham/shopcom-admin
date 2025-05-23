@@ -15,6 +15,7 @@ import 'package:shop_com_admin_web/screens/account/sub-screen/order_screen.dart'
 import 'package:shop_com_admin_web/screens/account/sub-screen/setting_screen.dart';
 import 'package:shop_com_admin_web/screens/account/sub-screen/shipping_address_screen.dart';
 import 'package:shop_com_admin_web/screens/product_detail/sub-screen/review_screen.dart';
+import 'package:shop_com_admin_web/screens/user/screen/user_screen.dart';
 
 import '../data/config/app_config.dart';
 import '../data/model/auth_user.dart';
@@ -76,9 +77,9 @@ GoRouter genRoute() {
               builder: (context, state) => const CartScreen(),
             ),
             GoRoute(
-              path: '/favorite',
-              name: 'favorite',
-              builder: (context, state) => const FavoritesScreen(),
+              path: '/user',
+              name: 'user',
+              builder: (context, state) => const UserScreen(),
             ),
             GoRoute(
               path: '/account',
@@ -90,10 +91,6 @@ GoRouter genRoute() {
               name: 'setting',
               builder: (context, state) => const SettingScreen(),
             ),
-            GoRoute(
-                path: '/shippingAddress',
-                name: 'shippingAddress',
-                builder: (context, state) => const ShippingAddress()),
             GoRoute(
               path: '/order',
               name: 'order',

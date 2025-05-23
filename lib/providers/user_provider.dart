@@ -4,7 +4,7 @@ import '../data/config/app_config.dart';
 import '../data/model/user.dart';
 
 class UserState {
-  final User user;
+  final List<User> user;
   final bool isLoading;
   final bool isError;
   final String? errorMessage;
@@ -15,10 +15,10 @@ class UserState {
         this.isError = false,
         this.errorMessage});
 
-  factory UserState.initial() => UserState(user: User.empty());
+  factory UserState.initial() => const UserState(user: []);
 
   UserState copyWith(
-      {User? user, bool? isLoading, bool? isError, String? errorMessage}) {
+      {List<User>? user, bool? isLoading, bool? isError, String? errorMessage}) {
     return UserState(
         user: user ?? this.user,
         isLoading: isLoading ?? this.isLoading,
@@ -30,11 +30,11 @@ class UserState {
 class UserNotifier extends StateNotifier<UserState> {
   UserNotifier() : super(UserState.initial());
 
-  Future<void> getUserInfo() async {
+  Future<void> fetchUsers() async {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      final user = await api.getUserInfo();
+      final user = await api.fetchUsers();
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
       state = state.copyWith(
@@ -46,6 +46,23 @@ class UserNotifier extends StateNotifier<UserState> {
     state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
     await _updateUserState();
   }
+
+  Future<bool> createUser({String? name, String? email, String? password, String? address, bool? isAdmin}) async{
+    state = state.copyWith(isLoading: true, isError: false);
+    try{
+      final result = await api.createUser(name: name, email: email, password: password, address: address, isAdmin: isAdmin);
+      if (result.isValue) {
+        await _updateUserState();
+        return true;
+      } else {
+        state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to create user");
+        return false;
+      }
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+      return false;
+    }
+}
 
   Future<bool> updateUserInfo({
     String? name,
@@ -71,7 +88,7 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> _updateUserState() async{
     try{
-      final user = await api.getUserInfo();
+      final user = await api.fetchUsers();
       state = state.copyWith(user: user, isLoading: false);
     } catch(e){
       state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
@@ -81,6 +98,6 @@ class UserNotifier extends StateNotifier<UserState> {
 
 final userProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
   final notifier = UserNotifier();
-  notifier.getUserInfo();
+  notifier.fetchUsers();
   return notifier;
 });
