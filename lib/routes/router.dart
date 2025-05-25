@@ -8,6 +8,7 @@ import 'package:shop_com_admin_web/providers/order_detail_provider.dart';
 import 'package:shop_com_admin_web/providers/product_detail_provider.dart';
 import 'package:shop_com_admin_web/screens/account/screen/account_screen.dart';
 import 'package:shop_com_admin_web/screens/cart/screen/cart_screen.dart';
+import 'package:shop_com_admin_web/screens/coupon/screen/coupon_screen.dart';
 import 'package:shop_com_admin_web/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com_admin_web/screens/product/screen/product_screen.dart';
 import 'package:shop_com_admin_web/screens/product_detail/screen/product_detail_screen.dart';
@@ -97,6 +98,11 @@ GoRouter genRoute() {
               path: '/order',
               name: 'order',
               builder: (context, state) => const OrderScreen(),
+            ),
+            GoRoute(
+              path: '/coupon',
+              name: 'coupon',
+              builder: (context, state) => const CouponScreen(),
             ),
             GoRoute(
               path: '/orderDetail',

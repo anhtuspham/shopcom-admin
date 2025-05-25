@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_com_admin_web/providers/order_provider.dart';
 import 'package:shop_com_admin_web/data/model/order.dart';
+import 'package:shop_com_admin_web/screens/order/widget/edit_order_dialog.dart';
 import 'package:shop_com_admin_web/utils/custom_page_controller.dart';
 import 'package:shop_com_admin_web/utils/widgets/data_table.dart';
 import 'package:shop_com_admin_web/utils/widgets/error_widget.dart';
@@ -40,7 +41,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
         children: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: null,
+            onPressed: () => showAddEditOrderDialog(context, order: order),
           ),
         ],
       ),

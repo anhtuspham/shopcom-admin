@@ -49,10 +49,10 @@ class Order {
     totalAmount: json["totalAmount"].toDouble(),
     discountAmount: json["discountAmount"].toDouble(),
     finalAmount: json["finalAmount"].toDouble(),
-    coupon: Coupon.fromJson(json['coupon']),
+    coupon: json['coupon'] != null ? Coupon.fromJson(json['coupon']) : Coupon.empty(),
     status: json["status"],
     address: json["address"],
-    paymentMethod: json["paymentMethod"],
+    paymentMethod: json["paymentMethod"] ?? '',
     createdAt: DateTime.parse(json["createdAt"]),
     v: json["__v"],
   );

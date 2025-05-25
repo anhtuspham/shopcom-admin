@@ -29,6 +29,7 @@ class LocalValueKey {
   static String get notification => getText("notification", "Thông báo");
   static String get someErrorOccur => getText("someErrorOccur", "Có lỗi xảy ra");
   static String get noInternet => getText("noInternet", "Không có kết nối mạng");
+  static String get discountValue => getText("discountValue", "Giảm giá");
   static String get hour => getText("hour", "Giờ");
   static String get lowerCaseHour => getText("lowerCaseHour", "giờ");
 
@@ -93,6 +94,7 @@ class LocalValueKey {
   static String get userList => getText("userList", "Danh sách người dùng");
 
   static String get editUser => getText("editUser", "Sửa người dùng");
+  static String get editOrder => getText("editOrder", "Cập nhật tiến độ đơn hàng");
 
   static String get userName => getText("userName", "Tên người dùng");
 
@@ -259,6 +261,10 @@ class LocalValueKey {
 
   static String get detailInfo => getText("detailInfo", "Chi tiết thông tin");
   static String get successExport => getText("successExport", "Hoàn thành xuất hàng");
+  static String get deleteFailCoupon => getText("deleteFailCoupon", "Xóa coupon thất bại");
+  static String get deleteSuccessCoupon => getText("deleteSuccessCoupon", "Xóa coupon thành công");
+  static String get updateSuccessOrder => getText("updateSuccessOrder", "Cập nhật đơn hàng thành công");
+  static String get updateFailOrder => getText("updateFailOrder", "Cập nhật đơn hàng thất bại");
   static String get numberAWB => getText("numberAWB", "Số AWB");
   static String get nameProduct => getText("nameProduct", "Tên sản phẩm");
   static String get quantity => getText("quantity", "Số lượng");
@@ -306,5 +312,7 @@ class LocalValueKey {
   static String get fileNameJobList => getText("fileNameJobList", "DanhSachQuyTrinh");
   static String get no => getText("no", "STT");
   static String get copy => getText("copy", "Sao chép");
+  static String get addCoupon => getText("addCoupon", "Thêm mã giảm giá");
+  static String get editCoupon => getText("editCoupon", "Cập nhật mã giảm giá");
 
 }

@@ -11,6 +11,7 @@ import 'package:async/async.dart';
 
 import 'api_exception.dart';
 import 'auth_user_api.dart';
+import 'coupon_api.dart';
 import 'custom_interceptor_api.dart';
 
 class BaseApi{
@@ -110,6 +111,6 @@ class BaseApi{
   }
 }
 
-class Api extends BaseApi with AuthUserApi, UserApi, ProductApi, CartApi, OrderApi, FavoriteApiApi, ReviewApi{
+class Api extends BaseApi with AuthUserApi, UserApi, ProductApi, CartApi, OrderApi, FavoriteApiApi, ReviewApi, CouponApi{
   Api();
 }

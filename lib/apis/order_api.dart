@@ -58,7 +58,7 @@ mixin OrderApi on BaseApi {
     String? status,
   }) async {
     return handleRequest(
-      request: () => post(
+      request: () => put(
         '/api/admin/order/$orderId/status',
         data: {
           'status': status
