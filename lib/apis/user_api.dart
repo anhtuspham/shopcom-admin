@@ -49,19 +49,23 @@ mixin UserApi on BaseApi {
   }
 
   Future<Result> editUser({
+    required String id,
     String? email,
     String? name,
     String? password,
     String? address,
+    bool? isAdmin
   }) async {
     return handleRequest(
-      request: () => put(
-        '/api/users/profile',
+      request: () => post(
+        '/api/admin/user/update',
         data: {
+          'id': id,
           'email': email,
           'name': name,
           'password': password,
           'address': address,
+          'isAdmin': isAdmin
         },
       ),
     );

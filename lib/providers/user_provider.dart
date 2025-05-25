@@ -65,14 +65,16 @@ class UserNotifier extends StateNotifier<UserState> {
 }
 
   Future<bool> updateUserInfo({
+    required String id,
     String? name,
     String? email,
     String? password,
     String? address,
+    bool? isAdmin
   }) async {
     state = state.copyWith(isLoading: true, isError: false);
     try{
-      final result = await api.editUser(name: name, email: email, password: password, address: address);
+      final result = await api.editUser(id: id, name: name, email: email, password: password, address: address, isAdmin: isAdmin);
       if (result.isValue) {
         await _updateUserState();
         return true;

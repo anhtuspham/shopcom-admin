@@ -37,7 +37,7 @@ class ColorValueKey {
 
 
   static Color get lineButtonBorder =>
-      getColor("lineButtonBorder",  Colors.red);
+      getColor("lineButtonBorder",  Colors.black87);
 
   static Color get deleteColor => getColor("deleteColor", Colors.red.shade800);
   static Color get editColor => getColor("editColor", const Color(0xff007bff));

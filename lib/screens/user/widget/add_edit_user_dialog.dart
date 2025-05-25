@@ -50,6 +50,7 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
 
   @override
   Widget build(BuildContext context) {
+    print('user ${widget.user?.id}');
     bool isNotEdit = widget.user == null;
     return BaseFormDialog(
       title: isNotEdit ? LocalValueKey.addUser : LocalValueKey.editUser,
@@ -109,7 +110,7 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
           height: 8,
         ),
         InputForm(
-          enabled: isNotEdit ? true : false,
+          enabled: true,
           initialValue: widget.user?.address ?? "",
           labelText: 'Địa chỉ',
           isRequired: true,
@@ -123,8 +124,9 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
         Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Quyền quản trị'),
+              const Text('Admin'),
               Switch(
                 value: isAdmin,
                 onChanged: (value) {
@@ -132,7 +134,7 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
                     isAdmin = value;
                   });
                 },
-                activeColor: ColorValueKey.mainColor,
+                activeColor: ColorValueKey.editColor,
               )
             ],
           ),
@@ -151,11 +153,12 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
                   address: address,
                 )
             : await ref.read(userProvider.notifier).updateUserInfo(
-                  name: name,
-                  email: email,
-                  address: address,
-                  password: password,
-                );
+                id: widget.user?.id ?? "",
+                name: name,
+                email: email,
+                address: address,
+                password: password,
+                isAdmin: isAdmin);
         setLoading(false);
         if (!context.mounted) return;
         final userState = ref.read(userProvider);

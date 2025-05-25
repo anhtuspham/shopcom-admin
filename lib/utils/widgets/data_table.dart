@@ -1196,6 +1196,7 @@ class CustomDataTable<T> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     bottomWidget ?? const Offstage(),
+                    const SizedBox(width: 10,),
                     RefreshButtonWidget(
                       onPressed: refresh,
                     ),
