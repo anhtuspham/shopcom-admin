@@ -87,6 +87,25 @@ class UserNotifier extends StateNotifier<UserState> {
       return false;
     }
   }
+  Future<bool> deleteUser({
+    required String id,
+  }) async {
+    state = state.copyWith(isLoading: true, isError: false);
+    try{
+      final result = await api.deleteUser(id: id);
+      if (result.isValue) {
+        await _updateUserState();
+        return true;
+      } else {
+        state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to delete user");
+        return false;
+      }
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+      return false;
+    }
+  }
+
 
   Future<void> _updateUserState() async{
     try{

@@ -4,10 +4,14 @@ import 'package:shop_com_admin_web/providers/user_provider.dart';
 import 'package:shop_com_admin_web/data/model/user.dart';
 import 'package:shop_com_admin_web/screens/user/widget/add_edit_user_dialog.dart';
 import 'package:shop_com_admin_web/utils/custom_page_controller.dart';
+import 'package:shop_com_admin_web/utils/global_key.dart';
 import 'package:shop_com_admin_web/utils/local_value_key.dart';
 import 'package:shop_com_admin_web/utils/widgets/button_widget.dart';
 import 'package:shop_com_admin_web/utils/widgets/data_table.dart';
 import 'package:shop_com_admin_web/utils/widgets/error_widget.dart';
+
+import '../../../utils/toast.dart';
+import '../../../utils/widgets/dialog_confirm.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   const UserScreen({super.key});
@@ -42,6 +46,29 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             icon: const Icon(Icons.edit),
             onPressed: () => showAddEditUserDialog(context, user: user),
           ),
+          const SizedBox(width: 10),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: () async {
+              final isOk = await showConfirmDialog(context,
+                  title: '${LocalValueKey.deleteConfirm}: ${user.name}');
+              if (!isOk) return;
+
+              final result = await ref
+                  .read(userProvider.notifier)
+                  .deleteUser(id: user.id ?? '');
+              if (!context.mounted) return;
+
+              final content = result == true
+                  ? LocalValueKey.deleteSuccessUser
+                  : LocalValueKey.deleteFailUser;
+              showResultToastWithUI(
+                description: content ?? "",
+                context: context,
+                result: result,
+              );
+            },
+          ),
         ],
       ),
       bottomWidget: Row(
@@ -56,33 +83,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       },
       showPagination: true,
       showBottomWidget: true,
-      isShowCheckbox: true,
+      isShowCheckbox: false,
       parent: context,
     );
-
-    // customDataTable.setConfigSize([
-    //   200,
-    //   200,
-    //   200,
-    // ]);
-    customDataTable.setConfigFilter([
-      true,
-      true,
-      true,
-      true,
-      true,
-      false
-    ]);
-    customDataTable.setConfigSort([
-      true,
-      true,
-      true,
-      true,
-      true,
-      false
-    ]);
-    customDataTable.setConfigSearch(
-        ['email', 'name', 'address']);
 
     return Column(
       children: [

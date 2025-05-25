@@ -6,9 +6,9 @@ import '../data/model/cart.dart';
 import '../data/model/order.dart';
 
 mixin OrderApi on BaseApi {
-  Future<List<Order>> fetchOrder() async {
+  Future<List<Order>> fetchOrders() async {
     Result result = await handleRequest(request: () {
-      return get('/api/order/my-orders');
+      return get('/api/admin/order/get-all-order');
     });
 
     try {
@@ -52,6 +52,21 @@ mixin OrderApi on BaseApi {
       return Order.empty();
     }
   }
+
+  Future<Result> updateOrderStatus({
+    required String orderId,
+    String? status,
+  }) async {
+    return handleRequest(
+      request: () => post(
+        '/api/admin/order/$orderId/status',
+        data: {
+          'status': status
+        },
+      ),
+    );
+  }
+
 
 // Future<Result> removeProductFromOrder({
 //   required String productId,

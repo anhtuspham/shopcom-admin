@@ -4,50 +4,44 @@ import '../data/config/app_config.dart';
 import '../data/model/order.dart';
 
 class OrderState {
-  final List<Order>? orders;
+  final List<Order> order;
   final bool isLoading;
   final bool isError;
   final String? errorMessage;
 
-  const OrderState({
-    this.orders,
-    this.isLoading = false,
-    this.isError = false,
-    this.errorMessage,
-  });
+  const OrderState(
+      {required this.order,
+      this.isLoading = false,
+      this.isError = false,
+      this.errorMessage});
 
-  factory OrderState.initial() => const OrderState();
+  factory OrderState.initial() => const OrderState(order: []);
 
-  OrderState copyWith({
-    List<Order>? orders,
-    bool? isLoading,
-    bool? isError,
-    String? errorMessage,
-  }) {
+  OrderState copyWith(
+      {List<Order>? order,
+      bool? isLoading,
+      bool? isError,
+      String? errorMessage}) {
     return OrderState(
-      orders: orders ?? this.orders,
-      isLoading: isLoading ?? this.isLoading,
-      isError: isError ?? this.isError,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
+        order: order ?? this.order,
+        isLoading: isLoading ?? this.isLoading,
+        isError: isError ?? this.isError,
+        errorMessage: errorMessage ?? this.errorMessage);
   }
 }
 
 class OrderNotifier extends StateNotifier<OrderState> {
   OrderNotifier() : super(OrderState.initial());
 
-  Future<void> fetchOrder() async {
+  Future<void> fetchOrders() async {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      final orders = await api.fetchOrder();
-      state = state.copyWith(orders: orders, isLoading: false, isError: false);
+      final order = await api.fetchOrders();
+      state = state.copyWith(order: order, isLoading: false);
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
-        isError: true,
-        errorMessage: e.toString(),
-      );
+          isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 
@@ -56,41 +50,63 @@ class OrderNotifier extends StateNotifier<OrderState> {
     await _updateOrderState();
   }
 
-  Future<void> createOrder({String? paymentMethod, String? couponCode}) async {
+  Future<bool> updateOrderStatus({
+    required String orderId,
+    String? status,
+  }) async {
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      final result = await api.createOrder(paymentMethod: paymentMethod, couponCode: couponCode);
-
+      final result =
+          await api.updateOrderStatus(orderId: orderId, status: status);
       if (result.isValue) {
-        await api.fetchCart();
         await _updateOrderState();
+        return true;
       } else {
-        app_config.printLog("e", " API_CREATE_ORDER : ${result.asError?.error} ");
-        throw Exception("Failed to create order: ${result.asError?.error}");
+        state = state.copyWith(
+            isLoading: false,
+            isError: true,
+            errorMessage: "Failed to update info");
+        return false;
       }
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
-        isError: true,
-        errorMessage: e.toString(),
-      );
-      throw e;
-    } finally {
-      state = state.copyWith(isLoading: false);
+          isLoading: false, isError: true, errorMessage: e.toString());
+      return false;
     }
   }
-  Future<void> _updateOrderState() async{
-    try{
-      final order = await api.fetchOrder();
-      state = state.copyWith(orders: order, isLoading: false);
-    } catch(e){
-      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+
+  // Future<bool> deleteOrder({
+  //   required String id,
+  // }) async {
+  //   state = state.copyWith(isLoading: true, isError: false);
+  //   try{
+  //     final result = await api.deleteOrder(id: id);
+  //     if (result.isValue) {
+  //       await _updateOrderState();
+  //       return true;
+  //     } else {
+  //       state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to delete order");
+  //       return false;
+  //     }
+  //   } catch(e){
+  //     state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+  //     return false;
+  //   }
+  // }
+
+  Future<void> _updateOrderState() async {
+    try {
+      final order = await api.fetchOrders();
+      state = state.copyWith(order: order, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(
+          isLoading: false, isError: true, errorMessage: e.toString());
     }
   }
 }
 
 final orderProvider = StateNotifierProvider<OrderNotifier, OrderState>((ref) {
   final notifier = OrderNotifier();
-  notifier.fetchOrder();
+  notifier.fetchOrders();
   return notifier;
 });

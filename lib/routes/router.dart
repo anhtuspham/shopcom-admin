@@ -9,6 +9,7 @@ import 'package:shop_com_admin_web/providers/product_detail_provider.dart';
 import 'package:shop_com_admin_web/screens/account/screen/account_screen.dart';
 import 'package:shop_com_admin_web/screens/cart/screen/cart_screen.dart';
 import 'package:shop_com_admin_web/screens/favorite/screen/favorite_screen.dart';
+import 'package:shop_com_admin_web/screens/product/screen/product_screen.dart';
 import 'package:shop_com_admin_web/screens/product_detail/screen/product_detail_screen.dart';
 import 'package:shop_com_admin_web/screens/account/sub-screen/order_detail.dart';
 import 'package:shop_com_admin_web/screens/account/sub-screen/order_screen.dart';
@@ -23,6 +24,7 @@ import '../data/model/product.dart';
 import '../screens/home/home.dart';
 import '../screens/auth/screen/login_screen.dart';
 import '../screens/home/screen/dashboard_screen.dart';
+import '../screens/order/screen/order_screen.dart';
 import '../screens/shop/screen/shop_screen.dart';
 import '../utils/widgets/error_page_widget.dart';
 
@@ -71,21 +73,21 @@ GoRouter genRoute() {
               name: 'shop',
               builder: (context, state) => const ShopScreen(),
             ),
-            GoRoute(
-              path: '/cart',
-              name: 'cart',
-              builder: (context, state) => const CartScreen(),
-            ),
+            // GoRoute(
+            //   path: '/cart',
+            //   name: 'cart',
+            //   builder: (context, state) => const CartScreen(),
+            // ),
             GoRoute(
               path: '/user',
               name: 'user',
               builder: (context, state) => const UserScreen(),
             ),
-            GoRoute(
-              path: '/account',
-              name: 'account',
-              builder: (context, state) => const AccountScreen(),
-            ),
+            // GoRoute(
+            //   path: '/product',
+            //   name: 'product',
+            //   builder: (context, state) => const ProductScreen(),
+            // ),
             GoRoute(
               path: '/setting',
               name: 'setting',

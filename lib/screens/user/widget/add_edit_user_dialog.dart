@@ -41,7 +41,6 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.user != null) {
       isAdmin = widget.user?.isAdmin ?? false;
@@ -50,7 +49,6 @@ class _AddEditUserDialogState extends ConsumerState<AddEditUserDialog> {
 
   @override
   Widget build(BuildContext context) {
-    print('user ${widget.user?.id}');
     bool isNotEdit = widget.user == null;
     return BaseFormDialog(
       title: isNotEdit ? LocalValueKey.addUser : LocalValueKey.editUser,

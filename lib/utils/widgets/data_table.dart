@@ -307,24 +307,24 @@ class CustomDataSource<T> extends DataGridSource {
                         );
                       },
                     ),
-                  if (_filter.isEmpty || index >= _filter.length || _filter[index] != false)
-                    ValueListenableBuilder<Map<String, bool>>(
-                      valueListenable: controller.filterStates,
-                      builder: (context, filterStates, child) {
-                        bool isFiltered = filterStates[_tmp] ?? false;
-
-                        return IconButton(
-                          onPressed: () async {
-                            await showMyDialog(data, _tmp);
-                            controller.updateFilterState(_tmp);
-                          },
-                          icon: Icon(
-                            isFiltered ? Icons.filter_list_alt : Icons.filter_alt_outlined,
-                            color: ColorValueKey.textColor,
-                          ),
-                        );
-                      },
-                    ),
+                  // if (_filter.isEmpty || index >= _filter.length || _filter[index] != false)
+                  //   ValueListenableBuilder<Map<String, bool>>(
+                  //     valueListenable: controller.filterStates,
+                  //     builder: (context, filterStates, child) {
+                  //       bool isFiltered = filterStates[_tmp] ?? false;
+                  //
+                  //       return IconButton(
+                  //         onPressed: () async {
+                  //           await showMyDialog(data, _tmp);
+                  //           controller.updateFilterState(_tmp);
+                  //         },
+                  //         icon: Icon(
+                  //           isFiltered ? Icons.filter_list_alt : Icons.filter_alt_outlined,
+                  //           color: ColorValueKey.textColor,
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
                 ],
               ),
             ),

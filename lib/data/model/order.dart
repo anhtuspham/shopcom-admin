@@ -1,15 +1,18 @@
 import 'dart:convert';
 
 import 'package:shop_com_admin_web/data/model/product_cart.dart';
+import 'package:shop_com_admin_web/utils/util.dart';
+
+import 'coupon.dart';
 
 class Order {
   String? id;
-  String? userId;
+  UserId? userId;
   List<ProductCart>? products;
   double? totalAmount;
   double? discountAmount;
   double? finalAmount;
-  String? coupon;
+  Coupon? coupon;
   String? status;
   String? address;
   String? paymentMethod;
@@ -40,13 +43,13 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     id: json["_id"],
-    userId: json["userId"],
+    userId: UserId.fromJson(json['userId']),
     products: List<ProductCart>.from(
         json["products"].map((x) => ProductCart.fromJson(x))),
     totalAmount: json["totalAmount"].toDouble(),
     discountAmount: json["discountAmount"].toDouble(),
     finalAmount: json["finalAmount"].toDouble(),
-    coupon: json["coupon"],
+    coupon: Coupon.fromJson(json['coupon']),
     status: json["status"],
     address: json["address"],
     paymentMethod: json["paymentMethod"],
@@ -55,14 +58,39 @@ class Order {
   );
 
   Map<String, dynamic> toJson() => {
-    "userId": userId,
-    "products": List<dynamic>.from(products!.map((x) => x.toJson())),
-    "totalAmount": totalAmount,
-    "status": status,
-    "address": address,
-    "paymentMethod": paymentMethod,
+    "Tên người dùng": userId?.name,
+    // "products": List<dynamic>.from(products!.map((x) => x.toJson())),
+    "Tiền đơn hàng": totalAmount,
+    "Giảm giá": discountAmount,
+    "Tổng tiền": finalAmount,
+    "Mã giảm giá": coupon?.code,
+    "Trạng thái": status,
+    "Địa chỉ": address,
+    "Phương thức thanh toán": paymentMethod,
+    "Ngày mua": getStringFromDateTime(createdAt ?? DateTime.now(), 'dd/MM/yyyy hh:mm:ss'),
+  };
+}
+
+class UserId {
+  String id;
+  String name;
+  String email;
+
+  UserId({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
+
+  factory UserId.fromJson(Map<String, dynamic> json) => UserId(
+    id: json["_id"],
+    name: json["name"],
+    email: json["email"],
+  );
+
+  Map<String, dynamic> toJson() => {
     "_id": id,
-    "createdAt": createdAt?.toIso8601String(),
-    "__v": v,
+    "name": name,
+    "email": email,
   };
 }

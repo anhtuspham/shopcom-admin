@@ -95,4 +95,13 @@ mixin UserApi on BaseApi {
       ),
     );
   }
+
+  Future<Result> deleteUser(
+      {required String id}) async {
+    return handleRequest(
+      request: () => delete(
+        '/api/admin/user/$id',
+      ),
+    );
+  }
 }
