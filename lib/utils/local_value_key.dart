@@ -185,10 +185,6 @@ class LocalValueKey {
   static String get codeDraw => getText("codeDraw", "Số bản vẽ");
   static String get nameDraw => getText("nameDraw", "Tên bản vẽ");
 
-  static String get stopJobSuccess => getText("stopJobSuccess", "Dừng công việc thành công");
-  static String get stopJobFail => getText("stopJobFail", "Dừng công việc thất bại");
-  static String get startJobSuccess => getText("stopJobSuccess", "Bắt đầu công việc thành công");
-  static String get startJobFail => getText("stopJobFail", "Bắt đầu công việc thất bại");
   static String get infoOrder => getText("infoOrder", "Thông tin đơn hàng");
   static String get numberOrder => getText("numberOrder", "Số đơn hàng");
   static String get drawList => getText("drawList", "Danh sách bản vẽ");
@@ -229,13 +225,6 @@ class LocalValueKey {
   static String get listDepartment => getText("listDepartment",  "Danh sách phòng ban");
   static String get deleteDepartment => getText("deleteDepartment",  "Xóa phòng ban");
   static String get department => getText("department",  "Phòng ban");
-  static String get deleteSuccessDepartment => getText("deleteSuccessDepartment",  "Xóa phòng ban thành công");
-  static String get deleteFailDepartment => getText("deleteFailDepartment",  "Xóa phòng ban thất bại");
-  static String get codeDepartment => getText("codeDepartment",  "Mã phòng ban");
-  static String get editDepartment => getText("editDepartment",  "Chỉnh sửa phòng ban");
-  static String get createDepartment => getText("createDepartment",  "Thêm phòng ban");
-  static String get addSuccessDepartment => getText("addSuccessDepartment",  "Thêm phòng ban thành công");
-  static String get editSuccessDepartment => getText("editSuccessDepartment",  "Chỉnh sửa phòng ban thành công");
   static String get nameDepartment => getText("nameDepartment",  "Tên phòng ban");
   static String get createJob => getText("createJob",  "Tạo công việc");
   static String get editJob => getText("editJob",  "Chỉnh sửa công việc");
@@ -245,6 +234,8 @@ class LocalValueKey {
   static String get deleteSuccessJob => getText("deleteSuccessJob",  "Xóa công việc thành công");
   static String get deleteFailJob => getText("deleteFailJob",  "Xóa công việc thất bại");
   static String get addSuccessJob => getText("addSuccessJob",  "Thêm công việc thành công");
+  static String get editSuccessCoupon => getText("editSuccessCoupon",  "Chỉnh sửa mã giảm giá thành công");
+  static String get addSuccessCoupon => getText("addSuccessCoupon",  "Thêm mã giảm giá thành công");
   static String get listJobs => getText("listJobs",  "Danh sách công việc");
   static String get invalidAccount => getText("invalidAccount", "Tài khoản không tồn tại");
   static String get noPermissionToAccess => getText("noPermissionToAccess", "Không có quyền truy cập");
@@ -314,5 +305,10 @@ class LocalValueKey {
   static String get copy => getText("copy", "Sao chép");
   static String get addCoupon => getText("addCoupon", "Thêm mã giảm giá");
   static String get editCoupon => getText("editCoupon", "Cập nhật mã giảm giá");
+  static String get discountType => getText("discountType", "Loại giảm giá");
+  static String get minOrderValue => getText("minOrderValue", "Đơn hàng tối thiểu");
+  static String get maxDiscountAmount => getText("maxDiscountAmount", "Giảm giá tối đa");
+  static String get expirationDate => getText("expirationDate", "Hạn sử dụng");
+  static String get usageLimit => getText("usageLimit", "Số lượt dùng tối đa");
 
 }

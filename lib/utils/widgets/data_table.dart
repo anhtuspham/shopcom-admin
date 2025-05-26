@@ -34,7 +34,6 @@ class CustomDataSource<T> extends DataGridSource {
   // final List<String> _column = [];
   bool Function(String col)? filterObjectActivating;
   BuildContext? parent;
-  bool showOrdinalNumber;
   final Function(T obj)? showExtension;
 
   // int? get rowsPerPage => _rowsPerPage;
@@ -46,7 +45,6 @@ class CustomDataSource<T> extends DataGridSource {
       this.isExtended = false,
       this.showExtension,
       this.filterObjectActivating,
-      required this.showOrdinalNumber,
       required this.dataGridController}) {
     // _rowsPerPage.value(10);
   }
@@ -386,25 +384,6 @@ class CustomDataSource<T> extends DataGridSource {
     // TODO: implement buildRow
     List<Widget> children = [];
     int length = row.getCells().length;
-
-    if (showOrdinalNumber) {
-      int index = rows.indexOf(row);
-      int stt = index + 1;
-
-      children.add(Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(5.0),
-        child: Text(
-          textAlign: TextAlign.center,
-          stt.toString(),
-          style: TextStyle(
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.normal,
-            color: ColorValueKey.textColor,
-          ),
-        ),
-      ));
-    }
 
     for (int i = 0; i < length; i++) {
       bool state = false;
@@ -817,9 +796,6 @@ class CustomDataTable<T> {
 
   bool filterCellActivating(RowColumnIndex currentRowColumnIndex, RowColumnIndex previousRowColumnIndex) {
     int col = currentRowColumnIndex.columnIndex;
-    if (showOrdinalNumber) {
-      col--;
-    }
     int row = currentRowColumnIndex.rowIndex;
     T? tmp = controller.getItemWithIndex(row);
     if (tmp != null) {
@@ -889,7 +865,6 @@ class CustomDataTable<T> {
   String? timeStartContentExcel;
   String? timeEndContentExcel;
   String? fileNameExcel;
-  bool showOrdinalNumber;
 
   CustomDataTable({
     this.showExtension,
@@ -921,13 +896,11 @@ class CustomDataTable<T> {
     this.timeStartContentExcel,
     this.timeEndContentExcel,
     this.fileNameExcel,
-    this.showOrdinalNumber = false,
   }) {
     if (showExtension != null) {
       _dataSource = CustomDataSource(
           parent: parent,
           controller: controller,
-          showOrdinalNumber: showOrdinalNumber,
           isExtended: true,
           showExtension: showExtension,
           filterObjectActivating: filterObjectActivating,
@@ -938,8 +911,7 @@ class CustomDataTable<T> {
           controller: controller,
           isExtended: false,
           filterObjectActivating: filterObjectActivating,
-          dataGridController: dataGridController,
-          showOrdinalNumber: showOrdinalNumber);
+          dataGridController: dataGridController);
     }
   }
 
