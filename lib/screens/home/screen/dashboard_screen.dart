@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_com_admin_web/screens/home/widgets/column_chart.dart';
-import 'package:shop_com_admin_web/screens/home/widgets/pie_chart.dart';
+import 'package:shop_com_admin_web/screens/home/widgets/column_chart_order_month.dart';
+import 'package:shop_com_admin_web/screens/home/widgets/column_chart_revenue_month.dart';
+import 'package:shop_com_admin_web/screens/home/widgets/pie_chart_order_status.dart';
+import 'package:shop_com_admin_web/screens/home/widgets/pie_chart_revenue_category.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../widgets/dashboard_stat.dart';
@@ -23,19 +25,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             DashboardStats(),
             const SizedBox(height: 10,),
-            Row(
+            const Row(
               children: [
-                Expanded(child: ColumnChart()),
-                const SizedBox(width: 12),
-                Expanded(child: ColumnChart()),
+                Expanded(child: ColumnChartOrderMonth()),
+                SizedBox(width: 12),
+                Expanded(child: ColumnChartRevenueMonth()),
               ]
             ),
             const SizedBox(height: 5,),
-            Row(
+            const Row(
               children: [
-                Expanded(child: PieChart()),
-                const SizedBox(width: 12,),
-                Expanded(child: PieChart()),
+                Expanded(child: PieChartOrderStatus()),
+                SizedBox(width: 12,),
+                Expanded(child: PieChartRevenueCategory()),
               ],
             ),
 
