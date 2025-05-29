@@ -51,7 +51,7 @@ class _ColumnChartState extends ConsumerState<ColumnChartOrderMonth> {
         primaryXAxis: const CategoryAxis(),
         series: [
           ColumnSeries<SalesData, String>(
-            name: 'Doanh thu',
+            name: 'Số đơn hàng',
             dataSource: _mapToChartData(orderMonthStat.order),
             xValueMapper: (SalesData data, _) => data.year,
             yValueMapper: (SalesData data, _) => data.sales,

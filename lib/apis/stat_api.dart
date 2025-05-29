@@ -5,6 +5,8 @@ import 'package:shop_com_admin_web/data/model/order_status.dart';
 import 'package:shop_com_admin_web/data/model/revenue_category.dart';
 import 'package:shop_com_admin_web/data/model/revenue_month.dart';
 
+import '../data/model/dashboard_stat.dart';
+
 mixin StatApi on BaseApi {
   Future<List<RevenueMonth>> getRevenueByMonth() async {
     Result result = await handleRequest(
@@ -59,6 +61,25 @@ mixin StatApi on BaseApi {
       return rawList.map((e) => OrderMonth.fromJson(e)).toList();
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<DashboardStat> getDashboardStats() async {
+    Result result = await handleRequest(
+      request: () {
+        return get('/api/admin/stat/dashboard-stat');
+      },
+    );
+    try {
+      final data = result.asValue!.value;
+      return DashboardStat.fromJson(data);
+    } catch (e) {
+      return DashboardStat(
+        totalRevenue: 0,
+        totalOrders: 0,
+        totalUsers: 0,
+        totalProducts: 0,
+      );
     }
   }
 }

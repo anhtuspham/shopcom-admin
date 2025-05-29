@@ -1,117 +1,119 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:shop_com_admin_web/providers/currency_provider.dart';
 
-class DashboardStats extends StatelessWidget {
-  final List<StatCardData> stats = [
-    StatCardData(
-        icon: FontAwesomeIcons.dollarSign,
-        value: '\$92k',
-        label: 'Tổng doanh thu',
-        change: '+15%',
-        isPositive: true),
-    StatCardData(
-        icon: FontAwesomeIcons.shopify,
-        value: '12',
-        label: 'Tổng đơn hàng',
-        change: '+19%',
-        isPositive: true),
-    StatCardData(
-        icon: FontAwesomeIcons.userCheck,
-        value: '100',
-        label: 'Người dùng',
-        change: '+13%',
-        isPositive: true),
-    StatCardData(
-        icon: FontAwesomeIcons.box,
-        value: '10',
-        label: 'Sản phẩm',
-        change: '-8%',
-        isPositive: false),
-  ];
+import '../../../providers/stat_dashboard_provider.dart';
+import '../../../utils/util.dart';
 
-  DashboardStats({super.key});
+class DashboardStats extends ConsumerWidget {
+  const DashboardStats({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 800),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            itemCount: stats.length,
-            itemBuilder: (context, index) {
-              return StatCard(data: stats[index]);
-            },
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 0.8,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final statsState = ref.watch(dashboardStatsProvider);
+
+    if (statsState.isLoading) {
+      return const Card(
+        color: Colors.white,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (statsState.isError) {
+      return Card(
+        color: Colors.white,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                statsState.errorMessage ?? 'Lỗi khi tải dữ liệu',
+                style: const TextStyle(color: Colors.red),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(dashboardStatsProvider.notifier).refresh();
+                },
+                child: const Text('Thử lại'),
+              ),
+            ],
           ),
+        ),
+      );
+    }
+
+    final stats = statsState.stats;
+
+
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      elevation: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildStatCard(
+              title: 'Tổng Doanh Thu',
+              value: formatMoney(stats.totalRevenue, ref.watch(currencyProvider)),
+              icon: Icons.monetization_on,
+              color: Colors.green,
+            ),
+            _buildStatCard(
+              title: 'Tổng Đơn Hàng',
+              value: stats.totalOrders.toString(),
+              icon: Icons.shopping_cart,
+              color: Colors.blue,
+            ),
+            _buildStatCard(
+              title: 'Tổng Người Dùng',
+              value: stats.totalUsers.toString(),
+              icon: Icons.people,
+              color: Colors.orange,
+            ),
+            _buildStatCard(
+              title: 'Tổng Sản Phẩm',
+              value: stats.totalProducts.toString(),
+              icon: Icons.inventory,
+              color: Colors.purple,
+            ),
+          ],
         ),
       ),
     );
   }
-}
 
-class StatCardData {
-  final IconData icon;
-  final String value;
-  final String label;
-  final String change;
-  final bool isPositive;
-
-  StatCardData(
-      {required this.icon,
-      required this.value,
-      required this.label,
-      required this.change,
-      required this.isPositive});
-}
-
-class StatCard extends StatelessWidget {
-  final StatCardData data;
-
-  const StatCard({super.key, required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(data.icon, size: 32, color: Colors.orangeAccent),
-            Text(data.value,
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Text(data.label, style: TextStyle(color: Colors.grey[700])),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                    data.isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-                    color: data.isPositive ? Colors.green : Colors.red,
-                    size: 16),
-                const SizedBox(width: 4),
-                Text(
-                  data.change,
-                  style: TextStyle(
-                    color: data.isPositive ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
-          ],
+  Widget _buildStatCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Expanded(
+      child: Card(
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Icon(icon, color: color, size: 30),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

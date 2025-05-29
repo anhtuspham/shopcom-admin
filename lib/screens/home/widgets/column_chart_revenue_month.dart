@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:shop_com_admin_web/data/model/order_month.dart';
 import 'package:shop_com_admin_web/data/model/revenue_month.dart';
 import 'package:shop_com_admin_web/providers/stat_revenue_month_provider.dart';
@@ -19,11 +20,14 @@ class ColumnChartRevenueMonth extends ConsumerStatefulWidget {
 
 class _ColumnChartState extends ConsumerState<ColumnChartRevenueMonth> {
   List<SalesData> _mapToChartData(List<RevenueMonth> orders) {
-    return orders.map((e) {
-      final String label = '${e.month.toString().padLeft(2, '0')}/${e.year}';
-      return SalesData(label, e.totalRevenue!.toDouble());
-    },).toList();
+    return orders.map(
+      (e) {
+        final String label = '${e.month.toString().padLeft(2, '0')}/${e.year}';
+        return SalesData(label, e.totalRevenue!.toDouble());
+      },
+    ).toList();
   }
+
   @override
   Widget build(BuildContext context) {
     final revenueMonthStat = ref.watch(revenueMonthStatProvider);
@@ -50,7 +54,13 @@ class _ColumnChartState extends ConsumerState<ColumnChartRevenueMonth> {
         title: const ChartTitle(text: 'Doanh thu theo tháng'),
         legend: const Legend(isVisible: true),
         tooltipBehavior: TooltipBehavior(enable: true),
-        primaryXAxis: const CategoryAxis(),
+        primaryXAxis: const CategoryAxis(
+          title: AxisTitle(text: 'Thời gian'),
+        ),
+        primaryYAxis: NumericAxis(
+          title: const AxisTitle(text: 'Doanh thu (USD)'),
+          numberFormat: NumberFormat.simpleCurrency(name: 'USD'),
+        ),
         series: [
           ColumnSeries<SalesData, String>(
             name: 'Doanh thu',
