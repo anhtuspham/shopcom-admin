@@ -63,6 +63,7 @@ dependencies:
   cached_network_image: ^3.4.1
   syncfusion_flutter_core: ^29.2.5
   dropdown_search: ^6.0.2
+  syncfusion_flutter_charts: ^29.2.7
 
 dev_dependencies:
   flutter_test:
