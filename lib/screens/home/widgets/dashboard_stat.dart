@@ -35,7 +35,7 @@ class DashboardStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1200),
+        constraints: const BoxConstraints(maxWidth: 800),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GridView.builder(
@@ -46,8 +46,8 @@ class DashboardStats extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 300,
-              childAspectRatio: 1.5,
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 0.8,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -82,6 +82,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

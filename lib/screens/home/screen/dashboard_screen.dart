@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shop_com_admin_web/screens/home/widgets/column_chart.dart';
 import 'package:shop_com_admin_web/screens/home/widgets/pie_chart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -12,20 +13,34 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-
-
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          DashboardStats(),
-          const SizedBox(height: 10,),
-          ColumnChart(),
-          const SizedBox(height: 10),
-          PieChart(),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        child: Column(
+          children: [
+            DashboardStats(),
+            const SizedBox(height: 10,),
+            Row(
+              children: [
+                Expanded(child: ColumnChart()),
+                const SizedBox(width: 12),
+                Expanded(child: ColumnChart()),
+              ]
+            ),
+            const SizedBox(height: 5,),
+            Row(
+              children: [
+                Expanded(child: PieChart()),
+                const SizedBox(width: 12,),
+                Expanded(child: PieChart()),
+              ],
+            ),
+
+          ],
+        ),
       ),
     );
   }

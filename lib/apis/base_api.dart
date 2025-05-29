@@ -5,6 +5,7 @@ import 'package:shop_com_admin_web/apis/favorite_api.dart';
 import 'package:shop_com_admin_web/apis/order_api.dart';
 import 'package:shop_com_admin_web/apis/product_api.dart';
 import 'package:shop_com_admin_web/apis/review_api.dart';
+import 'package:shop_com_admin_web/apis/stat_api.dart';
 import 'package:shop_com_admin_web/apis/user_api.dart';
 import 'package:shop_com_admin_web/data/config/app_config.dart';
 import 'package:async/async.dart';
@@ -111,6 +112,6 @@ class BaseApi{
   }
 }
 
-class Api extends BaseApi with AuthUserApi, UserApi, ProductApi, CartApi, OrderApi, FavoriteApiApi, ReviewApi, CouponApi{
+class Api extends BaseApi with AuthUserApi, UserApi, ProductApi, CartApi, OrderApi, FavoriteApiApi, ReviewApi, CouponApi, StatApi{
   Api();
 }

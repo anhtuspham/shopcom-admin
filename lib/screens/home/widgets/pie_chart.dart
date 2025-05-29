@@ -19,28 +19,32 @@ class _PieChartState extends State<PieChart> {
       ChartData('Bị hủy', 20)
     ];
     final double total = chartData.fold(0, (previousValue, element) => previousValue + element.y);
-    return Center(
-        child: SfCircularChart(
-            title: const ChartTitle(text: 'Thống kê đơn hàng'),
-            legend: const Legend(isVisible: true),
-            series: <CircularSeries>[
-          // Render pie chart
-          PieSeries<ChartData, String>(
-            dataSource: chartData,
-            pointColorMapper: (ChartData data, _) => data.color,
-            xValueMapper: (ChartData data, _) => data.x,
-            yValueMapper: (ChartData data, _) => data.y,
-            explode: true,
-            explodeAll: true,
-            dataLabelMapper: (datum, index) => '${((datum.y / total) * 100).toStringAsFixed(1)}%',
-            dataLabelSettings: const DataLabelSettings(
-              isVisible: true,
-              labelPosition: ChartDataLabelPosition.outside,
-              useSeriesColor: true,
-              connectorLineSettings: ConnectorLineSettings(type: ConnectorType.curve)
-            ),
-          )
-        ]));
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      child: Center(
+          child: SfCircularChart(
+              title: const ChartTitle(text: 'Tình trạng đơn hàng'),
+              legend: const Legend(isVisible: true),
+              series: <CircularSeries>[
+            // Render pie chart
+            PieSeries<ChartData, String>(
+              dataSource: chartData,
+              pointColorMapper: (ChartData data, _) => data.color,
+              xValueMapper: (ChartData data, _) => data.x,
+              yValueMapper: (ChartData data, _) => data.y,
+              explode: true,
+              explodeAll: true,
+              dataLabelMapper: (datum, index) => '${((datum.y / total) * 100).toStringAsFixed(1)}%',
+              dataLabelSettings: const DataLabelSettings(
+                isVisible: true,
+                labelPosition: ChartDataLabelPosition.outside,
+                useSeriesColor: true,
+                connectorLineSettings: ConnectorLineSettings(type: ConnectorType.curve)
+              ),
+            )
+          ])),
+    );
   }
 }
 
