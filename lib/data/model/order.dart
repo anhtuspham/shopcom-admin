@@ -52,7 +52,7 @@ class Order {
     coupon: json['coupon'] != null ? Coupon.fromJson(json['coupon']) : Coupon.empty(),
     status: json["status"],
     address: json["address"],
-    paymentMethod: json["paymentMethod"] ?? '',
+    paymentMethod: json["paymentMethod"] ?? 'COD',
     createdAt: DateTime.parse(json["createdAt"]),
     v: json["__v"],
   );

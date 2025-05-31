@@ -86,12 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(width: 4),
-        IconButton(
-          icon: const Icon(Icons.language),
-          onPressed: () {
-            // Add language switch logic here
-          },
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.language),
+        //   onPressed: () {
+        //     // Add language switch logic here
+        //   },
+        // ),
         const SizedBox(width: 4),
         IconButton(
           icon: const Icon(Icons.account_circle),
@@ -100,14 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         const SizedBox(width: 4),
-        IconButton(
-          icon: Icon(_sidebarController.extended ? Icons.arrow_left : Icons.arrow_right),
-          onPressed: () {
-            setState(() {
-              _sidebarController.setExtended(!_sidebarController.extended);
-            });
-          },
-        ),
+        // IconButton(
+        //   icon: Icon(_sidebarController.extended ? Icons.arrow_left : Icons.arrow_right),
+        //   onPressed: () {
+        //     setState(() {
+        //       _sidebarController.setExtended(!_sidebarController.extended);
+        //     });
+        //   },
+        // ),
       ],
     );
   }
