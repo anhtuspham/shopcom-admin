@@ -18,7 +18,7 @@ class ColorValueKey {
   static Color get selectedColor => getColor("selectedColor", Colors.amber);
   static Color get selectedColor2 => getColor("selectedColor2", Colors.amber);
   static Color get iconBgColor => getColor("iconBgColor", Colors.blue);
-  static Color get accountColor => getColor("accountColor", Colors.blueGrey);
+  static Color get accountColor => getColor("accountColor", Colors.black87);
   static Color get accountTextColor => getColor("accountTextColor", Colors.black);
   static Color get btnTextColor => getColor("btnTextColor", Colors.grey);
   static Color get tableBorder => getColor("tableBorder", Colors.black);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shop_com_admin_web/screens/home/widgets/account.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -93,12 +94,13 @@ class _HomeScreenState extends State<HomeScreen> {
         //   },
         // ),
         const SizedBox(width: 4),
-        IconButton(
-          icon: const Icon(Icons.account_circle),
-          onPressed: () {
-            // Add account logic here
-          },
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.account_circle),
+        //   onPressed: () {
+        //     // Add account logic here
+        //   },
+        // ),
+        AccountButton(),
         const SizedBox(width: 4),
         // IconButton(
         //   icon: Icon(_sidebarController.extended ? Icons.arrow_left : Icons.arrow_right),

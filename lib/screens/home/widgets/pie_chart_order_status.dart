@@ -79,7 +79,7 @@ class _PieChartState extends ConsumerState<PieChartOrderStatus> {
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               explode: true,
-              // explodeAll: true,
+              explodeAll: true,
               // dataLabelMapper: (datum, index) =>
               //     '${((datum.y / total) * 100).toStringAsFixed(1)}%',
               dataLabelSettings: const DataLabelSettings(
