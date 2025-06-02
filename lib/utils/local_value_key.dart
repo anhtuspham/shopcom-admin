@@ -310,5 +310,9 @@ class LocalValueKey {
   static String get maxDiscountAmount => getText("maxDiscountAmount", "Giảm giá tối đa");
   static String get expirationDate => getText("expirationDate", "Hạn sử dụng");
   static String get usageLimit => getText("usageLimit", "Số lượt dùng tối đa");
+  static String get addProduct => getText("addProduct", "Thêm sản phẩm");
+  static String get editProduct => getText("editProduct", "Chỉnh sửa sản phẩm");
+  static String get deleteSuccessProduct => getText("deleteSuccessProduct", "Xóa sản phẩm thành công");
+  static String get deleteFailProduct => getText("deleteFailProduct", "Xóa sản phẩm thất bại");
 
 }

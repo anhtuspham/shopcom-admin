@@ -195,7 +195,7 @@ class _ProductBagItemState extends ConsumerState<ProductBagItem> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                              formatMoney(widget.price ?? 0,
+                              formatMoney(money: widget.price ?? 0, currency:
                                   ref.watch(currencyProvider)),
                               style: const TextStyle(
                                 fontSize: 16,

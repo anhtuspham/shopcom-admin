@@ -117,8 +117,8 @@ class _OrderProductItemState extends ConsumerState<OrderProductItem> {
                           valueFontWeight: FontWeight.w700,
                         )),
                     Text(
-                        formatMoney(
-                            widget.price ?? 0, ref.watch(currencyProvider)),
+                        formatMoney(money:
+                            widget.price ?? 0, currency: ref.watch(currencyProvider)),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

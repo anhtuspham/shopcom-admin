@@ -5,11 +5,12 @@ import 'package:async/async.dart';
 import '../data/config/app_config.dart';
 
 mixin ProductApi on BaseApi {
-  Future<List<Product>> fetchProduct({String? sortBy, String? page, String? limit}) async {
+  Future<List<Product>> fetchProduct(
+      {String? sortBy, String? page, String? limit}) async {
     final query = <String, String>{};
-    if(sortBy != null) query['sort'] = sortBy;
-    if(page != null) query['page'] = page;
-    if(limit != null) query['limit'] = limit;
+    if (sortBy != null) query['sort'] = sortBy;
+    if (page != null) query['page'] = page;
+    if (limit != null) query['limit'] = limit;
 
     Result result = await handleRequest(
       request: () async {
@@ -30,7 +31,8 @@ mixin ProductApi on BaseApi {
           try {
             return Product.fromJson(e);
           } catch (err) {
-            app_config.printLog("e", " API_USER_FETCH_PRODUCT : ${err.toString()} ");
+            app_config.printLog(
+                "e", " API_USER_FETCH_PRODUCT : ${err.toString()} ");
             return null;
           }
         })
@@ -48,4 +50,12 @@ mixin ProductApi on BaseApi {
       return Product.empty();
     }
   }
+
+  Future<Result> deleteProduct({required String id}) async {
+    return await handleRequest(
+      request: () => delete('/api/product/delete/$id'),
+    );
+  }
+
+// Future<Result> createProduct({})
 }

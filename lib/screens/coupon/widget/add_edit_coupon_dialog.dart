@@ -29,6 +29,7 @@ class _AddEditCouponDialogState extends ConsumerState<AddEditCouponDialog> {
   String code = '';
   int discountValue = 0;
   int maxDiscountAmount = 0;
+  int minOrderValue = 0;
   String discountType = '';
   DateTime expireTime = DateTime.now();
   int usageLimit = 0;
@@ -140,6 +141,19 @@ class _AddEditCouponDialogState extends ConsumerState<AddEditCouponDialog> {
         const SizedBox(
           height: 8,
         ),
+        InputForm(
+          enabled: true,
+          initialValue: widget.coupon?.minOrderValue.toString() ?? "",
+          labelText: LocalValueKey.minOrderValue,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          isRequired: true,
+          onSaved: (newValue) {
+            minOrderValue = int.parse(newValue ?? '0');
+          },
+        ),
+        const SizedBox(
+          height: 8,
+        ),
         TextFormField(
           controller: _expireTimeController,
           readOnly: true,
@@ -184,6 +198,7 @@ class _AddEditCouponDialogState extends ConsumerState<AddEditCouponDialog> {
                 code: code,
                 discountValue: discountValue,
                 discountType: discountType,
+                minOrderValue: minOrderValue,
                 expirationDate: expireTime,
                 maxDiscountAmount: maxDiscountAmount,
                 usageLimit: usageLimit)
@@ -192,6 +207,7 @@ class _AddEditCouponDialogState extends ConsumerState<AddEditCouponDialog> {
                 code: code,
                 discountValue: discountValue,
                 discountType: discountType,
+                minOrderValue: minOrderValue,
                 expirationDate: expireTime,
                 maxDiscountAmount: maxDiscountAmount,
                 usageLimit: usageLimit);
@@ -209,6 +225,7 @@ class _AddEditCouponDialogState extends ConsumerState<AddEditCouponDialog> {
           context: context,
           result: result,
         );
+        context.pop();
       },
     );
   }

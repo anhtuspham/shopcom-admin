@@ -42,33 +42,44 @@ class Order {
   String toRawJson() => json.encode(toJson());
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-    id: json["_id"],
-    userId: UserId.fromJson(json['userId']),
-    products: List<ProductCart>.from(
-        json["products"].map((x) => ProductCart.fromJson(x))),
-    totalAmount: json["totalAmount"].toDouble(),
-    discountAmount: json["discountAmount"].toDouble(),
-    finalAmount: json["finalAmount"].toDouble(),
-    coupon: json['coupon'] != null ? Coupon.fromJson(json['coupon']) : Coupon.empty(),
-    status: json["status"],
-    address: json["address"],
-    paymentMethod: json["paymentMethod"] ?? 'COD',
-    createdAt: DateTime.parse(json["createdAt"]),
-    v: json["__v"],
-  );
+        id: json["_id"],
+        userId: UserId.fromJson(json['userId']),
+        products: List<ProductCart>.from(
+            json["products"].map((x) => ProductCart.fromJson(x))),
+        totalAmount: json["totalAmount"].toDouble(),
+        discountAmount: json["discountAmount"].toDouble(),
+        finalAmount: json["finalAmount"].toDouble(),
+        coupon: json['coupon'] != null
+            ? Coupon.fromJson(json['coupon'])
+            : Coupon.empty(),
+        status: json["status"],
+        address: json["address"],
+        paymentMethod: json["paymentMethod"] ?? 'COD',
+        createdAt: DateTime.parse(json["createdAt"]),
+        v: json["__v"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Tên người dùng": userId?.name,
-    // "products": List<dynamic>.from(products!.map((x) => x.toJson())),
-    "Tiền đơn hàng": totalAmount,
-    "Giảm giá": discountAmount,
-    "Tổng tiền": finalAmount,
-    "Mã giảm giá": coupon?.code,
-    "Trạng thái": status,
-    "Địa chỉ": address,
-    "Phương thức thanh toán": paymentMethod,
-    "Ngày mua": getStringFromDateTime(createdAt ?? DateTime.now(), 'dd/MM/yyyy hh:mm:ss'),
-  };
+        "Tên người dùng": userId?.name,
+        // "products": List<dynamic>.from(products!.map((x) => x.toJson())),
+        "Tiền đơn hàng": formatMoney(money: totalAmount!.toDouble()),
+        "Giảm giá": formatMoney(money: discountAmount!.toDouble()),
+        "Tổng tiền": formatMoney(money: finalAmount!.toDouble()),
+        "Mã giảm giá": coupon?.code,
+        "Trạng thái": status != null
+            ? switch (status) {
+                'pending' => 'Đang chờ xử lý',
+                'processing' => 'Đang xử lý',
+                'delivered' => 'Đã giao hàng',
+                'cancelled' => 'Đã hủy',
+                _ => 'Không xác định'
+              }
+            : 'Không có trạng thái',
+        "Địa chỉ": address,
+        "Phương thức thanh toán": paymentMethod,
+        "Ngày mua": getStringFromDateTime(
+            createdAt ?? DateTime.now(), 'dd/MM/yyyy hh:mm:ss'),
+      };
 }
 
 class UserId {
@@ -83,14 +94,14 @@ class UserId {
   });
 
   factory UserId.fromJson(Map<String, dynamic> json) => UserId(
-    id: json["_id"],
-    name: json["name"],
-    email: json["email"],
-  );
+        id: json["_id"],
+        name: json["name"],
+        email: json["email"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "email": email,
-  };
+        "_id": id,
+        "name": name,
+        "email": email,
+      };
 }

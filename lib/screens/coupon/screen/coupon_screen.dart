@@ -37,7 +37,7 @@ class _CouponScreenState extends ConsumerState<CouponScreen> {
 
     customDataTable = CustomDataTable<Coupon>(
       controller: customPageController,
-      titleHeader: 'Danh sách người dùng',
+      titleHeader: 'Danh sách mã giảm giá',
       showExtension: (Coupon coupon) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,

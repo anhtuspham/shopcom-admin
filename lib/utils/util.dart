@@ -36,11 +36,13 @@ String upperCaseFirstLetter(String str){
 
 const double vndRate = 25980;
 
-String formatMoney(double money, Currency currency){
+String formatMoney({required double money, Currency? currency}){
   switch(currency){
     case Currency.vnd:
       return NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(money * vndRate);
     case Currency.usd:
+      return NumberFormat.currency(locale: 'en_US', symbol: '\$').format(money);
+    case null:
       return NumberFormat.currency(locale: 'en_US', symbol: '\$').format(money);
   }
 }

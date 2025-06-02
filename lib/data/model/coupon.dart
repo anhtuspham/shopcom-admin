@@ -1,4 +1,4 @@
-import 'package:shop_com_admin_web/utils/util.dart';
+import '../../utils/util.dart';
 
 class Coupon {
   String? id;
@@ -50,12 +50,12 @@ class Coupon {
         discountValue: json["discountValue"] ?? 0,
         minOrderValue: json["minOrderValue"] ?? 0,
         maxDiscountAmount: json["maxDiscountAmount"] ?? 0,
-        expirationDate: DateTime.parse(json["expirationDate"]) ?? DateTime.now(),
+        expirationDate: json["expirationDate"] != null ? DateTime.parse(json["expirationDate"]) : null,
         isActive: json["isActive"] ?? false,
         usageLimit: json["usageLimit"] ?? 0,
         usedCount: json["usedCount"] ?? 0,
-        createdAt: DateTime.parse(json["createdAt"]) ?? DateTime.now(),
-        updatedAt: DateTime.parse(json["updatedAt"]) ?? DateTime.now(),
+        createdAt: json["createdAt"] != null ? DateTime.parse(json["createdAt"]) : null,
+        updatedAt: json["updatedAt"] != null ? DateTime.parse(json["updatedAt"]) : null,
         v: json["__v"],
       );
 
@@ -64,8 +64,8 @@ class Coupon {
         "Mã khuyến mãi": code,
         "Loại giảm giá": discountType,
         "Giá trị giảm giá": discountValue,
-        "Đơn hàng tối thiểu": minOrderValue,
-        "Giảm tối đa": maxDiscountAmount,
+        "Đơn hàng tối thiểu": formatMoney(money: minOrderValue!.toDouble()),
+        "Giảm tối đa": formatMoney(money: maxDiscountAmount!.toDouble()),
         "Ngày hết hạn": getStringFromDateTime(expirationDate ?? DateTime.now(), 'dd/MM/yyyy hh:mm:ss'),
         "Trạng thái": isActive,
         "Số lượng": usageLimit,

@@ -63,15 +63,14 @@ class Product {
   }
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "description": description,
-    "category": category,
-    "brand": brand,
-    "defaultVariant": defaultVariant?.toJson(),
-    "variants": List<dynamic>.from(variants!.map((x) => x.toJson())),
-    "ratings": ratings?.toJson(),
-    "isActive": isActive,
-    "createdAt": getStringFromDateTime(createdAt ?? DateTime(0), 'dd/MM/yyyy'),
+    "Tên sản phẩm": name,
+    "Mô tả": description,
+    "Danh mục": category,
+    "Thương hiệu": brand,
+    // "defaultVariant": defaultVariant?.toJson(),
+    // "variants": List<dynamic>.from(variants!.map((x) => x.toJson())),
+    "Đánh giá": ratings != null ? ratings?.average : 'Chưa có đanh giá',
+    "Đang hoạt động": isActive,
+    "Ngày tạo": getStringFromDateTime(createdAt ?? DateTime(0), 'dd/MM/yyyy'),
   };
 }

@@ -58,7 +58,7 @@ class DashboardStats extends ConsumerWidget {
           children: [
             _buildStatCard(
               title: 'Tổng Doanh Thu',
-              value: formatMoney(stats.totalRevenue, ref.watch(currencyProvider)),
+              value: formatMoney(money: stats.totalRevenue,currency: ref.watch(currencyProvider)),
               icon: Icons.monetization_on,
               color: Colors.green,
             ),

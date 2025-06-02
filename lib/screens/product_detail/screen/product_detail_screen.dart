@@ -337,7 +337,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
         ? state.product.variants![variantIndex].price
         : state.product.defaultVariant?.price;
     final currency = ref.watch(currencyProvider);
-    final formattedPrice = formatMoney(price ?? 0, currency);
+    final formattedPrice = formatMoney(money: price ?? 0, currency: currency);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

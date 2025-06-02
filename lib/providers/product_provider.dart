@@ -1,31 +1,26 @@
-// product_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../data/config/app_config.dart';
 import '../data/model/product.dart';
 
 class ProductState {
-  final List<Product> products;
-  final List<Product> filtered;
+  final List<Product> product;
   final bool isLoading;
   final bool isError;
   final String? errorMessage;
 
-  ProductState(
-      {this.products = const [],
-      this.filtered = const [],
-      this.isLoading = false,
-      this.isError = false,
-      this.errorMessage});
+  const ProductState(
+      {required this.product,
+        this.isLoading = false,
+        this.isError = false,
+        this.errorMessage});
+
+  factory ProductState.initial() => const ProductState(product: []);
 
   ProductState copyWith(
-      {List<Product>? products,
-      List<Product>? filtered,
-      bool? isLoading,
-      bool? isError,
-      String? errorMessage}) {
+      {List<Product>? product, bool? isLoading, bool? isError, String? errorMessage}) {
     return ProductState(
-        products: products ?? this.products,
-        filtered: filtered ?? this.filtered,
+        product: product ?? this.product,
         isLoading: isLoading ?? this.isLoading,
         isError: isError ?? this.isError,
         errorMessage: errorMessage ?? this.errorMessage);
@@ -33,59 +28,97 @@ class ProductState {
 }
 
 class ProductNotifier extends StateNotifier<ProductState> {
-  ProductNotifier() : super(ProductState());
+  ProductNotifier() : super(ProductState.initial());
 
-  String _currentSort = 'newest';
-
-  Future<void> fetchProduct({String? sort, String? page, String? limit}) async {
-    final sortParams = sort ?? _currentSort;
-    _currentSort = sortParams;
-
+  Future<void> fetchProducts() async {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true, isError: false);
     try {
-      await _updateProductsState(sortBy: sortParams, page: page, limit: limit);
+      final product = await api.fetchProduct();
+      state = state.copyWith(product: product, isLoading: false);
     } catch (e) {
       state = state.copyWith(
           isLoading: false, isError: true, errorMessage: e.toString());
     }
-  }
-
-  void search(String query) {
-    final filtered = query.isEmpty
-        ? state.products
-        : state.products
-            .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-    state = state.copyWith(filtered: filtered);
   }
 
   Future<void> refresh() async {
     state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
-    await _updateProductsState();
+    // await _updateProductState();
   }
 
-  Future<void> _updateProductsState(
-      {String? sortBy, String? page, String? limit}) async {
-    try {
-      final products =
-          await api.fetchProduct(sortBy: sortBy, page: page, limit: limit);
+  // Future<bool> createProduct({String? name, String? email, String? password, String? address, bool? isAdmin}) async{
+  //   state = state.copyWith(isLoading: true, isError: false);
+  //   try{
+  //     final result = await api.createProduct(name: name, email: email, password: password, address: address, isAdmin: isAdmin);
+  //     if (result.isValue) {
+  //       await _updateProductState();
+  //       return true;
+  //     } else {
+  //       state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to create product");
+  //       return false;
+  //     }
+  //   } catch(e){
+  //     state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+  //     return false;
+  //   }
+  // }
 
-      state = state.copyWith(
-          products: products,
-          filtered: products,
-          isLoading: false,
-          isError: false);
-    } catch (e) {
-      state = state.copyWith(
-          isLoading: false, isError: true, errorMessage: e.toString());
+  // Future<bool> updateProductInfo({
+  //   required String id,
+  //   String? name,
+  //   String? email,
+  //   String? password,
+  //   String? address,
+  //   bool? isAdmin
+  // }) async {
+  //   state = state.copyWith(isLoading: true, isError: false);
+  //   try{
+  //     final result = await api.editProduct(id: id, name: name, email: email, password: password, address: address, isAdmin: isAdmin);
+  //     if (result.isValue) {
+  //       await _updateProductState();
+  //       return true;
+  //     } else {
+  //       state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to update info");
+  //       return false;
+  //     }
+  //   } catch(e){
+  //     state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+  //     return false;
+  //   }
+  // }
+  Future<bool> deleteProduct({
+    required String id,
+  }) async {
+    state = state.copyWith(isLoading: true, isError: false);
+    try{
+      final result = await api.deleteProduct(id: id);
+      if (result.isValue) {
+        // await _updateProductState();
+        return true;
+      } else {
+        state = state.copyWith(isLoading: false, isError: true, errorMessage: "Failed to delete product");
+        return false;
+      }
+    } catch(e){
+      state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+      return false;
     }
   }
+
+
+  // Future<void> _updateProductState() async{
+  //   try{
+  //     final product = await api.fetchProducts();
+  //     state = state.copyWith(product: product, isLoading: false);
+  //   } catch(e){
+  //     state = state.copyWith(isLoading: false, isError: true, errorMessage: e.toString());
+  //   }
+  // }
 }
 
-final productProvider =
-    StateNotifierProvider.autoDispose<ProductNotifier, ProductState>((ref) {
+final productProvider = StateNotifierProvider<ProductNotifier, ProductState>((ref) {
   final notifier = ProductNotifier();
-  notifier.fetchProduct();
+  notifier.fetchProducts();
   return notifier;
 });

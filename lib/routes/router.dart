@@ -2,20 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_com_admin_web/providers/order_detail_provider.dart';
-import 'package:shop_com_admin_web/providers/product_detail_provider.dart';
-import 'package:shop_com_admin_web/screens/account/screen/account_screen.dart';
-import 'package:shop_com_admin_web/screens/cart/screen/cart_screen.dart';
 import 'package:shop_com_admin_web/screens/coupon/screen/coupon_screen.dart';
-import 'package:shop_com_admin_web/screens/favorite/screen/favorite_screen.dart';
 import 'package:shop_com_admin_web/screens/product/screen/product_screen.dart';
-import 'package:shop_com_admin_web/screens/product_detail/screen/product_detail_screen.dart';
-import 'package:shop_com_admin_web/screens/account/sub-screen/order_detail.dart';
-import 'package:shop_com_admin_web/screens/account/sub-screen/order_screen.dart';
-import 'package:shop_com_admin_web/screens/account/sub-screen/setting_screen.dart';
-import 'package:shop_com_admin_web/screens/account/sub-screen/shipping_address_screen.dart';
 import 'package:shop_com_admin_web/screens/product_detail/sub-screen/review_screen.dart';
 import 'package:shop_com_admin_web/screens/user/screen/user_screen.dart';
 
@@ -26,7 +15,6 @@ import '../screens/home/home.dart';
 import '../screens/auth/screen/login_screen.dart';
 import '../screens/home/screen/dashboard_screen.dart';
 import '../screens/order/screen/order_screen.dart';
-import '../screens/shop/screen/shop_screen.dart';
 import '../utils/widgets/error_page_widget.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -69,11 +57,11 @@ GoRouter genRoute() {
               name: 'home',
               builder: (context, state) => const DashboardScreen(),
             ),
-            GoRoute(
-              path: '/shop',
-              name: 'shop',
-              builder: (context, state) => const ShopScreen(),
-            ),
+            // GoRoute(
+            //   path: '/shop',
+            //   name: 'shop',
+            //   builder: (context, state) => const ShopScreen(),
+            // ),
             // GoRoute(
             //   path: '/cart',
             //   name: 'cart',
@@ -84,16 +72,16 @@ GoRouter genRoute() {
               name: 'user',
               builder: (context, state) => const UserScreen(),
             ),
-            // GoRoute(
-            //   path: '/product',
-            //   name: 'product',
-            //   builder: (context, state) => const ProductScreen(),
-            // ),
             GoRoute(
-              path: '/setting',
-              name: 'setting',
-              builder: (context, state) => const SettingScreen(),
+              path: '/product',
+              name: 'product',
+              builder: (context, state) => const ProductScreen(),
             ),
+            // GoRoute(
+            //   path: '/setting',
+            //   name: 'setting',
+            //   builder: (context, state) => const SettingScreen(),
+            // ),
             GoRoute(
               path: '/order',
               name: 'order',
@@ -104,42 +92,42 @@ GoRouter genRoute() {
               name: 'coupon',
               builder: (context, state) => const CouponScreen(),
             ),
-            GoRoute(
-              path: '/orderDetail',
-              name: 'orderDetail',
-              builder: (context, state) {
-                final id = state.extra as String;
-                return ProviderScope(overrides: [
-                  orderDetailProvider.overrideWith(
-                    (ref, arg) {
-                      final notifier = OrderDetailNotifier();
-                      notifier.fetchOrder(id);
-                      return notifier;
-                    },
-                  )
-                ], child: OrderDetailScreen(id: id));
-              },
-            ),
-            GoRoute(
-              path: '/productDetail',
-              name: 'productDetail',
-              builder: (context, state) {
-                final id = state.extra as String;
-                return ProviderScope(
-                    overrides: [
-                      productDetailProvider.overrideWith(
-                        (ref, arg) {
-                          final notifier = ProductDetailNotifier();
-                          notifier.fetchProduct(id);
-                          return notifier;
-                        },
-                      )
-                    ],
-                    child: ProductDetailScreen(
-                      id: id,
-                    ));
-              },
-            ),
+            // GoRoute(
+            //   path: '/orderDetail',
+            //   name: 'orderDetail',
+            //   builder: (context, state) {
+            //     final id = state.extra as String;
+            //     return ProviderScope(overrides: [
+            //       orderDetailProvider.overrideWith(
+            //         (ref, arg) {
+            //           final notifier = OrderDetailNotifier();
+            //           notifier.fetchOrder(id);
+            //           return notifier;
+            //         },
+            //       )
+            //     ], child: OrderDetailScreen(id: id));
+            //   },
+            // ),
+            // GoRoute(
+            //   path: '/productDetail',
+            //   name: 'productDetail',
+            //   builder: (context, state) {
+            //     final id = state.extra as String;
+            //     return ProviderScope(
+            //         overrides: [
+            //           productDetailProvider.overrideWith(
+            //             (ref, arg) {
+            //               final notifier = ProductDetailNotifier();
+            //               notifier.fetchProduct(id);
+            //               return notifier;
+            //             },
+            //           )
+            //         ],
+            //         child: ProductDetailScreen(
+            //           id: id,
+            //         ));
+            //   },
+            // ),
             GoRoute(
               path: '/review',
               name: 'review',

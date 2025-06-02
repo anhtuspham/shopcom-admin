@@ -191,8 +191,8 @@ class _ProductCardState extends ConsumerState<ProductCard> {
               child: Row(
                 children: [
                   Text(
-                    formatMoney(
-                        widget.originalPrice, ref.watch(currencyProvider)),
+                    formatMoney(money:
+                        widget.originalPrice, currency: ref.watch(currencyProvider)),
                     style: TextStyle(
                       fontSize: 12,
                       color: widget.discountedPrice != null
@@ -207,7 +207,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                   if (widget.discountedPrice != null) ...[
                     const SizedBox(width: 4),
                     Text(
-                      formatMoney(widget.discountedPrice ?? 0,
+                      formatMoney(money: widget.discountedPrice ?? 0, currency:
                           ref.watch(currencyProvider)),
                       style: const TextStyle(
                         fontSize: 12,

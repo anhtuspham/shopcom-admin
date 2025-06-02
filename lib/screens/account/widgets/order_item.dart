@@ -53,7 +53,7 @@ class _OrderItemState extends ConsumerState<OrderItem> {
               CustomHeaderInfo(
                   title: 'Total amount',
                   value:
-                      formatMoney(widget.totalAmount ?? 0, ref.watch(currencyProvider)),
+                      formatMoney(money: widget.totalAmount ?? 0, currency: ref.watch(currencyProvider)),
                   headerFontWeight: FontWeight.w700,
                   fontSize: 16,
                   valueFontWeight: FontWeight.w700),
