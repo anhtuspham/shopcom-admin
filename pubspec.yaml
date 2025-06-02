@@ -64,6 +64,7 @@ dependencies:
   syncfusion_flutter_core: ^29.2.5
   dropdown_search: ^6.0.2
   syncfusion_flutter_charts: ^29.2.7
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

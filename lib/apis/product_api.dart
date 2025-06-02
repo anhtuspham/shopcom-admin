@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shop_com_admin_web/apis/base_api.dart';
 import 'package:shop_com_admin_web/data/model/product.dart';
 import 'package:async/async.dart';
@@ -57,5 +63,78 @@ mixin ProductApi on BaseApi {
     );
   }
 
-// Future<Result> createProduct({})
+  Future<Result> createProduct({
+    required String name,
+    required String description,
+    required String category,
+    required String brand,
+    required List<Map<String, dynamic>> variants,
+    required List<List<Uint8List>> variantImageBytes,
+  }) async {
+    return await handleRequest(
+      request: () async {
+        final formData = FormData.fromMap({
+          'name': name,
+          'description': description,
+          'category': category,
+          'brand': brand,
+          'variants': jsonEncode(variants),
+        });
+
+        // Add images for each variant
+        for (int i = 0; i < variantImageBytes.length; i++) {
+          for (int j = 0; j < variantImageBytes[i].length; j++) {
+            formData.files.add(MapEntry(
+              'images-$i',
+              MultipartFile.fromBytes(
+                variantImageBytes[i][j],
+                filename: 'image-$i-$j.jpg', // Provide a filename
+              ),
+            ));
+          }
+        }
+
+        return post('/api/product/create', formData: formData);
+      },
+    );
+  }
+
+  Future<Result> updateProductInfo({
+    required String id,
+    String? name,
+    String? description,
+    String? category,
+    String? brand,
+    List<Map<String, dynamic>>? variants,
+    List<List<Uint8List>>? variantImageBytes,
+  }) async {
+    return await handleRequest(
+      request: () async {
+        final formData = FormData.fromMap({
+          if (name != null) 'name': name,
+          if (description != null) 'description': description,
+          if (category != null) 'category': category,
+          if (brand != null) 'brand': brand,
+          if (variants != null) 'variants': jsonEncode(variants),
+        });
+
+        // Add images for each variant
+        if (variantImageBytes != null) {
+          for (int i = 0; i < variantImageBytes.length; i++) {
+            for (int j = 0; j < variantImageBytes[i].length; j++) {
+              formData.files.add(MapEntry(
+                'images-$i',
+                MultipartFile.fromBytes(
+                  variantImageBytes[i][j],
+                  filename: 'image-$i-$j.jpg', // Provide a filename
+                ),
+              ));
+            }
+          }
+        }
+
+        return put('/api/product/update/$id', data: formData);
+      },
+    );
+  }
 }
