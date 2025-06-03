@@ -30,6 +30,12 @@ class _AddEditProductDialogState extends ConsumerState<AddEditProductDialog> {
   final TextEditingController brandController = TextEditingController();
   final List<_VariantForm> variants = [_VariantForm()];
   final ImagePicker _picker = ImagePicker();
+  final List<String> categoryItems = [
+    'Laptop',
+    'Smartphone',
+    'Tablet',
+    'Headphone'
+  ];
 
   @override
   void initState() {
@@ -82,10 +88,24 @@ class _AddEditProductDialogState extends ConsumerState<AddEditProductDialog> {
           isRequired: true,
         ),
         const SizedBox(height: 8),
-        InputForm(
-          controller: categoryController,
-          labelText: 'Category',
-          isRequired: true,
+        DropdownButtonFormField(
+          value: categoryController.text.isNotEmpty
+              ? categoryController.text
+              : null,
+          items: categoryItems.map((item) {
+            return DropdownMenuItem(value: item, child: Text(item));
+          }).toList(),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Category is required';
+            }
+            return null;
+          },
+          decoration: const InputDecoration(
+              border: OutlineInputBorder(), labelText: 'Category'),
+          onChanged: (value) {
+            categoryController.text = value ?? '';
+          },
         ),
         const SizedBox(height: 8),
         InputForm(

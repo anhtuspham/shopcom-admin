@@ -21,16 +21,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Hard-coded menu items
   final List<Map<String, String>> _menus = [
-    {'code': 'home', 'name': 'Home', 'route': '/home'},
-    {'code': 'setting', 'name': 'Setting', 'route': '/user'},
+    {'code': 'home', 'name': 'Trang chủ', 'route': '/home'},
+    {'code': 'setting', 'name': 'Quản lý', 'route': '/user'},
   ];
 
   // Hard-coded sidebar items for Setting menu with icons
   final List<Map<String, dynamic>> _settingTabs = [
-    {'code': 'user', 'name': 'User', 'route': '/user', 'icon': Icons.person},
-    {'code': 'product', 'name': 'Product', 'route': '/product', 'icon': Icons.inventory},
-    {'code': 'order', 'name': 'Order', 'route': '/order', 'icon': Icons.shopping_cart},
-    {'code': 'coupon', 'name': 'Coupon', 'route': '/coupon', 'icon': Icons.local_offer}
+    {'code': 'user', 'name': 'Người dùng', 'route': '/user', 'icon': Icons.person},
+    {'code': 'product', 'name': 'Sản phẩm', 'route': '/product', 'icon': Icons.inventory},
+    {'code': 'order', 'name': 'Đơn hàng', 'route': '/order', 'icon': Icons.shopping_cart},
+    {'code': 'coupon', 'name': 'Khuyến mãi', 'route': '/coupon', 'icon': Icons.local_offer}
   ];
 
   @override
@@ -125,11 +125,16 @@ class _HomeScreenState extends State<HomeScreen> {
           .entries
           .map(
             (entry) => SidebarXItem(
-          iconWidget: Icon(
-            entry.value['icon'] as IconData,
-            size: 24, // Consistent icon size
-            color: _sidebarController.selectedIndex == entry.key ? Colors.blue.shade700 : Colors.grey,
-          ),
+          iconBuilder:(selected, hovered) {
+            return Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Icon(
+                entry.value['icon'] as IconData,
+                size: 24, // Consistent icon size
+                color: _sidebarController.selectedIndex == entry.key ? Colors.blue.shade700 : Colors.grey,
+              ),
+            );
+          } ,
           label: entry.value['name']!,
           onTap: () {
             context.go(entry.value['route']!);
