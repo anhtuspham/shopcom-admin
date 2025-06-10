@@ -64,6 +64,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }} # Automatically provided GitHub token
           publish_dir: build/web # Directory containing the built web application
           publish_branch: gh-pages # The branch to publish to
-          # If you are using a custom domain, uncomment the next line and replace with your domain:
-          # cname: 'www.yourcustomdomain.com'
           force_orphan: true # Recommended to ensure clean deployments, especially for first time setup
