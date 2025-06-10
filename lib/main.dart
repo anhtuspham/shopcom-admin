@@ -20,7 +20,6 @@ Future<void> main() async {
     try {
       system_router = genRoute();
       try {
-        // test deploy
         runApp(const ProviderScope(child: MyDisplay()));
       } catch (e) {
         if (kDebugMode) {
