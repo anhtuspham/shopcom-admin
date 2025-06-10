@@ -5,7 +5,6 @@ on:
     branches:
       - main # Only run on pushes to the main branch
 
-# Grant permissions to the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read # Allow reading of the repository's contents
   pages: write   # Allow writing to the gh-pages branch
@@ -17,14 +16,12 @@ jobs:
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4 # Use actions/checkout@v4 for improved performance and features
+        uses: actions/checkout@v4 # Use actions/checkout@v4 for improved performance
 
       - name: Setup Flutter environment
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable' # Use the stable Flutter channel
-          # If you need a specific version, uncomment and set:
-          # flutter-version: '3.29.2' # Specify the desired Flutter version
           cache: true # Enable caching for Flutter SDK
 
       - name: Cache Flutter dependencies
@@ -50,13 +47,15 @@ jobs:
 
       - name: Build Flutter Web application
         run: |
-          # The --base-href argument is crucial for GitHub Pages.
-          # If deploying to <YOUR_USERNAME>.github.io/<YOUR_REPOSITORY>/, use --base-href="/<YOUR_REPOSITORY>/"
-          # If deploying to the root of a custom domain or user/organization page, use --base-href="/"
           flutter build web --release \
             --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false \
             --no-tree-shake-icons \
-            --base-href="/shopcom-admin/" # Adjust this based on your GitHub Pages deployment path
+            --base-href="/shopcom-admin/" # Matches your repository name
+      - name : Clean up gh-pages branch
+        run: |
+          git checkout --orphan gh-pages
+          git rm -rf .
+          git clean -fd
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -64,4 +63,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }} # Automatically provided GitHub token
           publish_dir: build/web # Directory containing the built web application
           publish_branch: gh-pages # The branch to publish to
-          force_orphan: true # Recommended to ensure clean deployments, especially for first time setup
+          force_orphan: true # Create a new branch with no history
+          user_name: 'github-actions[bot]' # Commit author name
+          user_email: 'github-actions[bot]@users.noreply.github.com' # Commit author email
+          commit_message: 'Deploy Flutter web app to gh-pages' # Custom commit message
