@@ -3,38 +3,67 @@ name: Deploy Flutter Web to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # Only run on pushes to the main branch
+
+# Grant permissions to the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read # Allow reading of the repository's contents
+  pages: write   # Allow writing to the gh-pages branch
+  id-token: write # Required for OpenID Connect (OIDC) authentication
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Use actions/checkout@v4 for improved performance and features
 
-      - name: Set up Flutter
+      - name: Setup Flutter environment
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'
+          channel: 'stable' # Use the stable Flutter channel
+          # If you need a specific version, uncomment and set:
+          # flutter-version: '3.29.2' # Specify the desired Flutter version
+          cache: true # Enable caching for Flutter SDK
 
-      - name: Check flutter version
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            build/web/.last_build_id # Cache specific to Flutter web builds
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      - name: Check Flutter version
         run: flutter --version
 
       - name: Print Environment Details
         run: |
           echo "Flutter Channel: stable"
-          flutter doctor
+          flutter doctor -v # Use -v for verbose output
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter Web
-        run: flutter build web --release --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --dart-define buildDate=$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') --no-tree-shake-icons --base-href="/shopcom-admin/"
+      - name: Build Flutter Web application
+        run: |
+          # The --base-href argument is crucial for GitHub Pages.
+          # If deploying to <YOUR_USERNAME>.github.io/<YOUR_REPOSITORY>/, use --base-href="/<YOUR_REPOSITORY>/"
+          # If deploying to the root of a custom domain or user/organization page, use --base-href="/"
+          flutter build web --release \
+            --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false \
+            --no-tree-shake-icons \
+            --base-href="/shopcom-admin/" # Adjust this based on your GitHub Pages deployment path
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/web
-          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Automatically provided GitHub token
+          publish_dir: build/web # Directory containing the built web application
+          publish_branch: gh-pages # The branch to publish to
+          # If you are using a custom domain, uncomment the next line and replace with your domain:
+          # cname: 'www.yourcustomdomain.com'
+          force_orphan: true # Recommended to ensure clean deployments, especially for first time setup
