@@ -51,11 +51,12 @@ jobs:
             --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false \
             --no-tree-shake-icons \
             --base-href="/shopcom-admin/" # Matches your repository name
-      - name : Clean up gh-pages branch
+
+      - name: Debug Git configuration
         run: |
-          git checkout --orphan gh-pages
-          git rm -rf .
-          git clean -fd
+          git remote -v
+          git branch -a
+          ls -la build/web
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
