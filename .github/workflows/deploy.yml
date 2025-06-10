@@ -16,13 +16,21 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.29.2'
+
+      - name: Check flutter version
+        run: flutter --version
+
+      - name: Print Environment Details
+        run: |
+          echo "Flutter Channel: stable"
+          flutter doctor
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build Flutter Web
-        run: flutter build web --base-href="/shopcom-admin/"
+        run: flutter build web --release --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --dart-define buildDate=$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') --no-tree-shake-icons --base-href="/shopcom-admin/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
