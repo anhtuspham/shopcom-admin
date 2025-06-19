@@ -51,7 +51,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
 
   Future<void> refresh() async {
     state = state.copyWith(isLoading: true, isError: false, errorMessage: null);
-    // await _updateProductState();
+    await _updateProductState();
   }
 
   Future<bool> createProduct(

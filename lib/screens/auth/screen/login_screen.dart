@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     _formKey.currentState!.save();
     final user = await userController.login(_email, _password);
-    if (mounted && user != null) {
+    if (mounted && user != null && user.isAdmin == true) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Login success"),
         backgroundColor: Colors.green,

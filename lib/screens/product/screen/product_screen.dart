@@ -110,7 +110,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
           )
         else if (productState.product.isEmpty)
             const Expanded(
-              child: Center(child: Text('Không có người dùng nào')),
+              child: Center(child: Text('Không có sản phẩm nào')),
             )
           else
             Expanded(
